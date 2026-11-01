@@ -83,6 +83,15 @@ body.cine #hud>*:not(#sub){opacity:0;transition:opacity .6s}
 #nomEcran{touch-action:manipulation}#nomEcran input{touch-action:manipulation}
 .b.s{padding:8px 13px;font-size:14px;letter-spacing:.06em;text-transform:none}
 #qui{font:600 12px/1 var(--f-d);letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+.modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
+.mode{display:grid;gap:4px;align-content:start;text-align:left;padding:12px 14px;background:rgba(10,11,13,.78);border:1px solid var(--line);border-radius:10px;cursor:pointer;color:var(--ink)}
+.mode b{font:800 24px/1 var(--f-d);letter-spacing:.02em;text-transform:uppercase}
+.mode small{font:400 13px/1.35 var(--f-b);color:var(--dim)}
+.mode .lbl{color:var(--amber)}
+.mode:hover,.mode:focus-visible,.mode.padfocus{border-color:var(--amber);outline:none}
+#menu .in{width:min(94vw,860px)}
+@media (max-width:700px){.modes{grid-template-columns:1fr}.mode small{display:none}}
+@media (max-height:520px){.mode{padding:8px 10px}.mode b{font-size:18px}.mode small{display:none}}
 #aideClav{font:500 13px/1.7 var(--f-b);color:var(--dim)}#aideClav kbd{font:600 11px/1 var(--f-d);border:1px solid var(--line);border-radius:3px;padding:2px 5px;color:var(--ink)}
 .panneau{width:min(92vw,560px);padding:22px;display:grid;gap:16px}
 .panneau h3{margin:0;font:700 28px/1 var(--f-d);letter-spacing:.03em;text-transform:uppercase}
@@ -116,6 +125,7 @@ body.tactile #tactile{display:block}
 #tbF{right:calc(var(--sr) + 4px);bottom:calc(var(--sb) + 4px + var(--tb) * 2.4)}
 #tbG{right:calc(var(--sr) + 4px + var(--tb) * 1.15);bottom:calc(var(--sb) + 4px + var(--tb) * 2.4)}
 #tbT{right:calc(var(--sr) + 4px);top:calc(var(--st) + 96px)}
+#tbC{left:calc(var(--sl) + 4px);bottom:calc(var(--sb) + 4px)}#tbC.actif{background:rgba(255,179,64,.32);border-color:var(--amber)}
 #tbM{left:50%;transform:translateX(-50%);top:calc(var(--st) + 2px);min-width:52px!important;height:40px!important;padding:0 10px!important}
 #tbM.on{transform:translateX(-50%) scale(.93)}
 body.tactile #act{display:none}
@@ -156,7 +166,7 @@ body.tactile #aideTouch{display:block}body.tactile #aideClav{display:none}
   <div id="act"></div>
   <div id="sub"></div>
 </div>
-<div id="tactile"><div class="tb" id="tbA" hidden>Agir</div><div class="tb" id="tbF" hidden>Prendre</div><div class="tb" id="tbG" hidden>Jeter</div><div class="tb" id="tbX" hidden>Frapper</div><div class="tb" id="tbB" hidden>Parer</div><div class="tb" id="tbT" hidden>Attendre</div><div class="tb" id="tbM">❚❚</div></div>
+<div id="tactile"><div class="tb" id="tbA" hidden>Agir</div><div class="tb" id="tbF" hidden>Prendre</div><div class="tb" id="tbG" hidden>Jeter</div><div class="tb" id="tbX" hidden>Frapper</div><div class="tb" id="tbB" hidden>Parer</div><div class="tb" id="tbT" hidden>Attendre</div><div class="tb" id="tbC" hidden>Accroupi</div><div class="tb" id="tbM">❚❚</div></div>
 <div id="tourner" class="gl">Tournez l’appareil à l’horizontale pour mieux voir la Fosse.</div>
 <div id="stick" hidden><i></i></div>
 <div id="dlg" hidden><div id="dlgNom"></div><div id="dlgTxt"></div><div id="dlgBox"></div><div id="dlgSuite">Entrée · clic pour continuer</div></div>
@@ -168,7 +178,13 @@ body.tactile #aideTouch{display:block}body.tactile #aideClav{display:none}
   <span class="lbl" style="color:var(--amber)">Centre vertical d'autogestion · la Gontention</span>
   <h1>HDF : <span>PLATFORM</span></h1>
   <p class="sous">Un banquet descend chaque jour sur une plateforme de béton, du niveau 0 jusqu'au fond. Ceux d'en haut mangent. Ceux d'en bas attendent. Chaque mois, tout le monde change d'étage.</p>
-  <div class="btns"><button class="b p" id="mJouer">Entrer dans la Fosse</button><button class="b" id="mCont" hidden>Reprendre</button><button class="b" id="mOpt">Réglages</button></div>
+  <div class="modes">
+    <button class="mode" id="mJouer"><span class="lbl">Campagne 1</span><b>La Descente</b><small>Cinq mois, du niveau 48 au fond. Trimagasi, Imoguiri, Baharat, et la panna cotta.</small></button>
+    <button class="mode" id="mJouer2"><span class="lbl">Campagne 2 · inédite</span><b>L’Ascension</b><small>La plateforme descend vide. Remontez la Fosse à la corde, du niveau 247 jusqu’aux cuisines.</small></button>
+    <button class="mode" id="mP2"><span class="lbl">Jeu complet · séparé</span><b>HDF : Platform 2</b><small>Ossian, Vesna, Tobiah, le Locataire et la grenade. Trois mois, cinq fins.</small></button>
+    <button class="mode" id="mImm"><span class="lbl">Mode libre</span><b>Immersion</b><small>Six mois pour de vrai : étage tiré au sort, codétenu inconnu, chaque jour compte.</small></button>
+  </div>
+  <div class="btns"><button class="b" id="mCont" hidden>Reprendre</button><button class="b" id="mOpt">Réglages</button></div>
   <div id="aideClav"><kbd>Z Q S D</kbd> / <kbd>W A S D</kbd> marcher · souris regarder · <kbd>E</kbd> agir · <kbd>F</kbd> prendre · <kbd>G</kbd> jeter dans le vide · clic gauche frapper · clic droit parer · <kbd>Maj</kbd> courir · <kbd>T</kbd> attendre la plateforme · <kbd>Échap</kbd> pause</div>
   <div id="aidePad">Manette : stick gauche marcher (<span class="pk">L3</span> courir) · stick droit regarder · <span class="pk">✕</span> agir · <span class="pk">□</span> prendre · <span class="pk">△</span> jeter · <span class="pk">R2</span> frapper · <span class="pk">L2</span> parer · croix bas attendre · <span class="pk">OPT</span> pause</div>
   <div id="aideTouch">Pouce gauche : marcher (poussez au bord pour courir) · glissez à droite : regarder · touchez à droite en combat : frapper · boutons à droite selon la situation</div>
@@ -189,6 +205,7 @@ body.tactile #aideTouch{display:block}body.tactile #aideClav{display:none}
   <label class="opt" for="oInv">Inverser l'axe vertical<input type="checkbox" id="oInv"></label>
   <label class="opt" for="oVol">Volume<input type="range" id="oVol" min="0" max="1" step="0.05" value="0.7"></label>
   <label class="opt" for="oVoix">Voix des personnages non joueurs (synthèse vocale)<input type="checkbox" id="oVoix"></label>
+  <div class="opt"><span id="oVoixEtat" style="color:var(--dim);font-size:13px">Sur iPhone et iPad, touchez « Tester » une fois pour activer les voix.</span><button class="b s" id="oTest" type="button">Tester la voix</button></div>
   <label class="opt" for="oPerf">Afficher les performances (images/s, triangles)<input type="checkbox" id="oPerf"></label>
   <label class="opt" for="oQ">Qualité graphique<select id="oQ"><option value="auto">Automatique</option><option value="basse">Basse</option><option value="haute">Haute</option><option value="ultra">Ultra</option></select></label>
   <div class="btns"><button class="b p" id="oOk">Retour</button></div>
@@ -5082,11 +5099,11 @@ document.addEventListener('gesturestart', e => e.preventDefault()); document.add
 const tb = (id, dn, up) => { const el = $(id); el.addEventListener('touchstart', e => { e.preventDefault(); e.stopPropagation(); el.classList.add('on'); modeEntree('tactile'); sonInit(); dn(); }, { passive: false });
   const fin = e => { e.preventDefault(); el.classList.remove('on'); if (up) up(); }; el.addEventListener('touchend', fin, { passive: false }); el.addEventListener('touchcancel', fin, { passive: false }); el.addEventListener('click', e => { e.stopPropagation(); if (!('ontouchstart' in window)) { dn(); if (up) setTimeout(up, 150); } }); };
 tb('tbA', () => { if (JEU.cine) { JEU.passer = true; return; } if (DLG.ouvert) { dlgOk(); return; } KEYS.e = true; appui('e'); }, () => { KEYS.e = false; });
-tb('tbF', () => appui('f')); tb('tbG', () => appui('g')); tb('tbT', () => appui('t')); tb('tbX', () => { IN.att = true; }); tb('tbB', () => { IN.par = true; }, () => { IN.par = false; }); tb('tbM', () => basculerPause());
+tb('tbF', () => appui('f')); tb('tbC', () => appui('c')); tb('tbG', () => appui('g')); tb('tbT', () => appui('t')); tb('tbX', () => { IN.att = true; }); tb('tbB', () => { IN.par = true; }, () => { IN.par = false; }); tb('tbM', () => basculerPause());
 // mode d'entrée (clavier, tactile, manette) : glyphes des invites, interface tactile affichée ou non
 const ENTREE = { mode: touch ? 'tactile' : 'clavier' };
 function modeEntree(m) { if (ENTREE.mode === m) return; ENTREE.mode = m; document.body.classList.toggle('manette', m === 'manette'); document.body.classList.toggle('tactile', m === 'tactile'); if (typeof actSig !== 'undefined') actSig = ''; if (typeof tacSig !== 'undefined') tacSig = ''; }
-const GLYPHES = { manette: { e: '✕', f: '□', g: '△', t: '▼' } };
+const GLYPHES = { manette: { e: '✕', f: '□', g: '△', t: '▼', c: '○' } };
 const glyphe = k => (GLYPHES[ENTREE.mode] || {})[k] || k.toUpperCase();
 addEventListener('keydown', () => modeEntree('clavier'), true);
 addEventListener('mousemove', e => { if (Math.abs(e.movementX) + Math.abs(e.movementY) > 6 && !touch) modeEntree('clavier'); });
@@ -5132,13 +5149,20 @@ function voixCharger() { if (!self.speechSynthesis) return; const L = speechSynt
   VOIX.f = VOIX.fr.filter(v => fem.test(v.name)); VOIX.h = VOIX.fr.filter(v => hom.test(v.name)); }
 if (self.speechSynthesis) { voixCharger(); try { speechSynthesis.addEventListener('voiceschanged', voixCharger); } catch (e) { speechSynthesis.onvoiceschanged = voixCharger; } }
 function profilVoix(nom, fem, enfant) { let P = VOIX.prof[nom]; if (!P) { let h = 0; for (const c of nom) h = (h * 31 + c.charCodeAt(0)) >>> 0; const f = fem || /Détenue|Femme|Affamée|Voix du 34/.test(nom) && !/Détenu du/.test(nom) || /^Détenue|^Femme|^Affamée/.test(nom); P = VOIX.prof[nom] = { g: enfant ? 'f' : f ? 'f' : 'h', p: (enfant ? 1.5 : f ? 1 : .8) + ((h % 7) - 3) * .04, r: .95 + (h % 5) * .03, h }; } return P; }
-function parler(txt, nom, fem, enfant) { if (!OPT.voix || !self.speechSynthesis || !nom || nom === 'Goreng' || !txt || /^\(/.test(txt)) return; try { if (!VOIX.pret) voixCharger();
-    const P = profilVoix(nom, fem, enfant), pool = (P.g === 'f' ? VOIX.f : VOIX.h), L = pool && pool.length ? pool : VOIX.fr, u = new SpeechSynthesisUtterance(txt.replace(/…/g, '...').replace(/[«»]/g, ''));
-    u.lang = 'fr-FR'; if (L.length) u.voice = L[(P.h || nom.length) % L.length]; u.pitch = clamp(P.p, 0, 2); u.rate = P.r; u.volume = clamp(OPT.vol * 1.2, 0, 1);
-    if (nom.startsWith('Voix du')) { u.volume *= .6; u.rate *= 1.05; }
-    speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} }
-// iOS / iPadOS : la synthèse ne parle qu'après un premier énoncé lancé par un geste de l'utilisateur
-function voixAmorcer() { if (VOIX.amorce || !self.speechSynthesis) return; VOIX.amorce = true; try { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); voixCharger(); } catch (e) {} }
+function parler(txt, nom, fem, enfant) { if (!OPT.voix || !self.speechSynthesis || !self.SpeechSynthesisUtterance || !nom || nom === 'Goreng' || !txt || /^\(/.test(txt)) return; try { if (!VOIX.pret) voixCharger();
+    const P = profilVoix(nom, fem, enfant), pool = (P.g === 'f' ? VOIX.f : VOIX.h), L = pool && pool.length ? pool : VOIX.fr, texte = txt.replace(/…/g, '... ').replace(/[«»]/g, '').replace(/\s+/g, ' ').trim();
+    const go = () => { try { const u = new SpeechSynthesisUtterance(texte); u.lang = 'fr-FR'; if (L.length) { u.voice = L[(P.h || nom.length) % L.length]; u.lang = u.voice.lang || 'fr-FR'; }
+        u.pitch = clamp(P.p, .1, 2); u.rate = clamp(P.r, .5, 1.5); u.volume = clamp(OPT.vol * 1.25, .05, 1); if (nom.startsWith('Voix du')) { u.volume *= .6; u.rate = clamp(u.rate * 1.05, .5, 1.5); }
+        VOIX.u = u; u.onstart = () => { VOIX.marche = true; }; u.onend = u.onerror = () => { if (VOIX.u === u) VOIX.u = null; };   // Safari : garder une référence, sinon la phrase est libérée avant d'être dite
+        speechSynthesis.speak(u); if (speechSynthesis.paused) speechSynthesis.resume(); } catch (e) {} };
+    // iOS / iPadOS : « cancel » puis « speak » dans le même instant fait perdre la phrase ; on laisse respirer la file
+    if (speechSynthesis.speaking || speechSynthesis.pending) { speechSynthesis.cancel(); VOIX.tc = performance.now(); clearTimeout(VOIX.tm); VOIX.tm = setTimeout(go, 110); } else if (performance.now() - (VOIX.tc || 0) < 150) { clearTimeout(VOIX.tm); VOIX.tm = setTimeout(go, 150); } else go(); } catch (e) {} }
+function voixCouper() { try { if (self.speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending)) { speechSynthesis.cancel(); VOIX.tc = performance.now(); } clearTimeout(VOIX.tm); } catch (e) {} }
+// iOS / iPadOS : la synthèse ne parle qu'après un premier énoncé lancé pendant un vrai geste (fin de toucher ou clic) ; on réessaie à chaque geste tant qu'elle n'a pas parlé
+function voixAmorcer() { if (VOIX.marche || !self.speechSynthesis || !self.SpeechSynthesisUtterance) return; try { voixCharger(); const u = new SpeechSynthesisUtterance(' '); u.volume = 0; u.lang = 'fr-FR'; u.onstart = () => { VOIX.marche = true; }; VOIX.u0 = u; speechSynthesis.speak(u); if (speechSynthesis.paused) speechSynthesis.resume(); } catch (e) {} }
+// les gestes qui débloquent vraiment l'audio sur iPhone / iPad : touchend et click (pas touchstart)
+for (const ev of ['touchend', 'click', 'keydown']) addEventListener(ev, () => { try { if (SON.ctx && SON.ctx.state !== 'running') SON.ctx.resume(); voixAmorcer(); } catch (e) {} }, { capture: true, passive: true });
+document.addEventListener('visibilitychange', () => { if (document.hidden && self.speechSynthesis) voixCouper(); });
 
 // ---------------------------------------------------------------- prénom du joueur : « Goreng » dans les textes devient le prénom choisi
 const PRENOM_DEF = 'Goreng';
@@ -5166,7 +5190,7 @@ $('dlg').addEventListener('click', () => { if (!(DLG.o && DLG.o.choix && DLG.o.c
 function dlgSel(d) { const n = (DLG.o && DLG.o.choix || []).length; if (!n) return; DLG.sel = (DLG.sel + d + n) % n; [...$('dlgBox').children].forEach((el, i) => el.classList.toggle('on', i === DLG.sel)); if (d) FX.bip(); }
 function dlgChoix(i) { const n = (DLG.o && DLG.o.choix || []).length; if (i >= n) return; DLG.sel = i; dlgFin(i); }
 function dlgOk() { if (performance.now() - DLG.t0 < 250) return; const n = (DLG.o && DLG.o.choix || []).length; dlgFin(n ? DLG.sel : 0); }
-function dlgFin(i) { if (DLG.p) { DLG.p.parle = false; DLG.p = null; } DLG.ouvert = false; $('dlg').hidden = true; const r = DLG.res; DLG.res = null; FX.bip(); if (self.speechSynthesis && OPT.voix) try { speechSynthesis.cancel(); } catch (e) {} if (r) r(i); }
+function dlgFin(i) { if (DLG.p) { DLG.p.parle = false; DLG.p = null; } DLG.ouvert = false; $('dlg').hidden = true; const r = DLG.res; DLG.res = null; FX.bip(); if (self.speechSynthesis && OPT.voix) voixCouper(); if (r) r(i); }
 const ROLES = {};
 async function dire(nom, texte) { await dlgOuvrir({ nom, role: ROLES[nom], texte }); }
 async function choisir(nom, texte, choix) { return dlgOuvrir({ nom, role: ROLES[nom], texte, choix }); }
@@ -5271,6 +5295,8 @@ function partsPlat(type, st) { const key = type + '|' + st; let P = MESHPLAT.get
   PLATS[type].f(m, k, c); if (st === 'souille') pc(m, CYL, .05, .004, .04, .22, .004, .16, [.46, .37, .25], 0); P = m.build(mk); MESHPLAT.set(key, P); return P; }
 // banquet(L, opts) : ce qu'il reste en arrivant au niveau L (les étages du dessus se sont servis)
 function banquet(L, o = {}) { const R = srand(o.graine || (L * 97 + JEU.jour * 13 + 5)), out = [];
+  if (o.rien) return out;
+  if (o.egal) { for (let r = 0; r < 5; r++) for (let c = 0; c < 7; c++) out.push({ type: (r + c) % 2 ? 'soupe' : 'pain', st: 'intact', x: -2.06 + c * .687, z: -1.26 + r * .63, ry: 0 }); return out; }
   const reste = o.plein ? 1 : Math.pow(clamp(1 - L / 112, 0, 1), 1.25), menu = MENU.slice().sort(() => R() - .5);
   let i = 0; for (let r = 0; r < 5; r++) for (let cI = 0; cI < 7; cI++) { const x = -2.06 + cI * .687 + (R() - .5) * .1, z = -1.26 + r * .63 + (R() - .5) * .08, ty = menu[i++ % menu.length]; let st = null;
     if (R() < reste) st = R() < Math.min(.85, L / 120) ? (R() < .55 ? 'souille' : 'entame') : 'intact';
@@ -5310,7 +5336,7 @@ const CUISINE = new F.Node('cuisine'); { const m = G.merger(), W = 9, D = 7, Hc 
 // =====================================================================================
 const MONDE = { cuisine: false, eclat: 1, rouge: 0, scintille: 0 };
 function lumieresImage() { LUM.length = 0;
-  if (MONDE.cuisine) { for (let x = -6; x <= 6; x += 4) for (const z of [-3, 3]) lumiere([KX + x, 3.3, z], [1, .97, .92], 10, 10); return; }
+  if (MONDE.cuisine) { const cx = MONDE.cx === undefined ? KX : MONDE.cx; for (let x = -6; x <= 6; x += 4) for (const z of [-3, 3]) lumiere([cx + x, 3.3, z], [1, .97, .92], 10 * (MONDE.eclatC || 1), 10); return; }
   const base = Math.floor(REF + .5), deep = clamp((base - 120) / 200, 0, 1); let k0 = 1;
   if (base > 140) { MONDE.scintille -= A.dt; if (MONDE.scintille < -rnd(2, 9)) MONDE.scintille = rnd(.05, .35); k0 = MONDE.scintille > 0 ? .25 : 1; }
   const e = MONDE.eclat * k0, c0 = [lerp(.95, 1, deep), lerp(.97, .82, deep), lerp(1, .66, deep)];
@@ -5441,17 +5467,17 @@ function dansTrou(x, z, m = 0) { return Math.abs(x) < HX - m && Math.abs(z) < HZ
 function platIci() { return PLAT.visible && Math.abs(PLAT.pos[1]) < .25 && !MONDE.cuisine; }
 function majJoueur(d, dt) {
   const s = .0024 * OPT.sens; J.a -= IN.dx * s; J.p -= IN.dy * s * (OPT.inv ? -1 : 1); IN.dx = IN.dy = 0; bornerLook();
-  { const ht = J.attache ? .95 : J.couche ? .82 : 1.62; J.h = J.h === undefined ? ht : J.h + (ht - J.h) * Math.min(1, dt * 3.2); }
+  { const ht = J.attache ? .95 : J.couche ? .82 : J.accroupi ? 1.0 : 1.62; J.h = J.h === undefined ? ht : J.h + (ht - J.h) * Math.min(1, dt * 3.2); }
   if (J.gl) { const g = J.gl; g.t = Math.min(1, g.t + dt / g.dur); const u = sstep(g.t); J.x = lerp(g.x0, g.x1, u); J.z = lerp(g.z0, g.z1, u); J.p = lerp(g.p0, g.p1, u); J.a = g.a0 + angDiff(g.a1, g.a0) * u; if (g.t >= 1) J.gl = null; return; }
   if (JEU.cine || J.attache || J.couche || J.bloque || DLG.ouvert || d === 0) { J.bob *= .9; return; }
   let f = (KEYS.z || KEYS.w || KEYS.arrowup ? 1 : 0) - (KEYS.s || KEYS.arrowdown ? 1 : 0) + IN.mz + PAD.mz, st = (KEYS.d || KEYS.arrowright ? 1 : 0) - (KEYS.q || KEYS.a || KEYS.arrowleft ? 1 : 0) + IN.mx + PAD.mx;
   const n = Math.hypot(f, st); if (n > 1) { f /= n; st /= n; }
-  const v = 2.4 * (REPAS.t > 0 ? .45 : 1) * (KEYS.shift || IN.sprint || PAD.sprint ? 1.65 : 1) * (ETAT.faim < 15 ? .6 : 1) * (ETAT.sante < 25 ? .7 : 1) * (J.chute ? 0 : 1);
+  const v = 2.4 * (J.accroupi ? .5 : 1) * (REPAS.t > 0 ? .45 : 1) * (KEYS.shift || IN.sprint || PAD.sprint ? 1.65 : 1) * (ETAT.faim < 15 ? .6 : 1) * (ETAT.sante < 25 ? .7 : 1) * (J.chute ? 0 : 1);
   const fx = -Math.sin(J.a), fz = -Math.cos(J.a), rx = Math.cos(J.a), rz = -Math.sin(J.a);
   let x = J.x + (fx * f + rx * st) * v * d, z = J.z + (fz * f + rz * st) * v * d; const r = .3;
   if (JEU.surPlatSeul) { x = clamp(x, -PLAT_W / 2 + r, PLAT_W / 2 - r); z = clamp(z, -PLAT_D / 2 + r, PLAT_D / 2 - r); }
-  x = clamp(x, -RX + r, RX - r); z = clamp(z, -RZ + r, RZ - r);
-  for (const b of COLL) { if (x < b.x0 - r || x > b.x1 + r || z < b.z0 - r || z > b.z1 + r) continue; const dl = x - (b.x0 - r), dr = b.x1 + r - x, dtp = z - (b.z0 - r), db = b.z1 + r - z, mn = Math.min(dl, dr, dtp, db); if (mn === dl) x = b.x0 - r; else if (mn === dr) x = b.x1 + r; else if (mn === dtp) z = b.z0 - r; else z = b.z1 + r; }
+  const BO = JEU.bornes || { x0: -RX, x1: RX, z0: -RZ, z1: RZ }; x = clamp(x, BO.x0 + r, BO.x1 - r); z = clamp(z, BO.z0 + r, BO.z1 - r);
+  for (const b of (JEU.coll || COLL)) { if (x < b.x0 - r || x > b.x1 + r || z < b.z0 - r || z > b.z1 + r) continue; const dl = x - (b.x0 - r), dr = b.x1 + r - x, dtp = z - (b.z0 - r), db = b.z1 + r - z, mn = Math.min(dl, dr, dtp, db); if (mn === dl) x = b.x0 - r; else if (mn === dr) x = b.x1 + r; else if (mn === dtp) z = b.z0 - r; else z = b.z1 + r; }
   for (const p of PERSOS) { if (!p.visible || p.fantome || p.niv !== undefined && p.niv !== Math.round(REF) || Math.abs(p.y) > 1 || p.mortT !== undefined) continue; const dx = x - p.x, dz = z - p.z, dd = Math.hypot(dx, dz); if (dd < .5 && dd > 1e-4) { x = p.x + dx / dd * .5; z = p.z + dz / dd * .5; } }
   const mv = Math.hypot(x - J.x, z - J.z); J.x = x; J.z = z;
   if (mv > 1e-4) { J.bob += mv * 5.2; J.pasT += mv; if (J.pasT > .75) { J.pasT = 0; FX.pas(); } }
@@ -5466,7 +5492,7 @@ function versJ(x, z) { return Math.atan2(-(x - J.x), -(z - J.z)); }   // angle d
 
 // ---- faim, santé, lucidité
 function majEtat(d) { if (d === 0 || JEU.cine && !JEU.etatCine) return;
-  ETAT.faim = Math.max(0, ETAT.faim - d * (JEU.descente ? .05 : .1));
+  ETAT.faim = Math.max(0, ETAT.faim - d * (JEU.descente ? .05 : .1) * (JEU.faimK === undefined ? 1 : JEU.faimK));
   if (ETAT.faim <= 0) blesser(d * .7, null, true); else if (ETAT.faim > 65 && ETAT.sante < (FLAGS.blesseMort ? 18 : 100)) ETAT.sante = Math.min(100, ETAT.sante + d * .35);
   if (ETAT.faim < 20) ETAT.luc = Math.max(0, ETAT.luc - d * .08); else if (ETAT.faim > 60) ETAT.luc = Math.min(100, ETAT.luc + d * .03);
   // la règle : garder de la nourriture quand la plateforme est partie
@@ -5506,7 +5532,7 @@ let actSig = '';
 function majInteractions(d) { const L = candidats(); ACT.liste = L; const sig = L.map(c => c.k + c.t + (c.em || '')).join('|');
   if (sig !== actSig) { actSig = sig; const el = $('act'); el.innerHTML = ''; for (const c of L) { const b = document.createElement('div'); b.className = 'gl'; const k = document.createElement('kbd'); k.textContent = glyphe(c.k); b.appendChild(k); b.appendChild(document.createTextNode(c.t)); if (c.em) { const e = document.createElement('em'); e.textContent = c.em; b.appendChild(e); } b.onclick = () => appui(c.k); el.appendChild(b); } }
   // actions maintenues (défaire des liens, démonter un lit…)
-  const ap = IN.appuis.splice(0); for (const k of ap) { if (k === 't' && JEU.attenteOk && PF.etat === 'approche') { PF.t = Math.max(PF.t, PF.Tw - 10.5); continue; } const c = L.find(x => x.k === k); if (!c) continue; if (c.tenir) { ACT.tenir = c; ACT.auto = false; ACT.prog = ACT.tenir === ACT.dernier ? ACT.prog : 0; } else c.f(); }
+  const ap = IN.appuis.splice(0); for (const k of ap) { if (k === 'c') { if (JEU.accroupiOk) { J.accroupi = !J.accroupi; FX.pas(); } continue; } if (k === 't' && JEU.attenteOk && PF.etat === 'approche') { PF.t = Math.max(PF.t, PF.Tw - 10.5); continue; } const c = L.find(x => x.k === k); if (!c) continue; if (c.tenir) { ACT.tenir = c; ACT.auto = false; ACT.prog = ACT.tenir === ACT.dernier ? ACT.prog : 0; } else c.f(); }
   if (ACT.tenir) { const c = L.find(x => x.k === ACT.tenir.k && x.t === ACT.tenir.t); if (!c || (!KEYS[c.k] && !ACT.auto)) { ACT.dernier = ACT.tenir; ACT.tenir = null; $('prog').hidden = true; }
     else { ACT.prog += d / c.tenir; if (c.pendant) c.pendant(d); $('prog').hidden = false; $('prog').firstChild.style.width = Math.min(100, ACT.prog * 100) + '%'; if (ACT.prog >= 1) { ACT.tenir = null; ACT.dernier = null; ACT.prog = 0; $('prog').hidden = true; c.f(); } } } }
 
@@ -5571,10 +5597,10 @@ function combatPossible() { return !!((ennemisVivants().length || JEU.frapperLib
 // boutons tactiles contextuels : ils n'apparaissent que lorsqu'ils servent
 let tacSig = '';
 function majTactile() { if (ENTREE.mode !== 'tactile') return; const L = ACT.liste || [], by = k => L.find(c => c.k === k), e = by('e'), f = by('f'), g = by('g'), cb = combatPossible(), dl = DLG.ouvert || JEU.pause || !JEU.enJeu;
-  const sig = [e && e.t + (e.em || ''), f && f.t, g && g.t, cb, PF.etat === 'approche' && JEU.attenteOk, dl, JEU.cine].join('|'); if (sig === tacSig) return; tacSig = sig;
+  const sig = [e && e.t + (e.em || ''), f && f.t, g && g.t, cb, PF.etat === 'approche' && JEU.attenteOk, dl, JEU.cine, JEU.accroupiOk, J.accroupi].join('|'); if (sig === tacSig) return; tacSig = sig;
   const A0 = $('tbA'); A0.hidden = !(e || JEU.cine) || dl; A0.innerHTML = ''; A0.appendChild(document.createTextNode(JEU.cine ? 'Passer' : e ? e.t : '')); if (e && e.em && !JEU.cine) { const sm = document.createElement('small'); sm.textContent = e.em; A0.appendChild(sm); }
   $('tbF').hidden = !f || dl || JEU.cine; if (f) $('tbF').textContent = f.t; $('tbG').hidden = !g || dl || JEU.cine; if (g) $('tbG').textContent = g.t.split(' ')[0];
-  $('tbX').hidden = !cb || dl; $('tbB').hidden = !cb || dl || J.arme !== 'barre' && !ennemisVivants().length; $('tbT').hidden = !(PF.etat === 'approche' && JEU.attenteOk) || dl || JEU.cine; }
+  $('tbX').hidden = !cb || dl; $('tbB').hidden = !cb || dl || J.arme !== 'barre' && !ennemisVivants().length; $('tbT').hidden = !(PF.etat === 'approche' && JEU.attenteOk) || dl || JEU.cine; $('tbC').hidden = !JEU.accroupiOk || dl || JEU.cine; $('tbC').classList.toggle('actif', !!J.accroupi); }
 async function combat(liste, o = {}) { COMBAT.ennemis = liste; JEU.combat = true; objectif(o.obj || 'Défendez-vous (clic gauche : frapper · clic droit : parer)'); await jusqua(() => !ennemisVivants().length); JEU.combat = false; $('hp').hidden = true; await attendre(1.2); }
 
 // =====================================================================================
@@ -5603,7 +5629,7 @@ function majHud(dt) { hudT -= dt; if (subT > 0) { subT -= dt; if (subT <= 0) $('
   const P = PF; let t = '—', s = ''; if (JEU.descente) { t = Math.round(REF) >= FOND ? 'Le fond' : 'Descente'; s = JEU.vitesse > .05 ? 'Niveau ' + Math.round(REF) + ' ↓' : Math.round(REF) >= FOND ? 'Niveau 333' : 'À l\'arrêt'; }
   else if (P.etat === 'approche') { t = 'Niveau ' + Math.max(0, P.aff) + ' ↓'; s = JEU.attenteOk ? 'T : attendre son passage' : 'Elle descend'; } else if (P.etat === 'arret') { t = P.tenir ? 'Ici' : 'Ici · ' + fmtT(P.arret - P.t); s = !P.tenir && P.arret - P.t <= 10.5 ? ((P.bouchees || 0) === 0 && ETAT.faim < 70 ? 'Elle vous attend encore un peu' : 'Elle va repartir') : 'Mangez maintenant'; } else if (P.etat === 'depart') { t = 'Repartie ↓'; s = 'Niveau ' + P.aff; } else s = 'Prochain passage demain';
   $('pfT').textContent = t; $('pfS').textContent = s; $('pf').classList.toggle('alerte', !JEU.descente && P.etat === 'arret' && !P.tenir && P.arret - P.t <= 10.5);
-  const inv = []; if (J.arme === 'barre') inv.push('Barre de fer'); if (J.tenu) inv.push('En main : ' + J.tenu.nom); if (JEU.rations !== undefined) inv.push('Rations : ' + JEU.rations); if (FLAGS.message) inv.push('Panna cotta : ' + (FLAGS.pcMangee ? 'mangée' : FLAGS.pcDonnee ? 'donnée' : 'intacte'));
+  const inv = []; if (J.accroupi) inv.push('Accroupi'); if (FLAGS.obj) for (const [k, v] of Object.entries(FLAGS.obj)) if (v && OBJETS_NOMS[k]) inv.push(OBJETS_NOMS[k]); if (J.arme === 'barre') inv.push('Barre de fer'); if (J.tenu) inv.push('En main : ' + J.tenu.nom); if (JEU.rations !== undefined) inv.push('Rations : ' + JEU.rations); if (FLAGS.message) inv.push('Panna cotta : ' + (FLAGS.pcMangee ? 'mangée' : FLAGS.pcDonnee ? 'donnée' : 'intacte'));
   $('inv').hidden = !inv.length; $('inv').textContent = inv.join(' · ');
   fx('fxMad', ETAT.luc < 55 ? (55 - ETAT.luc) / 55 * .85 : 0);
   if (ETAT.sante < 30 && !JEU.pause) { JEU.coeur = (JEU.coeur || 0) - .1; if (JEU.coeur <= 0) { JEU.coeur = 1.1; FX.coeur(); } } }
@@ -5624,7 +5650,7 @@ A.onBeforeRender(() => { lumieresImage(); for (const l of LUM) A.addLight(l); })
 // PAUSE, MENUS, MORT, SAUVEGARDE
 // =====================================================================================
 function basculerPause(forcer) { if (!JEU.enJeu || !$('fin').hidden || !$('mort').hidden) return; const p = forcer === true ? true : !(!$('pause').hidden);
-  if (forcer === true || $('pause').hidden) { try { if (self.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} JEU.pause = true; $('pause').hidden = false; $('pauseObj').textContent = JEU.obj ? 'Objectif : ' + JEU.obj : ''; if (document.pointerLockElement) document.exitPointerLock(); }
+  if (forcer === true || $('pause').hidden) { try { voixCouper(); } catch (e) {} JEU.pause = true; $('pause').hidden = false; $('pauseObj').textContent = JEU.obj ? 'Objectif : ' + JEU.obj : ''; if (document.pointerLockElement) document.exitPointerLock(); }
   else { $('pause').hidden = true; JEU.pause = false; $('c').focus(); } return p; }
 $('pReprendre').onclick = () => basculerPause();
 $('pMenu').onclick = () => { $('pause').hidden = true; allerMenu(); };
@@ -5636,9 +5662,16 @@ optsVersUI();
 $('oSens').oninput = e => { OPT.sens = +e.target.value; saveOpt(); }; $('oInv').onchange = e => { OPT.inv = e.target.checked; saveOpt(); }; $('oVol').oninput = e => { OPT.vol = +e.target.value; sonVol(); saveOpt(); };
 $('oVoix').onchange = e => { OPT.voix = e.target.checked; saveOpt(); }; $('oQ').onchange = e => { OPT.q = e.target.value; saveOpt(); try { if (OPT.q !== 'auto') { A.autoQuality = false; A.setQuality(OPT.q); } else A.autoQuality = true; } catch (er) {} };
 $('oOk').onclick = () => { $('opts').hidden = true; };
+$('oTest').onclick = () => { sonInit(); const el = $('oVoixEtat');
+  if (!self.speechSynthesis || !self.SpeechSynthesisUtterance) { el.textContent = 'Ce navigateur ne propose pas de synthèse vocale. Essayez Safari ou Chrome.'; return; }
+  voixCharger(); if (!OPT.voix) { OPT.voix = true; $('oVoix').checked = true; saveOpt(); }
+  parler('Service dans quatre minutes. Chaque assiette doit être parfaite.', 'Le chef'); setTimeout(() => parler('Évident.', 'Trimagasi'), 3600);
+  el.textContent = VOIX.fr.length ? VOIX.fr.length + ' voix française' + (VOIX.fr.length > 1 ? 's' : '') + ' trouvée' + (VOIX.fr.length > 1 ? 's' : '') + '. Rien n’est audible ? Vérifiez le mode silencieux et le volume de l’appareil.' : 'Aucune voix française installée : Réglages de l’appareil › Accessibilité › Contenu énoncé › Voix › Français.';
+  setTimeout(() => { if (VOIX.fr.length && !VOIX.marche) el.textContent = 'La voix ne démarre pas : coupez le mode silencieux, montez le volume, puis touchez « Tester » à nouveau.'; }, 2500); };
 // bandeau de performances : ms par image, images/s, triangles envoyés au GPU (décor visible + personnages dessinés)
 $('oPerf').checked = !!OPT.perf; $('perf').hidden = !OPT.perf; $('oPerf').onchange = e => { OPT.perf = e.target.checked; saveOpt(); $('perf').hidden = !OPT.perf; };
 const PERF = { n: 0, t: 0, ms: 0 };
+const OBJETS_NOMS = { draps: 'Draps noués', crochet: 'Crochet', corde: 'Corde à grappin', registre: 'Registre de Mirela', livre: 'Don Quichotte', bandages: 'Bandages', pain: 'Pain sec' };
 function trisScene() { let t = 0; const w = nd => { if (!nd.visible) return; for (const p of nd.parts) t += (p.mesh.count || 0) / 3; for (const c of nd.children) w(c); }; w(A.scene.root); return t; }
 A.onUpdate(dt => { if (!OPT.perf) return; PERF.n++; PERF.t += dt; PERF.ms += A.stats.ms || 0; if (PERF.t < .5) return;
   const ips = Math.round(PERF.n / PERF.t), ms = (PERF.t / PERF.n * 1000), tri = trisScene() + (JOE && JOE.tri || 0), el = $('perf');
@@ -5654,9 +5687,11 @@ $('mortMenu').onclick = () => { $('mort').hidden = true; allerMenu(); };
 $('finMenu').onclick = () => { $('fin').hidden = true; allerMenu(); };
 function allerMenu() { document.body.classList.remove('enjeu'); JEU.tk++; JEU.enJeu = false; JEU.pause = true; JEU.attentes = []; DLG.ouvert = false; $('dlg').hidden = true; $('menu').hidden = false; $('mCont').hidden = !(SAUVE && SAUVE.ch > 0); fondu(true, .3); }
 // nouvelle partie : fiche d'admission (prénom), puis le prologue
-$('mJouer').onclick = () => { sonInit(); $('menu').hidden = true; $('nomErr').hidden = true; const v = SAUVE && SAUVE.flags && SAUVE.flags.prenom; $('nomIn').value = v || 'Goreng'; $('nomEcran').hidden = false; if (!touch) setTimeout(() => { try { $('nomIn').focus(); $('nomIn').select(); } catch (e) {} }, 60); };
+function ouvrirFiche(mode) { JEU.modeChoisi = mode; sonInit(); $('menu').hidden = true; $('nomErr').hidden = true; const v = SAUVE && SAUVE.flags && SAUVE.flags.prenom; $('nomIn').value = v || 'Goreng'; $('nomEcran').hidden = false; if (!touch) setTimeout(() => { try { $('nomIn').focus(); $('nomIn').select(); } catch (e) {} }, 60); };
 function nomValider() { const v = nettoyerPrenom($('nomIn').value); if (!v) { $('nomErr').hidden = false; $('nomErr').textContent = 'Écrivez un prénom (lettres, espaces, tirets ou apostrophes).'; return; }
-  try { $('nomIn').blur(); } catch (e) {} $('nomEcran').hidden = true; FLAGS_RESET(); FLAGS.prenom = v; JEU.ckDescente = undefined; lancerChapitre(0); }
+  try { $('nomIn').blur(); } catch (e) {} $('nomEcran').hidden = true; FLAGS_RESET(); FLAGS.prenom = v; JEU.ckDescente = undefined; lancerChapitre(JEU.modeChoisi === 2 ? 10 : JEU.modeChoisi === 3 ? 20 : 0); }
+$('mP2').onclick = () => { try { voixCouper(); if (SON.ctx) SON.ctx.suspend(); } catch (e) {} location.href = 'platform-2.html#depuis-hdf'; };
+$('mJouer').onclick = () => ouvrirFiche(1); $('mJouer2').onclick = () => ouvrirFiche(2); $('mImm').onclick = () => ouvrirFiche(3);
 $('nomOk').onclick = nomValider; $('nomRetour').onclick = () => { $('nomEcran').hidden = true; $('menu').hidden = false; };
 $('nomIn').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); nomValider(); } else if (e.key === 'Escape') $('nomRetour').click(); });
 $('nomIn').addEventListener('input', () => { $('nomErr').hidden = true; });
@@ -5682,7 +5717,7 @@ $('livreOk').onclick = livreFermer;
 addEventListener('keydown', e => { if (JEU.cine && ['enter', ' ', 'e'].includes(e.key.toLowerCase())) JEU.passer = true; });
 $('c').addEventListener('click', () => { if (JEU.cine) JEU.passer = true; });
 // réplique sous-titrée qui laisse le jeu tourner (on peut l'écourter avec Entrée)
-async function dit(nom, txt, dur) { JEU.passer = false; bulle(nom, txt, (dur || Math.max(2.6, txt.length * .06)) + .3); const t0 = JEU.t, D = dur || Math.max(2.6, txt.length * .06); await jusqua(() => (JEU.t - t0 > D && !(OPT.voix && nom && nom !== 'Goreng' && self.speechSynthesis && speechSynthesis.speaking && JEU.t - t0 < D * 2.2 + 1)) || (JEU.passer && JEU.t - t0 > .4)); if (JEU.passer && self.speechSynthesis) try { speechSynthesis.cancel(); } catch (e) {} JEU.passer = false; }
+async function dit(nom, txt, dur) { JEU.passer = false; bulle(nom, txt, (dur || Math.max(2.6, txt.length * .06)) + .3); const t0 = JEU.t, D = dur || Math.max(2.6, txt.length * .06); await jusqua(() => (JEU.t - t0 > D && !(OPT.voix && nom && nom !== 'Goreng' && self.speechSynthesis && speechSynthesis.speaking && JEU.t - t0 < D * 2.2 + 1)) || (JEU.passer && JEU.t - t0 > .4)); if (JEU.passer && self.speechSynthesis) voixCouper(); JEU.passer = false; }
 // petit menu de questions qu'on épuise une à une
 async function questions(nom, intro, items, sortie = 'Assez parlé.') { const restants = items.slice(); let txt = intro;
   while (restants.length) { const i = await choisir(nom, txt, [...restants.map(q => q.q), sortie]); if (i === restants.length) return; const q = restants.splice(i, 1)[0]; STATS.paroles++; await scene(q.r); if (q.f) q.f(); txt = q.apres || '…'; } }
@@ -5693,6 +5728,8 @@ async function tourner(x, y, z, s = 1) { const t0 = JEU.t; await jusqua(() => { 
 const CH = [];
 function nettoyer() { JEU.tk++; JEU.attentes = []; DLG.ouvert = false; DLG.res = null; $('dlg').hidden = true; $('livre').hidden = true; $('fin').hidden = true; $('mort').hidden = true; $('pause').hidden = true;
   for (const p of PERSOS.slice()) if (!p.voisin) p.retirer(); BETES.length = 0; COMBAT.ennemis = []; COMBAT.allies = [];
+  J.accroupi = false; MONDE.cx = KX; MONDE.eclatC = 1; CUISINE.pos = [KX, 0, 0]; if (typeof CORDE !== 'undefined') CORDE.visible = false; if (typeof TRAITS !== 'undefined') { TRAITS.visible = false; CAISSES.visible = false; } JEU.osmoOk = false; $('hp').hidden = true;
+  for (const k of ['bornes', 'coll', 'accroupiOk', 'faimK', 'corde', 'cordeX', 'immersion', 'camp2', 'cm']) JEU[k] = undefined;
   for (const k of ['inter', 'maj', 'onManger', 'onPrendre', 'tentation', 'majDescente', 'chaleur', 'combat', 'rations', 'peutDormir', 'dorti', 'cible', 'mangerDescente', 'surPlatSeul', 'descente', 'frapperLibre', 'raisonMort', 'conseilMort', 'invincible', 'peutManger', 'peutPrendre', 'etatCine']) JEU[k] = undefined;
   JEU.vitesse = 0; JEU.attenteOk = false; JEU.bordDit = false; JEU.voisins = true; JEU.voisinsSale = true; JEU.cine = false; CAM.cine = null; document.body.classList.remove('cine');
   PF.etat = 'loin'; PF.manuel = false; PF.lvl = -20; PLAT.visible = false; PLAT.pos = [0, 0, 0]; PLAT.rot = [0, 0, 0]; for (const it of PF.items) PLAT.remove(it.node); PF.items = [];
@@ -6113,11 +6150,493 @@ function pollPad(now) { requestAnimationFrame(pollPad); const gp = padActif(); i
     if (dn(7) || dn(5)) IN.att = true;
     const par = on(6) || on(4); if (par !== PAD.par) { PAD.par = par; IN.par = par; }
     if (dn(9) || dn(17)) basculerPause();
-    if (dn(1) && !$('livre').hidden) livreFermer(); }
+    if (dn(1)) { if (!$('livre').hidden) livreFermer(); else appui('c'); } }
   PAD.prev = B.map((b, i) => on(i)); }
 requestAnimationFrame(pollPad);
 // focus manette sur le menu au démarrage, et quand un écran s'ouvre
 new MutationObserver(() => { if (ENTREE.mode !== 'manette') return; const sc = ecranOuvert(); if (sc && (!PAD.focus || !sc.contains(PAD.focus))) { PAD.focus = null; padFocus(0, sc); } }).observe(document.body, { attributes: true, subtree: true, attributeFilter: ['hidden'] });
+
+// =====================================================================================
+// CAMPAGNE 2 — L'ASCENSION (chapitres 10 à 14)
+// Quarante et un jours après que l'enfant est remontée, les cuisines n'envoient plus rien.
+// Avec Kemal, l'ingénieur des vérins, on remonte la Fosse à la corde jusqu'au niveau 0.
+// Actions nouvelles : arracher les draps, tordre un crochet, nouer une corde, lancer le grappin,
+// grimper, s'accroupir et se cacher, troquer, soigner, dresser et charger le service.
+// =====================================================================================
+// ---- la corde à grappin : draps noués pendus au rebord du niveau du dessus
+const CORDE = new F.Node('corde'); { const m = G.merger(), lo = H + 1.6, y0 = -1.3; pc(m, CYL, 0, y0 + lo / 2, 0, .045, lo, .045, [.78, .76, .7], 4);
+  for (let y = y0 + .4; y < H; y += .55) pc(m, SPH, 0, y, 0, .085, .07, .085, [.74, .72, .66], 4);
+  bx(m, .05, .05, .32, 0, H + .28, 0, [.4, .41, .43], 22); bx(m, .05, .22, .05, 0, H + .17, .14, [.4, .41, .43], 22); bx(m, .05, .22, .05, 0, H + .17, -.14, [.4, .41, .43], 22);
+  for (const p of m.build(mk)) CORDE.addPart(p.mesh, null, p.color, p.mat, { cast: false }); CORDE.pickable = false; CORDE.visible = false; A.add(CORDE); }
+function poserCorde(s) { JEU.corde = true; JEU.cordeX = s; CORDE.pos = [s * (HX - .07), 0, 0]; CORDE.visible = true; }
+function majCorde() { if (CORDE.visible && !MONDE.cuisine) { CORDE.pos[1] = niveauY(JEU.cordeL === undefined ? Math.round(REF) : JEU.cordeL); CORDE.rot = [Math.sin(JEU.t * 1.3) * .012, 0, Math.sin(JEU.t * .9) * .015]; } }
+A.onUpdate(() => majCorde());
+async function lancerGrappin(s) { if (JEU.lancement || JEU.corde) return; JEU.lancement = true; JEU.cordeL = Math.round(REF); FX.souffle(); await attendre(.35); ton(1600, .12, .12, 'triangle', 1200); bruit(.12, 2600, .15, 'highpass'); vibrer(.4, 120); poserCorde(s); JEU.lancement = false; STATS.grappins = (STATS.grappins || 0) + 1; }
+// ---- grimper d'un étage : la caméra suit la montée le long de la corde, puis tout le décor glisse d'un niveau
+async function grimper(o = {}) { const s = JEU.cordeX || -1, L = Math.round(REF), xr = s * (HX - .38); JEU.cine = true; document.body.classList.add('cine'); J.accroupi = false;
+  const e0 = oeil(), P = [e0, [xr, 1.25, .05], [xr, H * .5, -.05], [xr, H + .55, .05], [s * (HX + .7), H + 1.62, 0]], D = [.9, 1.6, 1.7, 1.2], T0 = JEU.t; let son = 0;
+  CAM.cine = { eye: e0.slice(), look: [e0[0] + s * 2, e0[1], e0[2]] };
+  await jusqua(() => { let t = JEU.t - T0, i = 0; while (i < D.length && t > D[i]) { t -= D[i]; i++; } if (i >= D.length) return true;
+    const u = sstep(t / D[i]), a = P[i], b = P[i + 1], e = [lerp(a[0], b[0], u), lerp(a[1], b[1], u), lerp(a[2], b[2], u)]; const sway = i >= 1 && i <= 2 ? Math.sin(JEU.t * 2.2) * .06 : 0; e[2] += sway;
+    const lk = i < 3 ? [e[0] + s * 1.6, e[1] + (i === 0 ? 0 : .5), e[2] * .5] : [0, e[1] - .1, 0]; CAM.cine.eye = e; CAM.cine.look = lk;
+    son -= A.dt; if (son <= 0 && i >= 1 && i <= 2) { son = .62; bruit(.25, 420, .14, 'bandpass', 3, SON.brun); ton(180 + Math.random() * 40, .2, .03, 'sine', 120); } return false; });
+  REF = L - 1; JEU.niv = L - 1; JEU.voisinsSale = true; J.x = s * (HX + .7); J.z = 0; J.y = 0; J.a = s < 0 ? -PI / 2 : PI / 2; J.p = -.1; J.h = 1.62; CAM.cine = null; JEU.cine = false; document.body.classList.remove('cine');
+  JEU.corde = false; JEU.lancement = false; JEU.grimpe = false; JEU.inter = interCamp2(); CORDE.visible = false; ETAT.faim = Math.max(0, ETAT.faim - 3); STATS.grimpe = (STATS.grimpe || 0) + 1; }
+function nourrir(type, n, nom) { manger({ type, st: 'intact', nut: n, nom: nom || PLATS[type].nom, x: 0, z: 0 }, true); }
+function ajouterParts(p, L) { p.ch.setLook({ parts: p.ch.def.parts.concat(L) }); }
+const LOOK_K = { colors: { skin: '#b47850', hair: '#2a2a2a', top: '#4a5a7a', top2: '#4a5a7a', bottom: '#3a3a44', shoes: '#2a2622' }, build: 'heavy', height: 1.02 };
+function kemal(x, z, clip, yaw) { const k = cellmate({ nom: 'Kemal', role: 'Ingénieur des vérins · compagnon d’ascension', tenue: 'craftsman', morph: 'man', graine: 404, x, z, yaw: yaw === undefined ? -PI / 2 : yaw, clip: clip || 'Idle', look: LOOK_K }); return k; }
+function prepCamp2(L, cal) { niveau(L, cal); JEU.camp2 = true; JEU.faimK = .45; FLAGS.obj = FLAGS.obj || { livre: true }; JEU.inter = interCamp2(); }
+// interactions de base de la campagne : lire (tant qu'on a le livre), manger le pain sec
+function interCamp2(extra) { return [...(extra || []),
+  { k: 'f', t: 'Manger', em: 'pain sec (+18)', cond: () => FLAGS.obj && FLAGS.obj.pain && REPAS.t <= 0 && !JEU.cine, f() { FLAGS.obj.pain = false; nourrir('pain', 18, 'Pain sec'); } },
+  { x: -RX + .52, y: .6, z: 0, r: 2.2, cos: .75, k: 'e', t: 'Lire', em: 'Don Quichotte', cond: () => FLAGS.obj && FLAGS.obj.livre && !MONDE.cuisine, f: livreOuvrir }]; }
+// lancer + grimper depuis le rebord s (-1 ouest, 1 est)
+function interCorde(s, nivTxt, condLancer) { return [
+  { x: s * (HX + .05), y: .3, z: 0, r: 2.3, cos: .6, k: 'e', t: 'Lancer le grappin', em: 'vers le niveau ' + nivTxt, tenir: 1.4, cond: () => FLAGS.obj.corde && !JEU.corde && (!condLancer || condLancer()), f: () => lancerGrappin(s) },
+  { x: s * (HX - .07), y: 1.4, z: 0, r: 2.4, cos: .6, k: 'e', t: 'Grimper', em: 'au niveau ' + nivTxt, cond: () => JEU.corde && !JEU.cine, f() { JEU.grimpe = true; } }]; }
+
+// =====================================================================================
+// CHAPITRE 10 — Niveau 247 : la plateforme propre
+// =====================================================================================
+CH[10] = async function asc1() {
+  prepCamp2(247, '<b>L’Ascension</b> · jour 41'); FLAGS.obj = { livre: true }; ETAT.faim = 50; ETAT.luc = 70; STATS.grimpe = 0; STATS.dons = 0;
+  const K = kemal(RX - .82, -.2, 'Sit_Chair'); K.dy = .07;
+  J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6; JEU.voisins = true;
+  await carte('Campagne 2', 'L’Ascension', 'Quarante et un jours après qu’une enfant est remontée jusqu’au niveau 0, la plateforme a cessé de descendre chargée.', 6.5);
+  await carte('Jour 41 du jeûne', 'Niveau 247', '', 3); await fondu(false, 2); await attendre(1);
+  await dit('Kemal', 'Tu dormais. Tant mieux. Dormir, c’est manger un peu moins.'); await lever(-3.95, 1.15, versJ2(-3.95, 1.15, K.x, K.z)); await tourner(K.x, 1.3, K.z, .6);
+  await scene([['Kemal', 'Kemal. Avant la Fosse, j’étais ingénieur. C’est moi qui ai dessiné les vérins qui portent la plateforme.'], ['Kemal', 'Drôle d’endroit pour admirer son travail, hein ?']]);
+  await questions('Kemal', 'Pose tes questions. On a le temps, c’est même tout ce qu’on a.', [
+    { q: 'Pourquoi la plateforme descend-elle vide ?', r: [['Kemal', 'Pas vide. Propre. Tu vas voir. Personne n’y touche au-dessus, parce qu’il n’y a rien dessus.'], ['Kemal', 'Depuis quarante et un jours, les cuisines n’envoient plus rien. Plus une assiette.']] },
+    { q: 'Que s’est-il passé là-haut ?', r: [['Kemal', 'On raconte qu’une gamine est remontée jusqu’au niveau 0, assise sur la plateforme. Le lendemain, plus de service.'], ['Kemal', 'Les rumeurs montent mieux que la nourriture, ici.']] },
+    { q: 'Combien de temps peut-on tenir ?', r: [['Kemal', 'Toi, encore un peu. Moi, j’ai une jambe qui guérit mal.'], ['Kemal', 'Tiens. Un quignon que je gardais. Mange-le quand tu n’en pourras plus.'], ['', 'Kemal vous donne un morceau de pain sec. (F pour le manger.)']], f: () => { FLAGS.obj.pain = true; } }]);
+  if (!FLAGS.obj.pain) { FLAGS.obj.pain = true; bulle('Kemal', 'Garde ce quignon. Pour quand tu n’en pourras plus.', 3); }
+  K.parler = async () => { await questions('Kemal', pick(['Oui ?', 'Je t’écoute.', 'On avance, c’est déjà ça.']), [
+    { q: 'Comment marchent les vérins ?', r: [['Kemal', 'Huit vérins, un seul câble de commande. La plateforme peut rester à chaque étage aussi longtemps qu’on veut. On a choisi deux minutes. Pour la vitesse.']] },
+    { q: 'Pourquoi êtes-vous ici ?', r: [['Kemal', 'J’ai demandé à voir le résultat de mes plans. On m’a dit : « Volontiers. Six mois. »']] }]); };
+  // ---- la plateforme passe, propre comme un plateau neuf
+  objectif('Attendez le passage de la plateforme.'); JEU.attenteOk = true;
+  const pf = plateformeVenir(247, { attente: 22, arret: 16, banquet: { rien: true } }); await jusqua(() => PF.etat === 'approche' && PF.t > PF.Tw - 9);
+  K.jouer('Idle'); K.dy = 0; K.aller(HX + .4, -.4).then(() => K.regarder(0, -.4)); await pf;
+  await dit('Kemal', 'Regarde. Pas une miette, pas une tache. On dirait qu’elle sort du lave-vaisselle.', 4); await dit('Goreng', 'Tous les étages au-dessus ont faim. Tous.', 3);
+  await plateformePartir(); JEU.attenteOk = false;
+  await scene([['Kemal', 'Alors on monte. Une corde, un crochet, et deux cent quarante-sept étages.']]);
+  const c = await choisir('Goreng', '', ['On ne tiendra jamais.', 'D’accord. Comment ?']);
+  await dire('Kemal', c === 0 ? 'Sans doute. Mais en bas, on ne tiendra pas non plus. Autant mourir en grimpant.' : 'Les draps des deux lits, noués. Un pied de lit tordu en crochet. Je te montre.');
+  // ---- fabriquer la corde
+  objectif('Fabriquez une corde : arrachez les deux draps, tordez un pied de lit en crochet, puis nouez le tout.');
+  K.aller(RX - 1.7, -2.4).then(() => K.regarderJoueur());
+  const O = FLAGS.obj, fait = () => O.drapO && O.drapE && O.crochetOk;
+  JEU.inter = interCamp2([
+    { x: -RX + .52, y: .55, z: .2, r: 2.4, cos: .7, k: 'e', t: 'Arracher le drap', em: 'de votre lit', tenir: 1.8, cond: () => !O.drapO, pendant: d => { if (Math.random() < d * 5) bruit(.12, 1400, .07, 'bandpass', 2); }, f() { O.drapO = true; O.draps = true; FX.souffle(); bulle('', 'Un drap gris, raide de crasse. Il fera l’affaire.', 2.6); } },
+    { x: RX - .52, y: .55, z: .2, r: 2.4, cos: .7, k: 'e', t: 'Arracher le drap', em: 'du lit de Kemal', tenir: 1.8, cond: () => !O.drapE, pendant: d => { if (Math.random() < d * 5) bruit(.12, 1400, .07, 'bandpass', 2); }, f() { O.drapE = true; O.draps = true; FX.souffle(); bulle('Kemal', 'Prends-le. Je dormirai sur le béton, je suis habitué.', 3); } },
+    { x: -RX + .95, y: .2, z: -.95, r: 2.2, cos: .65, k: 'e', t: 'Tordre un pied de lit', em: 'en crochet', tenir: 3.2, cond: () => !O.crochetOk, pendant: d => { if (Math.random() < d * 3) { ton(300 + Math.random() * 200, .15, .05, 'square', 180); vibrer(.25, 60); } }, f() { O.crochet = true; O.crochetOk = true; FX.verre(); bulle('', 'Le métal cède dans un grincement. Un crochet tordu, mais solide.', 3); } },
+    { k: 'e', t: 'Nouer la corde', em: 'draps + crochet', tenir: 2.6, cond: () => fait() && !O.corde && !O.cordeFaite, pendant: d => { if (Math.random() < d * 4) bruit(.1, 900, .06, 'bandpass', 2); }, f() { O.corde = true; O.cordeFaite = true; O.draps = false; O.crochet = false; FX.bip(); bulle('Kemal', 'Nœud de chaise, puis nœud plat. Comme ça, ça ne glissera pas. Normalement.', 3.6); } },
+    ...interCorde(-1, '246')]);
+  await jusqua(() => O.corde); objectif('Lancez le grappin depuis le rebord ouest, puis grimpez.');
+  await jusqua(() => JEU.corde); await dit('Kemal', 'Il a pris. Tire un coup sec… Ça tient. Vas-y en premier, je suis plus lourd.', 3.5);
+  JEU.grimpe = false; await jusqua(() => JEU.grimpe); objectif(''); K.visible = false;
+  await grimper(); JEU.inter = interCamp2();
+  // ---- niveau 246 : Anselme
+  const An = cellmate({ nom: 'Anselme', role: 'Résident · niveau 246', tenue: 'elder', morph: 'elder', graine: 246, x: RX - .52, z: .15, yaw: 0, clip: 'Lie_Back', look: { colors: { top: '#8a7a60', top2: '#8a7a60' } } }); An.dy = .38;
+  await attendre(1.2); K.niv = 246; K.x = -HX - .7; K.z = 1.1; K.visible = true; K.regarder(RX, 0); await dit('Kemal', 'Ouf. Un de fait. Plus que deux cent quarante-six.', 3);
+  objectif('Parlez à l’occupant du niveau 246.');
+  await new Promise(res => { An.parler = async () => { An.parler = null;
+    await scene([['Anselme', 'Vous… vous montez ? Personne ne monte.'], ['Goreng', 'On va jusqu’aux cuisines. Savoir pourquoi plus rien ne descend.'], ['Anselme', 'Alors dites-leur qu’au 246, il y avait un vieux qui s’appelait Anselme. Qu’il a attendu, bien sagement.']]);
+    const o = FLAGS.obj.pain ? ['Lui donner votre pain sec.', 'Je leur dirai. Promis.'] : ['Je leur dirai. Promis.'];
+    const r = await choisir('Goreng', '', o);
+    if (FLAGS.obj.pain && r === 0) { FLAGS.obj.pain = false; FLAGS.anselme = true; STATS.dons++; ETAT.luc = Math.min(100, ETAT.luc + 8); await scene([['', 'Il prend le pain à deux mains, comme on tient un oiseau.'], ['Anselme', 'Je n’avais plus rien demandé à personne depuis des semaines.'], ['Kemal', '… C’était mon quignon. Mais c’est bien.']]); }
+    else await dire('Anselme', 'Promis, promis. Ils disent tous ça, en montant. Mais personne ne monte.'); res(); }; });
+  FLAGS.nomAnselme = 'Anselme'; await attendre(1);
+  await fondu(true, 1.6); ETAT.faim = Math.max(28, ETAT.faim - 16);
+  await carte('Vingt-deux jours plus tard', 'Niveau 180', 'Un étage par jour. Lancer, grimper, reprendre son souffle. Recommencer.', 4.6);
+  lancerChapitre(11); };
+
+// =====================================================================================
+// CHAPITRE 11 — Niveau 180 : Mirela, l'archiviste
+// =====================================================================================
+const TRAITS = new F.Node('traits'); { const m = G.merger(), R0 = srand(180); for (let g = 0; g < 26; g++) { const gx = -5 + (g % 13) * .62, gy = 1.1 + Math.floor(g / 13) * .7;
+    for (let i = 0; i < 4; i++) bx(m, .018, .32, .006, gx + i * .07, gy + (R0() - .5) * .02, -RZ + .006, [.16, .15, .14], 21); bx(m, .3, .016, .006, gx + .1, gy, -RZ + .007, [.16, .15, .14], 21); }
+  for (const p of m.build(mk)) TRAITS.addPart(p.mesh, null, p.color, p.mat, { cast: false }); TRAITS.pickable = false; TRAITS.visible = false; A.add(TRAITS); }
+A.onUpdate(() => { if (TRAITS.visible) TRAITS.pos[1] = niveauY(180); });
+CH[11] = async function asc2() {
+  prepCamp2(180, '<b>L’Ascension</b> · jour 63'); TRAITS.visible = true;
+  const K = kemal(-HX - .8, 1.2, 'Idle', PI / 2); K.regarder(RX, 0);
+  const M = cellmate({ nom: 'Mirela', role: 'Archiviste · niveau 180', tenue: 'villager_f', morph: 'woman', graine: 180, x: RX - .82, z: .2, yaw: -PI / 2, clip: 'Read_Sit', look: { colors: { hair: '#bdbdbd', top: '#5a6a4a', top2: '#5a6a4a', bottom: '#3a3a44' }, build: 'slim' }, props: [{ prop: 'Clipboard', socket: 'Socket_Hand_L', q: [0, 0, 0, 1], t: [0, 0, 0] }] }); M.dy = .07;
+  try { ajouterParts(M, ['Glasses']); } catch (e) {}
+  J.x = -HX - .7; J.z = -.4; J.a = -PI / 2; J.p = -.05;
+  await carte('Jour 63 du jeûne', 'Niveau 180', '', 3); await fondu(false, 1.6); await attendre(.8);
+  await tourner(M.x, 1.1, M.z, .8);
+  await scene([['Mirela', 'Ne bougez plus. Nom, niveau d’origine, date d’arrivée.'], ['Goreng', 'Pardon ?'], ['Mirela', 'Je tiens le registre. Ceux qui passent, ceux qui meurent, du 160 au 250. Quelqu’un doit se souvenir.'], ['', 'Le mur derrière elle est couvert de traits gravés, par paquets de cinq.']]);
+  objectif('Parlez à Mirela.');
+  let marche = false;
+  await new Promise(res => { M.parler = async () => {
+    await questions('Mirela', 'Je vous écoute. Vite, l’encre est rare.', [
+      { q: 'Pourquoi tenir un registre ?', r: [['Mirela', 'Parce que la Fosse oublie tout. Les noms partent par le trou avec le reste.']] },
+      { q: 'Que savez-vous des cuisines ?', r: [['Mirela', 'Je sais des choses. Elles ont un prix, comme tout ici.']] }], 'Parlons affaires.');
+    const opts = [], acts = [];
+    opts.push('Ajouter les noms du 246 et du 247 à votre registre.'); acts.push('noms');
+    if (FLAGS.obj.livre) { opts.push('Vous donner Don Quichotte.'); acts.push('livre'); }
+    if (FLAGS.obj.pain) { opts.push('Vous donner mon pain sec.'); acts.push('pain'); }
+    const r = await choisir('Mirela', 'Que m’offrez-vous ?', opts);
+    if (acts[r] === 'noms') { const q = await choisir('Mirela', 'Le vieil homme du 246. Son nom ?', ['Augustin', 'Anselme', 'Armand']);
+      if (q === 1) { STATS.paroles++; await scene([['Mirela', 'Anselme. Niveau 246.'], ['', 'Elle grave un trait de plus, lentement.'], ['Mirela', 'Vous vous en souvenez. Presque personne ne se souvient.']]); marche = true; }
+      else { await dire('Mirela', 'Vous l’avez déjà oublié. Voilà pourquoi j’écris.'); if (FLAGS.obj.livre) { const r2 = await choisir('Mirela', 'Il me faudra autre chose.', ['Vous donner Don Quichotte.', 'Je n’ai rien d’autre.']); if (r2 === 0) { FLAGS.obj.livre = false; marche = true; await dire('Mirela', 'Un livre… Trois ans que je ne lis que mes propres listes.'); } } } }
+    else if (acts[r] === 'livre') { FLAGS.obj.livre = false; marche = true; await dire('Mirela', 'Un livre… Trois ans que je ne lis que mes propres listes. Merci.'); }
+    else if (acts[r] === 'pain') { FLAGS.obj.pain = false; marche = true; await dire('Mirela', 'Du pain. Vous êtes fou, ou généreux. Ici, c’est pareil.'); }
+    if (!marche) { await dire('Mirela', 'Alors je vous dirai juste ceci, gratuitement : au 120, baissez la tête.'); }
+    else {
+      await scene([['Mirela', 'Au 120, un certain Frère Osmo prêche que la plateforme vide est un jeûne sacré. Ses fidèles gardent le rebord ouest. Personne ne passe.'], ['Mirela', 'Si vous montez, lancez depuis le rebord est. Et baissez la tête : un homme accroupi derrière un lit, ça ne se voit pas.'], ['Mirela', 'Et prenez ceci.'],
+        ['', 'Elle vous tend des feuillets cousus. Des colonnes de noms, de niveaux, de dates.'], ['Mirela', 'Une copie du registre. Les morts depuis le premier jour du jeûne. Montrez-la à ceux qui ont fermé les fourneaux.']]);
+      FLAGS.obj.registre = true; await attendre(.5); nourrir('pain', 14, 'Biscuits de Mirela'); bulle('Mirela', 'Et mangez ces biscuits. On ne grimpe pas le ventre vide.', 3); }
+    M.parler = async () => { await dire('Mirela', pick(['Montez. Et revenez me dire ce que vous avez vu.', 'Je garderai votre nom. Au cas où.'])); }; res(); }; });
+  objectif('Lancez le grappin et grimpez vers le niveau 179.');
+  JEU.inter = interCamp2(interCorde(-1, '179')); JEU.grimpe = false; await jusqua(() => JEU.grimpe); K.visible = false; await grimper(); TRAITS.visible = false;
+  await fondu(true, 1.4); ETAT.faim = Math.max(26, ETAT.faim - 14);
+  await carte('Cinquante-neuf étages plus haut', 'Niveau 120', 'Il fait nuit dans la Fosse. Quelqu’un chante, très bas.', 4.4);
+  lancerChapitre(12); };
+
+// =====================================================================================
+// CHAPITRE 12 — Niveau 120 : Frère Osmo (infiltration)
+// =====================================================================================
+const LOOK_FID = { colors: { top: '#d8d0bc', top2: '#d8d0bc', bottom: '#8a7a60', hat: '#d8d0bc' } };
+function segBoite(ax, az, bx2, bz, b) { for (let i = 1; i < 12; i++) { const t = i / 12, x = ax + (bx2 - ax) * t, z = az + (bz - az) * t; if (x > b.x0 && x < b.x1 && z > b.z0 && z < b.z1) return true; } return false; }
+CH[12] = async function asc3() {
+  prepCamp2(120, '<b>L’Ascension</b> · jour 122 · nuit'); MONDE.eclat = .5; JEU.accroupiOk = true;
+  const K = kemal(-HX - .8, 1.2, 'Crouch_Idle', PI / 2); K.visible = false;
+  const O = cellmate({ nom: 'Frère Osmo', role: 'Prêcheur · niveau 120', tenue: 'villager', morph: 'man', graine: 120, x: 0, z: -RZ + .75, yaw: PI, clip: 'Kneel_Care', look: { colors: { top: '#efe9dc', top2: '#efe9dc', bottom: '#d8d0bc', hair: '#bdbdbd' }, build: 'slim' } });
+  try { ajouterParts(O, ['Necklace']); } catch (e) {}
+  const FID = [[[-3.9, 2.7], [3.9, 2.7]], [[3.6, -2.6], [3.6, 2.4]], [[-1.6, -2.5], [1.8, -2.5], [1.8, -2.9]]].map((pts, i) => { const f = cellmate({ nom: 'Fidèle', role: 'Disciple de Frère Osmo', tenue: 'villager', morph: i === 1 ? 'woman' : 'man', graine: 1200 + i, x: pts[0][0], z: pts[0][1], clip: 'Idle', look: LOOK_FID }); f.pts = pts; f.i = 0; f.att = rnd(.5, 2); return f; });
+  J.x = -HX - .7; J.z = -.2; J.a = -PI / 2; J.p = -.05; J.accroupi = true;
+  await carte('Jour 122 du jeûne', 'Niveau 120', '', 3); await fondu(false, 1.6);
+  await dit('', 'Vous vous hissez sur le rebord, accroupi. Trois silhouettes en blanc font les cent pas. Un homme prie face au mur.', 4.6);
+  objectif('Rejoignez le rebord est sans être vu. Restez accroupi (' + glyphe('c') + ') et cachez-vous derrière les lits.');
+  JEU.vu = false; JEU.alerte = 0; let detecte = false;
+  JEU.maj = d => { if (d === 0 || detecte) return;
+    for (const f of FID) { if (f.path) continue; f.att -= d; if (f.att <= 0) { f.i = (f.i + 1) % f.pts.length; const [x, z] = f.pts[f.i]; f.aller(x, z, { clip: 'Patrol_Walk', v: .8 }).then(() => { f.att = rnd(1.4, 3.2); f.regarder(f.x + Math.sin(rnd(0, TAU)) * 3, f.z + Math.cos(rnd(0, TAU)) * 3); }); } }
+    let vu = 0; for (const f of FID) { const dx = J.x - f.x, dz = J.z - f.z, dd = Math.hypot(dx, dz), portee = J.accroupi ? 3.4 : 7.5; if (dd > portee) continue; const ang = Math.abs(angDiff(Math.atan2(dx, dz), f.ch.yaw)); if (ang > .85) continue;
+      if (J.accroupi && COLL.some(b => b.lit && segBoite(f.x, f.z, J.x, J.z, b))) continue; vu = Math.max(vu, (1.25 - dd / portee) * (J.accroupi ? .8 : 1.4)); }
+    JEU.alerte = clamp(JEU.alerte + (vu ? vu * d * 1.1 : -d * .3), 0, 1); $('hp').hidden = JEU.alerte <= .01; $('hpN').textContent = JEU.alerte > .6 ? 'On vous a presque vu' : 'Vigilance'; $('hpB').style.width = JEU.alerte * 100 + '%';
+    if (JEU.alerte >= 1) { detecte = true; JEU.vu = true; } };
+  JEU.osmoOk = false; JEU.inter = interCamp2(interCorde(1, '119', () => !detecte || JEU.osmoOk));
+  await Promise.race([jusqua(() => JEU.corde), jusqua(() => detecte)]);
+  JEU.maj = undefined; $('hp').hidden = true;
+  if (detecte) { for (const f of FID) { f.stop(); f.regarderJoueur(); } J.accroupi = false; FX.choc();
+    await dit('Fidèle', 'Ici ! Un grimpeur !', 2); O.jouer('Idle'); O.dy = 0; await O.aller(J.x + (J.x > 0 ? -1.6 : 1.6), J.z + .4); O.regarderJoueur();
+    await scene([['Frère Osmo', 'Un pèlerin qui monte, en pleine nuit. La plateforme vide est un jeûne sacré, mon enfant. Celui qui monte refuse l’épreuve.']]);
+    const opts = [], acts = []; if (FLAGS.obj.registre) { opts.push('Votre jeûne a des noms. Lisez-les : vos frères des étages du dessous.'); acts.push('reg'); }
+    opts.push('Je prierai avec vous, Frère. Puis vous me laisserez passer.'); acts.push('prie'); opts.push('Écartez-vous.'); acts.push('force');
+    const r = await choisir('Goreng', '', opts);
+    if (acts[r] === 'reg') { STATS.paroles++; await scene([['', 'Osmo prend les feuillets. Il lit longtemps, les lèvres serrées.'], ['Frère Osmo', 'Teodor, 203. Ilse, 211. Le petit Rafi… Rafi était ici, au 120, il y a trois mois.'], ['Frère Osmo', 'Montez. Et dites-leur qu’un vieux fou a prié pour rien pendant quatre-vingts jours.']]); }
+    else if (acts[r] === 'prie') { J.accroupi = true; JEU.cine = true; await dit('Frère Osmo', 'Agenouillez-vous. Fermez les yeux.', 3); await fondu(true, 1.2); ETAT.faim = Math.max(10, ETAT.faim - 6); ETAT.luc = Math.max(0, ETAT.luc - 6); await carte('', '', 'Vous priez avec eux jusqu’à l’aube. Vos genoux ne sentent plus le béton.', 3.6); await fondu(false, 1.2); JEU.cine = false; J.accroupi = false; await dit('Frère Osmo', 'Allez. Le jeûne vous accompagnera.', 3); }
+    else { JEU.raisonMort = 'Les fidèles de Frère Osmo ont eu le dessus.'; JEU.conseilMort = 'Restez accroupi derrière les lits, ou montrez le registre à Osmo.'; K.visible = true; K.niv = 120; K.x = -HX - .9; K.z = .8; K.jouer('Combat_Idle'); COMBAT.allies = [K];
+      const E = FID.map((f, i) => { f.retirer(); return ennemi({ nom: 'Fidèle', tenue: 'villager', morph: i === 1 ? 'woman' : 'man', graine: 1200 + i, x: f.x, z: f.z, niv: 120, hp: 45, dmg: 7, look: LOOK_FID }); });
+      await combat(E); COMBAT.allies = []; K.jouer('Idle'); await dit('Frère Osmo', 'Vous avez frappé des affamés. Le jeûne aurait été plus doux.', 3.5); }
+    JEU.osmoOk = true; objectif('Lancez le grappin depuis le rebord est.'); }
+  else { FLAGS.discret = true; STATS.discret = 1; await dit('', 'Personne ne s’est retourné. Le chant continue, très bas.', 3); }
+  if (!JEU.corde) await jusqua(() => JEU.corde);
+  K.visible = true; K.niv = 120; K.x = HX + .9; K.z = 1.1; K.regarderJoueur(); K.jouer('Idle'); await dit('Kemal', 'J’ai fait le tour par l’ombre. Plus jamais de chorale, je te jure.', 3);
+  objectif('Grimpez.'); JEU.grimpe = false; await jusqua(() => JEU.grimpe); K.visible = false; await grimper(); MONDE.eclat = 1;
+  await fondu(true, 1.4); ETAT.faim = Math.max(24, ETAT.faim - 14);
+  await carte('Cinquante-huit étages plus haut', 'Niveau 61', 'Dernier tiers. Kemal ne parle plus, il économise son souffle.', 4.2);
+  lancerChapitre(13); };
+
+// =====================================================================================
+// CHAPITRE 13 — Niveau 61 : les jumeaux Tobias et Line
+// =====================================================================================
+const CAISSES = new F.Node('caisses'); { const m = G.merger(), W = [.48, .34, .2]; bx(m, .7, .5, .55, 3.9, .25, -3.6, W, 13, .02); bx(m, .6, .45, .5, 4.6, .225, -3.4, W, 13, .02); bx(m, .55, .42, .5, 4.2, .71, -3.55, W, 13, .02); pc(m, CYL, 3.3, .2, -3.8, .3, .4, .3, [.3, .32, .34], 22);
+  for (const p of m.build(mk)) CAISSES.addPart(p.mesh, null, p.color, p.mat, { cast: false }); CAISSES.pickable = false; CAISSES.visible = false; A.add(CAISSES); }
+A.onUpdate(() => { if (CAISSES.visible) CAISSES.pos[1] = niveauY(61); });
+CH[13] = async function asc4() {
+  prepCamp2(61, '<b>L’Ascension</b> · jour 181'); CAISSES.visible = true;
+  const K = kemal(-HX - .95, .9, 'Lie_Back', PI); K.tint = [.3, 0, 0, .12];
+  const LT = { colors: { top: '#a03c64', top2: '#a03c64', bottom: '#2a2a30', hair: '#141210', skin: '#d49a6a' } }, KN = [{ prop: 'Knife', socket: 'Socket_Hand_R', q: [0, 0, 0, 1], t: [0, 0, 0] }];
+  const To = cellmate({ nom: 'Tobias', role: 'Marchand · niveau 61', tenue: 'fisher', morph: 'man', graine: 61, x: 3.2, z: -2.4, yaw: -2.4, clip: 'Idle', look: LT, props: KN });
+  const Li = cellmate({ nom: 'Line', role: 'Marchande · niveau 61', tenue: 'villager_f', morph: 'woman', graine: 62, x: 4.4, z: -2.1, yaw: -2.2, clip: 'Idle_LookAround', look: LT });
+  J.x = -HX - .7; J.z = -.5; J.a = -PI / 2; J.p = -.15;
+  await carte('Jour 181 du jeûne', 'Niveau 61', '', 3); await fondu(false, 1.4);
+  await dit('', 'Un cri derrière vous. Kemal a glissé sur les derniers nœuds. Sa jambe a heurté le rebord de plein fouet.', 4.4); FX.choc(); A.shake = .1;
+  await tourner(K.x, .4, K.z, 1); await dit('Kemal', 'Ça va… ça va. Non. Ça ne va pas du tout.', 3);
+  await tourner(To.x, 1.4, To.z, .9);
+  await scene([['Line', 'Tiens, de la visite qui vient d’en bas. Ça n’arrive jamais.'], ['Tobias', 'Ton copain saigne. On a des bandages. Et du sucre. Et tout le reste.'], ['Line', 'Tout se paie, au 61.']]);
+  objectif('Obtenez des bandages auprès des jumeaux.');
+  let ok = false; const essaye = {}; const parlerJ = async () => { while (!ok) { const opts = [], acts = [];
+      if (FLAGS.obj.registre && !essaye.reg) { opts.push('Le registre de Mirela.'); acts.push('reg'); } if (FLAGS.obj.livre) { opts.push('Don Quichotte.'); acts.push('livre'); } if (FLAGS.obj.pain) { opts.push('Mon pain sec.'); acts.push('pain'); }
+      if (!essaye.corde) { opts.push('Ma corde.'); acts.push('corde'); } opts.push('Si les cuisines reprennent, vous mangerez sans rien payer. Aidez-nous à monter.'); acts.push('conv'); opts.push('Donnez-les-moi. Maintenant.'); acts.push('force'); opts.push('Plus tard.'); acts.push('non');
+      const r = await choisir('Tobias', 'Qu’est-ce que tu proposes ?', opts), a = acts[r];
+      if (a === 'non') return; if (a === 'reg') { essaye.reg = true; await scene([['Tobias', 'Des noms ? Ça ne se mange pas, des noms.'], ['Line', 'Range ça. Ça porte malheur.']]); continue; }
+      if (a === 'corde') { essaye.corde = true; await dire('Kemal', 'Non ! Sans corde, on reste ici pour toujours. Trouve autre chose.'); continue; }
+      if (a === 'livre') { FLAGS.obj.livre = false; ok = true; await scene([['Line', 'Un livre ! Trois ans que je relis les étiquettes des caisses.'], ['Line', 'Tobias, donne-lui les bandages. Et du sucre, tiens.']]); nourrir('gateau', 12, 'Morceaux de sucre'); }
+      else if (a === 'pain') { FLAGS.obj.pain = false; ok = true; await dire('Tobias', 'Du pain du 246 ? Il a voyagé, celui-là. Marché conclu.'); }
+      else if (a === 'conv') { STATS.paroles++; if (Math.random() < .35 + STATS.paroles * .08 + (ETAT.luc > 50 ? .15 : 0)) { ok = true; await scene([['Line', '… Manger sans payer. Tu te rends compte, Tobias ?'], ['Tobias', 'Si tu mens, je descends te chercher. Tiens, tes bandages.']]); } else await dire('Tobias', 'Des promesses. On en a des caisses entières, de promesses. Autre chose.'); }
+      else if (a === 'force') { JEU.raisonMort = 'Les jumeaux du 61 ont eu le dessus.'; JEU.conseilMort = 'Troquez plutôt : un livre, du pain, ou de bons arguments.'; To.retirer(); Li.retirer();
+        const E = [ennemi({ nom: 'Tobias', tenue: 'fisher', graine: 61, x: To.x, z: To.z, niv: 61, hp: 55, dmg: 10, couteau: true, look: LT }), ennemi({ nom: 'Line', tenue: 'villager_f', morph: 'woman', graine: 62, x: Li.x, z: Li.z, niv: 61, hp: 50, dmg: 9, look: LT })];
+        await combat(E); ok = true; FLAGS.jumeauxTues = true; await dit('', 'Dans les caisses : des bandages, et rien d’autre qui se mange.', 3); } }
+    FLAGS.obj.bandages = true; };
+  To.parler = parlerJ; Li.parler = parlerJ; await jusqua(() => FLAGS.obj.bandages);
+  if (!FLAGS.jumeauxTues) { await scene([['Line', 'Vous montez aux cuisines ? Alors sachez ceci : la cheffe s’appelle Valeska. Elle a fermé les fourneaux elle-même.'], ['Tobias', 'Elle dit que la gamine est montée pour l’accuser. Elle ne cuisinera plus pour des gens qui s’entretuent.']]); To.parler = Li.parler = async () => dire(pick(['Tobias', 'Line']), 'Bonne grimpe. Ne tombez pas sur nous.'); }
+  objectif('Soignez Kemal (E maintenu).');
+  await new Promise(res => { JEU.inter = interCamp2([{ x: K.x, y: .3, z: K.z, r: 2.4, cos: .6, k: 'e', t: 'Soigner Kemal', em: 'bandages', tenir: 3.4, cond: () => FLAGS.obj.bandages, pendant: d => { if (Math.random() < d * 3) bruit(.1, 1600, .05, 'bandpass', 3); }, f() { FLAGS.obj.bandages = false; res(); } }]); });
+  K.tint = [0, 0, 0, 0]; K.jouer('Idle'); K.x = -HX - 1.2; K.regarderJoueur(); await dit('Kemal', 'Merci. Encore soixante et un étages. Après ça, je ne veux plus jamais voir une corde.', 3.6);
+  objectif('Grimpez vers le niveau 60.'); JEU.inter = interCamp2(interCorde(-1, '60')); JEU.grimpe = false; await jusqua(() => JEU.grimpe); K.visible = false; await grimper(); CAISSES.visible = false;
+  await fondu(true, 1.4); ETAT.faim = Math.max(22, ETAT.faim - 12);
+  await carte('Soixante étages plus haut', 'Niveau 1', 'La lumière change. Elle est blanche, comme celle d’un hôpital. Il n’y a plus de rebord au-dessus : il y a un garde-corps.', 5);
+  lancerChapitre(14); };
+
+// =====================================================================================
+// CHAPITRE 14 — Niveau 0 : les cuisines et la cheffe Valeska
+// =====================================================================================
+CH[14] = async function asc5() {
+  prepCamp2(1, '<b>L’Ascension</b> · niveau 0'); JEU.voisins = false;
+  MONDE.cuisine = true; MONDE.cx = 0; MONDE.eclatC = .55; CUISINE.pos = [0, 0, 0]; CUISINE.visible = true; A.setEnv(ENV_CUISINE, true);
+  PF.manuel = true; PF.etat = 'cuisine'; PLAT.visible = true; PLAT.pos = [0, 0, 0]; poserBanquet(0, { rien: true });
+  JEU.bornes = { x0: -8.1, x1: 8.1, z0: -6.0, z1: 6.0 }; JEU.coll = [];
+  const rel = () => 0, mkP = o => { const p = new Perso(o); p.rel = rel; p.libre = true; if (o.role) ROLES[o.nom] = o.role; return p; };
+  const V = mkP({ nom: 'Valeska', role: 'Cheffe des cuisines · niveau 0', tenue: 'cook', morph: 'woman', graine: 900, x: 3.6, z: -3.2, yaw: -2.2, clip: 'Idle', look: { colors: { top: '#1e1c20', top2: '#1e1c20', hat: '#f4f4f0', accent: '#8a1c1c', hair: '#6e4a2a' } } });
+  const C1 = mkP({ nom: 'Cuisinier', tenue: 'cook', graine: 901, x: -5.2, z: 4.2, yaw: 2.6, clip: 'Sit_Ground' }), C2 = mkP({ nom: 'Cuisinière', tenue: 'cook', morph: 'woman', graine: 902, x: -3.6, z: 4.9, yaw: 3, clip: 'Sit_Ground' }), C3 = mkP({ nom: 'Commis', tenue: 'cook', graine: 903, x: 5.6, z: 4.3, yaw: -2.6, clip: 'Sit_Ground' });
+  const Fi = mkP({ nom: 'La petite fille', role: 'Elle est montée seule', tenue: 'villager_f', morph: 'child', graine: 9, x: 7.2, z: -5.2, yaw: -2.6, clip: 'Sit_Ground', look: { parts: ['Head_Round', 'Hair_Bob', 'Dress', 'Legs_Skin', 'Shoes', 'Hands_Skin'], colors: { top: '#e8e2d4', top2: '#e8e2d4', hair: '#2a1e18', shoes: '#5e3c22' } } });
+  const K = mkP({ nom: 'Kemal', role: 'Ingénieur des vérins', tenue: 'craftsman', graine: 404, x: -HX - .9, z: 1.4, yaw: PI / 2, clip: 'Idle', look: LOOK_K }); K.visible = false;
+  // arrivée : on se hisse par-dessus le garde-corps
+  J.x = -HX - .6; J.z = .2; J.a = -PI / 2; J.p = .1; JEU.cine = true; document.body.classList.add('cine');
+  CAM.cine = { eye: [-HX + .3, -1.8, .2], look: [-HX - 2, -1.2, .2] }; await fondu(false, 1.6);
+  { const T0 = JEU.t; await jusqua(() => { const u = sstep((JEU.t - T0) / 3.2); CAM.cine.eye = [lerp(-HX + .3, -HX - .6, u), lerp(-1.8, 1.62, u), .2]; CAM.cine.look = [lerp(-HX - 2, 3, u), lerp(-1.2, 1.3, u), lerp(.2, -1, u)]; return u >= 1; }); }
+  CAM.cine = null; JEU.cine = false; document.body.classList.remove('cine'); J.a = versJ(V.x, V.z); J.p = 0;
+  await carte('Niveau 0', 'Les cuisines', '', 2.6);
+  K.visible = true; V.regarderJoueur(); await attendre(.6);
+  await scene([['Valeska', 'Personne ne monte. Personne. Comment êtes-vous arrivés ici ?'], ['Kemal', 'Avec des draps, un crochet tordu, et beaucoup d’entêtement.'], ['Valeska', 'Je m’appelle Valeska. Je dirige ces cuisines. Enfin, je les dirigeais.'], ['Goreng', 'C’est vous qui avez arrêté le service.'],
+    ['Valeska', 'Il y a cent quatre-vingts jours, la plateforme est remontée avec une enfant dessus. Assise. Une panna cotta intacte entre les mains.'], ['Valeska', 'Une enfant. Au niveau 333. Ce jour-là, j’ai compris à quoi servait chaque plat que j’envoyais. J’ai éteint les fourneaux.'], ['Valeska', 'Je refuse d’être complice.']]);
+  Fi.parler = async () => { await scene([['', 'La petite vous regarde, puis vous tend une feuille pliée.'], ['', 'Un dessin au crayon : une tour très haute, des centaines d’étages, et tout en bas, minuscule, une assiette blanche.'], ['Goreng', 'C’est toi qui l’as dessiné ?'], ['', 'Elle hoche la tête, et montre du doigt le bas de la tour. Puis vous.']]); FLAGS.dessin = true; Fi.parler = async () => dit('', 'Elle vous sourit, sans un mot.', 2.4); };
+  objectif('Convainquez Valeska de rallumer les fourneaux. (Vous pouvez aussi parler à l’enfant.)');
+  // ---- les arguments : trois au plus, certains dépendent de ce que vous rapportez d'en bas
+  const ARG = [];
+  if (FLAGS.obj.registre) ARG.push({ t: 'Voici le registre de Mirela. Des centaines de noms, morts depuis que vous avez fermé. Votre refus aussi a des victimes.', v: 2, r: [['', 'Valeska feuillette. Ses doigts s’arrêtent sur une ligne, puis une autre.'], ['Valeska', 'Je croyais que sans moi, au moins, ils ne s’entretueraient plus pour mes plats.'], ['Valeska', 'Ils meurent quand même. Seulement, plus lentement.']] });
+  ARG.push({ t: 'Kemal a conçu la plateforme. Elle peut s’arrêter plus longtemps à chaque étage, assez pour qu’une règle soit lue et respectée.', v: 1, r: [['Kemal', 'Huit vérins, un câble de commande. Deux minutes, c’était un choix. Pas une loi de la physique.'], ['Valeska', 'Une règle… Et qui la ferait respecter ?']] });
+  ARG.push({ t: 'L’enfant n’est pas montée pour vous punir. Elle est montée pour qu’on la voie.', v: FLAGS.dessin ? 2 : 1, r: [['Valeska', 'Pour qu’on la voie…'], ...(FLAGS.dessin ? [['Goreng', 'Elle m’a montré son dessin. Une assiette, tout en bas. Elle ne vous accuse pas. Elle vous demande de continuer, autrement.']] : []), ['', 'Valeska se tourne vers la petite. Longtemps.']] });
+  if (FLAGS.anselme) ARG.push({ t: 'Au 246, un vieil homme s’appelait Anselme. Je lui ai donné mon dernier pain. En bas, des gens partagent encore.', v: 1, r: [['Valeska', 'Vous avez donné votre pain, en montant vers moi ?'], ['Kemal', 'Mon pain, techniquement. Mais oui.']] });
+  if (FLAGS.obj.livre) ARG.push({ t: '« Celui à qui le ciel donne un morceau de pain est un homme heureux. » Le pain n’est pas le crime, cheffe.', v: 1, r: [['Valeska', 'Cervantès, au niveau 0… Vous l’avez porté jusqu’ici ?']] });
+  ARG.push({ t: 'Vous n’avez pas le droit d’affamer des centaines de gens pour soulager votre conscience.', v: 0, r: [['Valeska', 'Peut-être. Mais je n’avais pas le droit non plus de les nourrir pour qu’ils s’égorgent.']] });
+  let score = 0, force = false;
+  for (let n = 0; n < 3 && ARG.length; n++) { const opts = ARG.map(a => a.t).concat(['Assez parlé. Rallumez les fourneaux, ou on le fera à votre place.']); const r = await choisir('Goreng', n === 0 ? '' : 'Valeska attend la suite.', opts);
+    if (r === ARG.length) { force = true; break; } const a = ARG.splice(r, 1)[0]; score += a.v; STATS.paroles++; await scene(a.r); }
+  let fin;
+  if (!force && score >= 3) { await scene([['Valeska', 'Bien. Alors prouvez-le. On prépare le service ensemble.'], ['Valeska', 'Des parts égales. Une par personne. Et un message sur le plateau, que chaque étage lira avant de se servir.']]); fin = 'service'; }
+  else { if (!force) { await dire('Valeska', 'Non. Repartez d’où vous venez. Mes fourneaux resteront froids.'); const r = await choisir('Goreng', '', ['Redescendre. Vous avez peut-être raison.', 'Prendre les cuisines.']); if (r === 0) { ecranFin2('greve'); return; } }
+    await dire('Valeska', 'Vous voyez ? On en revient toujours là.'); JEU.raisonMort = 'Les cuisiniers ont défendu leurs fourneaux.'; JEU.conseilMort = 'Parez leurs couteaux (clic droit, L2), Kemal vous aide.'; K.jouer('Combat_Idle'); COMBAT.allies = [K];
+    C1.retirer(); C2.retirer(); const E = [ennemi({ nom: 'Cuisinier', tenue: 'cook', graine: 901, x: C1.x, z: C1.z, hp: 60, dmg: 10, couteau: true }), ennemi({ nom: 'Cuisinière', tenue: 'cook', morph: 'woman', graine: 902, x: C2.x, z: C2.z, hp: 55, dmg: 10, couteau: true })];
+    for (const e of E) e.rel = rel; await combat(E); COMBAT.allies = []; K.jouer('Idle'); V.aller(7, 5.4).then(() => { V.regarderJoueur(); V.jouer('Sit_Ground'); }); await dit('Valeska', 'Faites votre service, alors. Vous verrez ce que ça fait d’être en haut.', 3.6); fin = 'force'; }
+  // ---- le service : trois postes, un message, la plateforme
+  const POSTES = [-5, 0, 5].map(x => ({ x, z: -5.75, fait: false }));
+  if (fin === 'service') { const P = [C1, C2, C3]; P.forEach((c, i) => { c.jouer('Idle'); c.dy = 0; c.aller(POSTES[i].x + .7, -5.6).then(() => { c.regarder(c.x, -9); c.jouer(['Chop_Knife', 'Cook_Pan', 'Stir_Bowl'][i]); }); }); V.aller(-2.5, -3).then(() => V.regarderJoueur()); MONDE.eclatC = 1; bruit(1.2, 300, .2, 'lowpass', 1, SON.brun); }
+  else { MONDE.eclatC = .85; }
+  objectif('Dressez les assiettes aux trois postes (E maintenu).');
+  JEU.inter = POSTES.map((p, i) => ({ x: p.x, y: .95, z: -6.4, r: 2.4, cos: .6, k: 'e', t: 'Dresser les assiettes', em: 'poste ' + (i + 1), tenir: 3, cond: () => !p.fait, pendant: d => { if (Math.random() < d * 4) ton(900 + Math.random() * 900, .06, .04, 'triangle'); }, f() { p.fait = true; FX.verre(); bulle(fin === 'service' ? 'Valeska' : '', fin === 'service' ? pick(['Même portion. Toujours la même.', 'Pas de garniture en plus. Égal.', 'Voilà. Une assiette, une personne.']) : 'Une rangée d’assiettes égales de plus.', 2.6); } }));
+  await jusqua(() => POSTES.every(p => p.fait));
+  objectif('Écrivez le message du plateau, sur le grand plan de travail ouest.');
+  await new Promise(res => { JEU.inter = [{ x: -8.1, y: .95, z: 0, r: 3, cos: .5, k: 'e', t: 'Écrire le message', em: 'sur le plan de travail', f: async () => { JEU.inter = []; const m = await choisir('Goreng', 'Ce que liront les 333 niveaux avant de se servir :', ['« Une assiette par personne. Celui qui prend plus prend la vie d’un autre. »', '« Il y en a assez pour tous. Jusqu’au niveau 333. »', '« Une enfant est montée du fond. Mangez comme si elle vous regardait. »']); FLAGS.message2 = m; res(); } }]; });
+  objectif('Chargez la plateforme (E maintenu au bord du trou).');
+  await new Promise(res => { JEU.inter = [{ k: 'e', t: 'Charger la plateforme', em: '333 niveaux, parts égales', tenir: 3.4, cond: () => Math.hypot(clamp(J.x, -HX, HX) - J.x, clamp(J.z, -HZ, HZ) - J.z) < 1.4, pendant: d => { if (Math.random() < d * 5) ton(700 + Math.random() * 500, .05, .03, 'triangle'); }, f() { poserBanquet(0, { egal: true }); FX.choc(); res(); } }]; });
+  JEU.inter = []; objectif('');
+  if (fin === 'service') await scene([['Valeska', 'Une assiette par personne. S’ils la respectent, il y en aura jusqu’au fond.'], ['Kemal', 'Et la plateforme restera trois minutes à chaque étage. J’ai réglé le câble pendant que vous dressiez.']]);
+  else await scene([['Kemal', 'On a fait ce qu’il fallait. Je crois. Je ne sais plus.']]);
+  Fi.jouer('Idle'); Fi.aller(-HX - .5, -1.2).then(() => Fi.regarder(0, 0));
+  // cinématique : la plateforme redescend, chargée de parts égales
+  JEU.cine = true; document.body.classList.add('cine'); const e0 = oeil(); CAM.cine = { eye: e0, look: [0, 0, 0] }; const T0 = JEU.t;
+  JEU.maj = d => { const t = JEU.t - T0, u = sstep(t / 3); CAM.cine.eye = [lerp(e0[0], -HX - .9, u), lerp(e0[1], 2.6, u), lerp(e0[2], 2.2, u)]; CAM.cine.look = [0, PLAT.pos[1] - .6, 0]; if (t > 3.5) { PLAT.pos[1] -= d * Math.min(.6, (t - 3.5) * .25); if (SON.gro) SON.gro.ga.gain.value = .6; } };
+  await attendre(3.5); await dit('', 'Les vérins grondent. Pour la première fois depuis cent quatre-vingts jours, le service descend.', 4.6); await attendre(5); await fondu(true, 3); JEU.maj = undefined; if (SON.gro) SON.gro.ga.gain.value = 0;
+  ecranFin2(fin); };
+function ecranFin2(fin) { JEU.pause = true; JEU.enJeu = false; try { localStorage.removeItem('fosse-sauve'); } catch (e) {} SAUVE = { ch: 0 }; document.body.classList.remove('cine');
+  const MSG = ['« Une assiette par personne. Celui qui prend plus prend la vie d’un autre. »', '« Il y en a assez pour tous. Jusqu’au niveau 333. »', '« Une enfant est montée du fond. Mangez comme si elle vous regardait. »'];
+  const T = { service: ['Le Service', 'Valeska a rallumé les fourneaux. La plateforme descend chargée de parts égales et s’arrête trois minutes à chaque étage. Sur le plateau, on peut lire : ' + (MSG[FLAGS.message2] || MSG[0]) + ' Personne ne sait si la Fosse saura lire. Mais pour la première fois, quelqu’un a écrit.'],
+    force: ['Les Nouveaux Cuisiniers', 'Vous avez pris les cuisines par la force et lancé le service vous-même. Les assiettes sont égales, le message est clair. Mais au niveau 0, c’est désormais vous qui décidez de ce qui descend. Valeska vous regarde depuis le coin de la pièce, comme on regarde un successeur.'],
+    greve: ['La Grève', 'Vous redescendez sans avoir convaincu personne. Les fourneaux restent froids, la plateforme continue de passer propre et vide. Quelque part au 180, Mirela grave un trait de plus.'] }[fin];
+  $('finL').textContent = 'Campagne 2 · L’Ascension'; $('finH').textContent = T[0]; $('finP').textContent = perso(T[1]);
+  const S = [['Montées à la corde', STATS.grimpe || 0], ['Arguments donnés', STATS.paroles || 0], ['Infiltration du 120', FLAGS.discret ? 'sans être vu' : 'repéré'], ['Dons faits en montant', STATS.dons || 0]];
+  $('finStats').innerHTML = ''; for (const [l, v] of S) { const d = document.createElement('div'); const b = document.createElement('b'); b.textContent = v; d.appendChild(b); d.appendChild(document.createTextNode(l)); $('finStats').appendChild(d); }
+  $('fin').hidden = false; }
+
+// =====================================================================================
+// MODE IMMERSION (chapitre 20) — six mois dans la Fosse, pour de vrai
+// Chaque mois : un étage tiré au sort, un codétenu (gardé ou nouveau), quatre jours.
+// Chaque jour : un événement du matin, la plateforme (le codétenu mange aussi), un événement
+// de l'après-midi, la nuit (et ses risques). Confiance, faim du codétenu, maladie, désespoir,
+// corps qui tombent, cris des voisins, partage, la règle de la chaleur, hallucinations.
+// =====================================================================================
+const IMM_PRENOMS = { m: ['Arjun', 'Costa', 'Elio', 'Gaspard', 'Igor', 'Kofi', 'Moussa', 'Oskar', 'Rémi', 'Teodor', 'Bastien', 'Salomon', 'Hamid', 'Viktor', 'Anatole'], f: ['Bérénice', 'Dolorès', 'Fatou', 'Hana', 'Jade', 'Lisandre', 'Noor', 'Paloma', 'Sana', 'Ysée', 'Mireille', 'Agathe', 'Leïla', 'Zofia', 'Odette'] };
+const CARAC = {
+  solidaire: { conf: 62, quota: 1, clip: 'Sit_Chair', objet: 'une tasse fêlée', prop: 'Mug',
+    intro: ['Enfin réveillé. Je t’ai gardé une place au bord, pour quand elle passera.', 'Salut. On va s’entraider, d’accord ? Ici, c’est la seule chose qui marche.'],
+    histoires: ['J’étais infirmière de nuit. On apprend à partager le peu qu’il reste à quatre heures du matin.', 'Mon frère est mort au 190, il y a deux ans. Je suis entrée pour comprendre. Je n’ai toujours pas compris.', 'Une part chacun. Si tout le monde fait ça, le 333 mange. C’est de l’arithmétique, pas de la morale.'],
+    repas: ['Une part. Je laisse le reste.', 'Prends ce qu’il te faut. Pas plus.'], soir: ['On a tenu une journée de plus. Ça compte.', 'Tu crois qu’en bas ils ont eu nos restes ?'] },
+  cynique: { conf: 40, quota: 4, clip: 'Sit_Ground', objet: 'un couteau à huîtres', prop: 'Knife',
+    intro: ['Tiens, le nouveau. Règle numéro un : ce qui est dans ma bouche est à moi.', 'Bonjour. Ou pas. Ça dépendra de l’étage du mois prochain.'],
+    histoires: ['J’étais agent immobilier. Je vendais des étages. Tu vois l’ironie, j’espère.', 'Le partage ? Les gens du dessus ne partagent pas. Pourquoi je serais le seul idiot ?', 'J’ai vu un type rationner pendant un mois au 30. Il est mort au 210 le mois suivant. Le corps se souvient, pas la Fosse.'],
+    repas: ['Mange vite, ça part.', 'Laisse, c’est à moi celui-là.'], soir: ['Demain, pareil. Après-demain, pareil.', 'Ne me regarde pas comme ça.'] },
+  violent: { conf: 24, quota: 5, clip: 'Combat_Idle', objet: 'une barre de fer', prop: 'Baton',
+    intro: ['Tu ronfles. La prochaine fois, je te réveille autrement.', 'Reste de ton côté. Le trou, c’est la frontière.'],
+    histoires: ['J’ai fait six ans pour une bagarre. Ici, au moins, personne ne fait semblant.', 'Au 260, mon binôme a essayé de m’attacher pendant que je dormais. Il n’a pas fini le nœud.', 'J’ai faim tout le temps. Même au 5. C’est dans le ventre, ça ne part pas.'],
+    repas: ['Recule.', 'C’est à moi. Tout ça.'], soir: ['Je dors d’un œil.', 'Si tu bouges la nuit, je le saurai.'] },
+  fragile: { conf: 50, quota: 1, clip: 'Sit_Ground', objet: 'une guitare sans deux cordes', prop: 'Guitar',
+    intro: ['Oh… tu es réveillé. J’avais peur que tu ne te réveilles pas. Ça arrive, ici.', 'Bonjour. Pardon. Je pleure un peu le matin, ça passe.'],
+    histoires: ['Je jouais dans les cafés. Je chantais des chansons d’amour à des gens qui mangeaient.', 'J’ai signé pour effacer une dette. Six mois. On m’a dit que c’était court.', 'Parfois j’entends ma mère m’appeler depuis le dessous. Je sais que ce n’est pas elle.'],
+    repas: ['Je n’ai pas très faim. C’est grave ?', 'Tu peux te servir avant moi.'], soir: ['Tu veux que je joue quelque chose ?', 'Merci d’être là.'] },
+  croyant: { conf: 55, quota: 2, clip: 'Read_Sit', objet: 'un livre de prières', prop: 'Book',
+    intro: ['Béni soit ce réveil. Tu as dormi trois jours, j’ai prié pour toi.', 'La paix sur toi. Ici, on n’a que ça à offrir, alors offrons-le.'],
+    histoires: ['Je crois que la Fosse est une épreuve. Pas une punition : une question.', 'Au 77, j’ai vu un homme donner son repas à une inconnue. Elle a pleuré. C’était le plus beau jour de ma vie.', 'Je n’ai pas peur de mourir ici. J’ai peur de devenir quelqu’un d’autre avant.'],
+    repas: ['Merci pour ce qui descend.', 'Deux parts. Je garde le reste pour ceux d’en dessous.'], soir: ['Prions pour le 333.', 'Le jour se lève ou se couche, ici ? Je ne sais plus.'] },
+};
+const IMM = { d: null };
+function immSauver() { FLAGS.imm = JSON.parse(JSON.stringify(IMM.d)); }
+function immNouveauCodetenu() { const R = Math.random, fem = R() < .45, nom = pick(IMM_PRENOMS[fem ? 'f' : 'm'].filter(n => !(IMM.d.passes || []).some(p => p.nom === n))), car = pick(Object.keys(CARAC));
+  return { nom, fem, car, conf: CARAC[car].conf, faim: 60, graine: Math.floor(R() * 9000) + 100, morph: fem ? 'woman' : (R() < .2 ? 'elder' : 'man'), hist: 0, malade: 0, desespoir: 0, vivant: true, mois0: IMM.d.mois }; }
+function immTenue(c) { return c.morph === 'woman' ? 'villager_f' : pick(['villager', 'farmer', 'craftsman', 'fisher']); }
+function immCalendrier() { const d = IMM.d; JEU.calendrier = '<b>Immersion</b> · mois ' + d.mois + '/6 · jour ' + d.jour + '/4'; }
+function immNiveauTire() { const r = Math.random(); return Math.max(1, Math.min(FOND, Math.round(r < .35 ? 1 + Math.random() * 70 : r < .65 ? 70 + Math.random() * 110 : 180 + Math.random() * 150))); }
+
+CH[20] = async function immersion() {
+  if (!FLAGS.imm || !FLAGS.imm.mois) { IMM.d = { mois: 1, jour: 1, niv: immNiveauTire(), cm: null, passes: [], niveaux: [], jours: 0, dons: 0, vols: 0, corps: 0, tues: 0, repas: 0 }; IMM.d.cm = immNouveauCodetenu(); ETAT.faim = 70; ETAT.sante = 100; ETAT.luc = 80; immSauver(); }
+  IMM.d = JSON.parse(JSON.stringify(FLAGS.imm)); JEU.immersion = true; JEU.faimK = .55; JEU.voisins = true;
+  if (IMM.d.mois === 1 && IMM.d.jour === 1 && !IMM.d.intro) { IMM.d.intro = true; await carte('Mode Immersion', 'Six mois', 'Un étage tiré au sort chaque mois. Un codétenu que vous ne choisissez pas. Survivez jusqu’à la sortie, et décidez de qui vous serez en sortant.', 6); }
+  for (;;) { const r = await immMois(); if (r === 'fin') return; }
+};
+async function immMois() { const d = IMM.d; niveau(d.niv, ''); immCalendrier(); if (!d.niveaux.includes(d.niv)) d.niveaux.push(d.niv); sauver(20);
+  // le codétenu du mois
+  const c = d.cm; ROLES[c.nom] = 'Codétenu' + (c.fem ? 'e' : '') + ' · ' + c.car + ' · niveau ' + d.niv;
+  const P = cellmate({ nom: c.nom, role: ROLES[c.nom], tenue: immTenue(c), morph: c.morph, graine: c.graine, x: RX - .82, z: -.2, yaw: -PI / 2, clip: CARAC[c.car].clip === 'Read_Sit' ? 'Read_Sit' : 'Sit_Chair', props: CARAC[c.car].prop === 'Book' ? [{ prop: 'Book', socket: 'Socket_Hand_L', q: [0, 0, 0, 1], t: [0, 0, 0] }] : [] });
+  P.dy = .07; if (CARAC[c.car].clip === 'Sit_Ground') { P.x = RX - .52; P.z = -.5; P.dy = .3; P.regarder(RX - .52, 9, true); P.jouer('Sit_Ground', { fade: 0 }); } if (CARAC[c.car].clip === 'Combat_Idle') { P.x = RX - 1.4; P.z = 1.6; P.dy = 0; P.jouer('Idle_LookAround', { fade: 0 }); }
+  IMM.P = P; P.parler = () => immParler();
+  J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6; JEU.inter = immInter();
+  // cinématique d'arrivée : le puits, puis le numéro de l'étage
+  await carte('Mois ' + d.mois + ' sur 6', 'Niveau ' + d.niv, d.niv > 200 ? 'Le fond n’est pas loin. L’air sent le fer.' : d.niv < 30 ? 'Une odeur de rôti descend du puits.' : '', 3.4);
+  JEU.cine = true; document.body.classList.add('cine'); CAM.cine = { eye: [-HX - .3, 1.4, 0], look: [0, 12, 0] }; fondu(false, 1.6);
+  { const T0 = JEU.t; await jusqua(() => { const u = sstep((JEU.t - T0) / 4.2); CAM.cine.look = [lerp(0, 0, u), lerp(14, -10, u), lerp(0, .1, u)]; CAM.cine.eye = [-HX - .3, 1.4 + Math.sin(u * PI) * .2, 0]; return u >= 1 || JEU.passer; }); }
+  await fondu(true, .6); CAM.cine = null; JEU.cine = false; document.body.classList.remove('cine'); await fondu(false, 1.2);
+  await lever(-3.95, 1.15, versJ2(-3.95, 1.15, P.x, P.z)); await tourner(P.x, 1.2, P.z, .5);
+  if (c.mois0 === d.mois && !c.connu) { c.connu = true; await dire(c.nom, pick(CARAC[c.car].intro)); await dire(c.nom, 'Je m’appelle ' + c.nom + '. Mon objet, c’est ' + CARAC[c.car].objet + '.'); }
+  else await dire(c.nom, pick(['Encore toi. Le gaz nous a gardés ensemble, on dirait.', 'Niveau ' + d.niv + '. On fait avec.', 'Tu te souviens de moi ? Moi, je me souviens de ce que tu as fait le mois dernier.']));
+  for (; d.jour <= 4; d.jour++) { immCalendrier(); immSauver(); const r = await immJour(); if (r === 'mort') return 'fin'; }
+  // fin du mois : le gaz, un nouvel étage, peut-être un nouveau codétenu
+  await gaz(d.mois === 6 ? 'Le gaz. Le dernier. Quelque chose est différent cette fois : une voix compte à rebours.' : 'Le gaz. Dernier soir du mois ' + d.mois + '.');
+  P.retirer(); d.jours += 4;
+  if (d.mois >= 6) { await immSortie(); return 'fin'; }
+  d.mois++; d.jour = 1; d.niv = immNiveauTire();
+  if (!c.vivant || Math.random() < .45) { d.passes.push({ nom: c.nom, car: c.car, sort: c.vivant ? 'réassigné' + (c.fem ? 'e' : '') + ' ailleurs' : c.sort || 'mort' + (c.fem ? 'e' : '') }); d.cm = immNouveauCodetenu(); }
+  immSauver(); return 'suite'; }
+// ---- interactions propres à l'immersion
+function immInter() { return [...interLit(),
+  { x: -3.6, y: .9, z: -RZ + .25, r: 2, cos: .7, k: 'e', t: 'Boire au lavabo', em: 'eau tiède', cond: () => !(IMM.bu > JEU.t), f() { IMM.bu = JEU.t + 40; ETAT.luc = Math.min(100, ETAT.luc + 3); ETAT.faim = Math.min(100, ETAT.faim + 2); bruit(.8, 900, .08, 'bandpass', 1); bulle('', 'L’eau a un goût de tuyau. Elle fait du bien quand même.', 2.4); } },
+  { x: -RX + .02, y: 1.2, z: -2.4, r: 2, cos: .7, k: 'e', t: 'Graver un trait', em: 'compter les jours', cond: () => IMM.graveJour !== IMM.d.mois * 10 + IMM.d.jour, f() { IMM.graveJour = IMM.d.mois * 10 + IMM.d.jour; ETAT.luc = Math.min(100, ETAT.luc + 2); bruit(.5, 2400, .06, 'bandpass', 4); bulle('', 'Un trait de plus sur le béton. ' + (IMM.d.jours + IMM.d.jour) + ' jours depuis l’entrée.', 2.6); } },
+  { k: 'e', t: 'Donner', get em() { return J.tenu ? J.tenu.nom + ' à ' + IMM.d.cm.nom : ''; }, cond: () => J.tenu && IMM.P && IMM.P.visible && IMM.d.cm.vivant && IMM.P.dist() < 2.2, f() { const it = J.tenu, c = IMM.d.cm; J.tenu = null; vmPlat(null); finChaleur(); c.faim = Math.min(100, c.faim + it.nut); c.conf = Math.min(100, c.conf + 15); c.malade = Math.max(0, c.malade - 1); IMM.d.dons++; STATS.dons = (STATS.dons || 0) + 1; IMM.P.geste('Pick_Up'); FX.bip(); bulle(c.nom, pick(['Pour moi ? … Merci.', 'Personne ne m’a jamais rien donné, ici.', 'Je m’en souviendrai.']), 3); } }]; }
+// ---- conversation libre avec le codétenu
+async function immParler() { const c = IMM.d.cm, K = CARAC[c.car], P = IMM.P; if (!c.vivant) return;
+  const S = [];
+  S.push({ q: 'Qui es-tu, vraiment ?', f: async () => { await dire(c.nom, K.histoires[c.hist % K.histoires.length]); c.hist++; c.conf = Math.min(100, c.conf + 4); } });
+  S.push({ q: 'Comment tu tiens le coup ?', f: async () => { await dire(c.nom, c.malade ? 'J’ai de la fièvre. Si quelque chose de propre descend… garde-m’en un peu.' : c.desespoir > 1 ? '… Je ne sais plus pourquoi je me lève.' : c.faim < 25 ? 'J’ai faim. Une faim qui pense à ma place.' : c.faim > 70 ? 'Ça va. Le ventre plein, on devient presque gentil.' : 'On tient. On tient.'); } });
+  S.push({ q: 'On rationne ensemble ? Une part chacun.', f: async () => { const ok = c.car === 'solidaire' || c.car === 'croyant' || (c.car === 'fragile') || (c.conf > 65 && c.car === 'cynique'); if (ok) { IMM.ration = true; c.conf = Math.min(100, c.conf + 6); await dire(c.nom, c.car === 'solidaire' ? 'Évidemment. Et on laisse un mot pour le dessous.' : 'D’accord. Une part chacun. Je te fais confiance.'); } else { c.conf = Math.max(0, c.conf - 3); await dire(c.nom, c.car === 'violent' ? 'Rationne si tu veux. Ta part en moins, c’est la mienne en plus.' : 'Pour que ceux du dessous mangent mieux que nous ? Non merci.'); } } });
+  if (c.desespoir > 0) S.push({ q: 'Lève-toi. On va traverser ce mois ensemble.', f: async () => { c.desespoir = Math.max(0, c.desespoir - 2); c.conf = Math.min(100, c.conf + 10); ETAT.luc = Math.max(0, ETAT.luc - 2); await dire(c.nom, '… D’accord. Juste aujourd’hui. Demain on verra.'); P.jouer(CARAC[c.car].clip === 'Read_Sit' ? 'Read_Sit' : 'Sit_Ground'); } });
+  if (c.car === 'fragile') S.push({ q: 'Joue-moi quelque chose.', f: async () => { P.ch.extraProps = [{ prop: 'Guitar', socket: 'Socket_Hand_L', q: [0, 0, 0, 1], t: [0, 0, 0] }]; P.jouer('Play_Guitar'); for (let i = 0; i < 6; i++) setTimeout(() => ton(220 * Math.pow(2, [0, 3, 5, 7, 5, 3][i] / 12), .9, .05, 'triangle'), i * 520); await dit('', 'Quatre cordes, une chanson d’amour. Pendant une minute, la Fosse n’existe plus.', 4); ETAT.luc = Math.min(100, ETAT.luc + 10); c.conf = Math.min(100, c.conf + 8); P.ch.extraProps = []; P.jouer('Sit_Ground'); } });
+  if (c.car === 'croyant') S.push({ q: 'Prier avec toi.', f: async () => { P.jouer('Kneel_Care'); await dit(c.nom, 'Pour le 333. Pour ceux qui mangent trop. Pour nous, qui sommes au milieu.', 4); ETAT.luc = Math.min(100, ETAT.luc + 6); c.conf = Math.min(100, c.conf + 6); P.jouer('Read_Sit'); } });
+  await questions(c.nom, c.conf > 70 ? 'Oui ?' : c.conf < 25 ? 'Quoi ?' : 'Je t’écoute.', S); }
+// ---- un jour
+async function immJour() { const d = IMM.d, c = d.cm, P = IMM.P, K = CARAC[c.car]; JEU.attenteOk = true;
+  // matin
+  await attendre(1.5); await immEvenement('matin'); if (ETAT.sante <= 0) return 'mort';
+  // la plateforme : le codétenu se met au bord et mange selon son caractère
+  objectif('Attendez la plateforme (T pour attendre).');
+  const pf = plateformeVenir(d.niv, { attente: rnd(26, 36), arret: 62 }); await jusqua(() => PF.etat === 'approche' && PF.t > PF.Tw - 9);
+  if (c.vivant && !c.malade && c.desespoir < 2) { P.jouer('Idle'); P.dy = 0; P.aller(HX + .4, -.3).then(() => { P.regarder(0, -.3); P.manger(); }); }
+  await pf; objectif('Mangez. Ce que vous laissez descend.'); let pris = 0, quota = IMM.ration ? 1 : K.quota + (c.faim < 25 ? 2 : 0);
+  if (c.vivant && c.desespoir < 2) dit(c.nom, pick(K.repas), 2.4);
+  IMM.mangeJ = 0; JEU.onManger = () => { IMM.mangeJ++; d.repas++; if (IMM.ration && IMM.mangeJ === 2) { c.conf = Math.max(0, c.conf - 8); bulle(c.nom, 'On avait dit une part.', 2.6); } };
+  JEU.maj = dt => { if (!c.vivant || c.malade > 1 || c.desespoir >= 2 || PF.etat !== 'arret' || pris >= quota || P.path) return; IMM.tMange = (IMM.tMange || rnd(3, 6)) - dt; if (IMM.tMange > 0) return; IMM.tMange = rnd(4, 8);
+    const L = itemsRestants(i => i.type !== 'os' || c.faim < 30).sort((a, b) => Math.hypot(a.x - P.x, a.z - P.z) - Math.hypot(b.x - P.x, b.z - P.z)); if (!L.length) return; const it = L[0]; retirerItem(it); pris++; c.faim = Math.min(100, c.faim + it.nut * .8); P.geste('Pick_Up');
+    if ((c.car === 'violent' || c.car === 'cynique') && it.nut > 20 && Math.random() < .5) bulle(c.nom, it.nom + '. À moi.', 2); };
+  // vol : un codétenu affamé et méfiant essaie de prendre le plat que vous tenez
+  const tVol = JEU.t; const vol = (async () => { await jusqua(() => !!J.tenu || PF.etat !== 'arret'); if (!J.tenu || !c.vivant || c.conf > 45 || !(c.car === 'violent' || c.car === 'cynique')) return; await attendre(1.2); if (!J.tenu) return;
+    const r = await choisir(c.nom, 'Donne-moi ça. ' + J.tenu.nom + '. Maintenant.', ['Le lui donner.', 'Refuser et le manger devant lui.', 'Partager en deux.']);
+    if (r === 0) { const it = J.tenu; J.tenu = null; vmPlat(null); c.faim += it.nut; c.conf += 10; d.dons++; } else if (r === 1) { c.conf = Math.max(0, c.conf - 18); const it = J.tenu; manger(it, true); bulle(c.nom, 'Je m’en souviendrai.', 2.5); } else { const it = J.tenu; J.tenu = null; vmPlat(null); c.faim += it.nut / 2; ETAT.faim = Math.min(100, ETAT.faim + it.nut / 2); c.conf += 6; FX.croque(); } })();
+  await plateformePartir(); JEU.maj = undefined; JEU.onManger = undefined; objectif('');
+  if (IMM.promBas) { IMM.promBas = false; const n = itemsRestants().length; if (n >= 3) { ETAT.luc = Math.min(100, ETAT.luc + 6); IMM.d.dons++; voix(d.niv + 1, 'Merci… Merci, le ' + d.niv + ' !'); } else { ETAT.luc = Math.max(0, ETAT.luc - 6); voix(d.niv + 1, 'Menteurs. Vous êtes tous des menteurs, là-haut.'); } }
+  c.faim = Math.max(0, c.faim - 18 + (pris === 0 ? -6 : 0)); if (IMM.ration && IMM.mangeJ <= 1 && pris <= 1) { ETAT.luc = Math.min(100, ETAT.luc + 3); }
+  if (c.vivant && P.path === null) { P.dy = 0; if (c.malade > 1) { P.x = RX - .52; P.z = .15; P.dy = .38; P.regarder(RX - .52, -9, true); P.jouer('Lie_Back', { fade: 0 }); } else asseoir(P, -.2); }
+  // après-midi
+  await attendre(2); await immEvenement('apres'); if (ETAT.sante <= 0) return 'mort';
+  // soir : dormir, et la nuit
+  if (c.vivant) await dit(c.nom, pick(K.soir), 2.6);
+  let nuitAttaque = false;
+  await dormir(d.jour < 4 ? '<b>Immersion</b> · mois ' + d.mois + '/6 · jour ' + (d.jour + 1) + '/4' : '<b>Immersion</b> · mois ' + d.mois + '/6 · dernière nuit', { obj: 'Allez dormir sur votre lit.', faim: 10, nuit: async () => {
+    if (c.vivant) { if (c.malade) { c.malade++; if (c.malade > 3 && c.faim < 40) { c.vivant = false; c.sort = 'emporté' + (c.fem ? 'e' : '') + ' par la fièvre'; } } if (c.desespoir >= 2 && c.faim < 20) { c.desespoir++; if (c.desespoir > 4) { c.vivant = false; c.sort = 'éteint' + (c.fem ? 'e' : '') + ' en silence'; } }
+      nuitAttaque = c.vivant && (c.car === 'violent' || (c.car === 'cynique' && c.faim < 15)) && c.conf < 30 && c.faim < 35 && Math.random() < .55; if (c.vivant && !nuitAttaque) coucher(P); } },
+    matin: () => { if (c.vivant && !nuitAttaque) { if (c.malade > 1) { P.x = RX - .52; P.z = .15; P.dy = .38; P.regarder(RX - .52, -9, true); P.jouer('Lie_Back', { fade: 0 }); } else assis(P, -.2); } else if (!c.vivant) P.visible = false; } });
+  if (!c.vivant && c.sort && !c.annonce) { c.annonce = true; await dit('', c.nom + ' ne s’est pas réveillé' + (c.fem ? 'e' : '') + '. Vous ' + (c.fem ? 'la' : 'le') + ' recouvrez de son drap.', 4); ETAT.luc = Math.max(0, ETAT.luc - 14); }
+  if (nuitAttaque) { const r = await immNuit(); if (r === 'mort') return 'mort'; }
+  return 'ok'; }
+// ---- la nuit : un codétenu affamé et méfiant passe à l'acte
+async function immNuit() { const c = IMM.d.cm, P = IMM.P; J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .5; MONDE.eclat = .3; FX.coeur();
+  await dit('', 'Un frottement près du lit. Une ombre penchée sur vous.', 3); P.visible = true; P.dy = 0; P.x = -RX + 1.4; P.z = .5; P.regarderJoueur(); P.jouer('Combat_Idle');
+  const r = await choisir(c.nom, 'Ne crie pas. Ce n’est rien de personnel. J’ai faim, c’est tout.', ['Lui parler. « Attends. Demain, je te donne ma part. »', 'Se battre.', 'Rouler hors du lit et fuir vers le trou.']);
+  if (r === 0 && c.conf > 15 && Math.random() < .6) { c.conf += 12; IMM.promesse = true; await dire(c.nom, '… Ta part. Demain. Si tu mens, je reviens.'); asseoir(P, -.2); MONDE.eclat = 1; await lever(-3.95, 1.2); return 'ok'; }
+  await lever(-3.95, 1.2); MONDE.eclat = .6; JEU.raisonMort = c.nom + ' a eu le dessus, cette nuit-là.'; JEU.conseilMort = 'Partagez avec votre codétenu, gagnez sa confiance : un affamé méfiant devient dangereux la nuit.';
+  P.retirer(); const E = ennemi({ nom: c.nom, tenue: immTenue(c), morph: c.morph, graine: c.graine, x: P.x, z: P.z, niv: IMM.d.niv, hp: 60, dmg: 10, couteau: c.car === 'cynique' });
+  if (r === 2) { E.cd = 2.2; J.x = -HX - .6; J.z = 1.5; }
+  await combat([E], { obj: 'Défendez-vous.' }); c.vivant = false; c.sort = 'tombé' + (c.fem ? 'e' : '') + ' en vous attaquant'; IMM.d.tues++; ETAT.luc = Math.max(0, ETAT.luc - 18); MONDE.eclat = 1; JEU.raisonMort = undefined;
+  await dit('', 'Le silence revient. Vous restez assis contre le mur jusqu’au matin.', 3.5); IMM.P = E; E.visible = false; return 'ok'; }
+// ---- événements (matin et après-midi), tirés selon l'étage, le caractère et l'état
+async function immEvenement(moment) { const d = IMM.d, c = d.cm, P = IMM.P, deep = d.niv > 150, haut = d.niv < 40;
+  const EV = [
+    { w: deep ? 3 : 1.5, f: evCorps },
+    { w: 2, f: async () => { voix(d.niv + 1, deep ? 'S’il vous plaît… laissez quelque chose. N’importe quoi. On a un enfant malade ici.' : 'Hé, le ' + d.niv + ' ! Laissez-nous la sauce, au moins !');
+      const r = await choisir('Goreng', 'Que répondre au niveau du dessous ?', ['« Je laisserai quelque chose. Promis. »', '« Débrouillez-vous. Comme nous. »', 'Ne rien dire.']);
+      if (r === 0) { IMM.promBas = true; objectif('Promesse : laissez au moins trois plats sur la plateforme.'); } else if (r === 1) ETAT.luc = Math.max(0, ETAT.luc - 3); } },
+    { w: haut ? 1 : 2, f: async () => { voix(d.niv - 1, pick(['Vous en bas ! Vous voulez nos os ? Ouvrez la bouche !', 'Le ' + d.niv + ', vous avez de la chance, on n’a pas tout fini aujourd’hui. Remerciez-nous.', 'On vous entend parler. Taisez-vous, on essaie de dormir.'])); await attendre(1); if (Math.random() < .5) { await dit('', 'Quelque chose tombe du dessus et s’écrase au fond du trou.', 3); } } },
+    { w: c.vivant ? 2 : 0, f: async () => { await dit(c.nom, K0().histoires[c.hist % K0().histoires.length], 5); c.hist++; c.conf = Math.min(100, c.conf + 3); } },
+    { w: c.vivant && !c.malade && (deep || ETAT.faim < 40) ? 1.4 : 0, f: async () => { c.malade = 1; await dit(c.nom, 'J’ai… j’ai froid. Et chaud. Ça tourne.', 3); await dit('', c.nom + ' a de la fièvre. Il lui faudrait manger quelque chose de propre. (Prenez un plat et donnez-le-lui.)', 4.5); } },
+    { w: c.vivant && (c.car === 'fragile' || ETAT.luc < 50) && c.desespoir === 0 ? 1.4 : 0, f: async () => { c.desespoir = 2; P.jouer('Sit_Ground'); await dit('', c.nom + ' ne se lève plus. ' + (c.fem ? 'Elle' : 'Il') + ' regarde le trou sans le voir.', 4); await dit('', 'Parlez-lui. Il y a des jours où une phrase suffit.', 3); } },
+    { w: c.vivant && c.car === 'cynique' && moment === 'apres' ? 1.6 : 0, f: evCacheNourriture },
+    { w: 1, f: async () => { const t = pick(['« Le 202 ment. Il n’y a pas de 333. »', '« Ici est mort Ilan. Il partageait. »', '« Mange. Ne regarde pas. Mange. »', '« Si tu lis ceci, garde ton nom. »', '« J’ai compté 1 840 traits. Je n’en ferai pas un de plus. »']); await dit('', 'Sur le mur, gravé au clou : ' + t, 4.5); ETAT.luc = Math.max(0, ETAT.luc + (/Ilan|nom/.test(t) ? 2 : -2)); } },
+    { w: ETAT.luc < 45 && d.passes.length ? 2 : 0, f: evFantome },
+    { w: c.vivant && (c.car === 'solidaire') && moment === 'matin' ? 1.5 : 0, f: async () => { await dire(c.nom, 'J’ai une idée. On demande au dessous de rationner aussi. Si chaque étage le fait, ça descend loin.');
+      const r = await choisir('Goreng', '', ['Appeler le niveau du dessous avec ' + c.nom + '.', 'Ça ne marchera jamais.']); if (r === 0) { voix(d.niv + 1, Math.random() < .5 ? 'Une part chacun ? … Bon. On essaie. Un jour.' : 'Et pourquoi on vous croirait ?'); IMM.ration = true; c.conf += 6; ETAT.luc = Math.min(100, ETAT.luc + 3); } else c.conf -= 4; } },
+  ];
+  // pas d'événement une fois sur quatre : le silence aussi fait partie de la Fosse
+  if (Math.random() < .25) { await dit('', pick(['Rien. Le néon grésille.', 'Une goutte tombe quelque part, toutes les quatre secondes.', 'Quelqu’un chante, très loin au-dessus.', 'Le béton est froid sous vos pieds.']), 2.6); return; }
+  const tot = EV.reduce((s, e) => s + e.w, 0); let r = Math.random() * tot; for (const e of EV) { r -= e.w; if (r <= 0 && e.w > 0) { await e.f(); break; } }
+  if (IMM.promBas && moment === 'apres') IMM.promBas = false; }
+function K0() { return CARAC[IMM.d.cm.car]; }
+function voix(niv, txt) { const nom = 'Voix du ' + niv; ROLES[nom] = niv > IMM.d.niv ? 'Niveau du dessous' : 'Niveau du dessus'; bulle(nom, txt, Math.max(3, txt.length * .06)); return attendre(Math.max(2.6, txt.length * .055)); }
+// un corps tombe dans le puits (cinématique)
+async function evCorps() { const d = IMM.d, c = d.cm; d.corps++; FX.chute();
+  const f = new Perso({ tenue: pick(['villager', 'fisher', 'villager_f']), morph: Math.random() < .4 ? 'woman' : 'man', graine: Math.floor(rnd(1, 999)), x: rnd(-1, 1), z: rnd(-.6, .6), clip: 'Fall_Flat' }); f.libre = true;
+  let y = H * 2.5, v = -2; f.rel = () => y; const T0 = JEU.t;
+  await jusqua(() => { const dt = A.dt; v -= 9.8 * dt; y += v * dt; f.ch.yaw += dt * 2; return y < -H * 3 || JEU.t - T0 > 4; }); f.retirer(); A.shake = .05;
+  await dit('', 'Un corps est passé dans le trou. Il n’a pas crié.', 3); ETAT.luc = Math.max(0, ETAT.luc - 6);
+  if (c.vivant) await dit(c.nom, pick({ solidaire: ['Il venait d’au-dessus. Quelqu’un l’a poussé, ou il a sauté.'], cynique: ['Un de moins pour la plateforme.'], violent: ['Regarde pas. Ça porte malheur.'], fragile: ['Je… je n’arrive pas à respirer.'], croyant: ['Que quelqu’un l’attende, en bas.'] }[c.car]), 3); }
+// le codétenu cache de la nourriture : la cellule chauffe pour les deux
+async function evCacheNourriture() { const c = IMM.d.cm, P = IMM.P; await dit('', c.nom + ' glisse quelque chose sous son matelas.', 3); JEU.chaleur = { t: 0, froid: Math.random() < .4 };
+  const r = await choisir(c.nom, 'Quoi ? C’est un bout de pain. Pour demain. Ils ne le sauront pas.', ['« Jette-le dans le trou. Tout de suite. »', '« Donne-le-moi, je le mange. »', 'Le laisser faire.']);
+  if (r === 0 && c.conf > 20) { await dire(c.nom, 'D’accord, d’accord !'); P.geste('Give_Item'); finChaleur(); c.conf -= 4; }
+  else if (r === 1 && c.conf > 35) { await dire(c.nom, 'Tiens. Mange-le, alors. Vite.'); finChaleur(); nourrir('pain', 10, 'Pain caché'); c.conf -= 6; }
+  else { await dire(c.nom, 'Il ne se passera rien. Tu verras.'); await attendre(9); if (JEU.chaleur) { await dire(c.nom, 'Bon… bon ! Je le jette !'); finChaleur(); c.conf -= 10; } } }
+// hallucination : un ancien codétenu revient
+async function evFantome() { const d = IMM.d, ex = pick(d.passes); const g = new Perso({ nom: ex.nom, tenue: 'villager', morph: 'man', graine: 7, x: rnd(-1.5, 1.5), z: HZ + .8, yaw: PI, clip: 'Idle' }); g.niv = d.niv; g.tint = [.55, .62, .72, .55]; g.fantome = true; ROLES[ex.nom] = 'Souvenir';
+  await tourner(g.x, 1.4, g.z, 1); await dire(ex.nom, pick(['Tu m’as oublié' + ' ? Moi non.', 'Au niveau ' + pick(d.niveaux) + ', tu disais que tu serais différent.', 'Mange. Il n’y a que ça qui compte, ici. Tu le sais maintenant.'])); g.retirer(); ETAT.luc = Math.max(0, ETAT.luc - 6); }
+// ---- la sortie, après six mois
+async function immSortie() { const d = IMM.d; JEU.voisins = false; MONDE.cuisine = true; MONDE.cx = KX; CUISINE.visible = true; A.setEnv(ENV_CUISINE, true); MONDE.eclatC = 1.3; PF.manuel = true; PLAT.visible = false;
+  const rel = () => 0, doc = new Perso({ nom: 'L’Administration', tenue: 'doctor', morph: 'woman', graine: 33, x: KX + 1.5, z: 3.2, yaw: PI, clip: 'Write_Notes', props: [{ prop: 'Clipboard', socket: 'Socket_Hand_L', q: [0, 0, 0, 1], t: [0, 0, 0] }] }); doc.rel = rel; doc.libre = true; ROLES['L’Administration'] = 'Bureau des sorties';
+  JEU.cine = true; document.body.classList.add('cine'); CAM.cine = { eye: [KX + 1.5, 1.6, 6.2], look: [KX + 1.5, 1.3, 3] }; await fondu(false, 2.5);
+  const juste = d.dons >= 4 && d.tues === 0, bete = d.tues > 0 || d.vols > 2;
+  await dire('L’Administration', 'Résident ' + prenom() + '. Six mois effectués. ' + (d.jours) + ' jours. ' + d.niveaux.length + ' étages : ' + d.niveaux.join(', ') + '.');
+  await dire('L’Administration', 'Votre diplôme est homologué. Avant de sortir, une dernière question, pour nos statistiques : qu’avez-vous appris ?');
+  const r = await choisir(prenom(), '', ['« Que la faim décide à notre place, si on la laisse faire. »', '« Qu’une part suffit, si tout le monde s’y tient. »', '« Rien. Je veux juste sortir. »']);
+  await dire('L’Administration', ['Noté. Vous seriez surpris du nombre de gens qui répondent ça.', 'Noté. Très peu de gens répondent ça. Encore moins le pensent.', 'Noté. C’est la réponse la plus fréquente.'][r]);
+  await fondu(true, 2.5); doc.retirer(); JEU.cine = false; CAM.cine = null; document.body.classList.remove('cine');
+  JEU.pause = true; JEU.enJeu = false; delete FLAGS.imm; try { localStorage.removeItem('fosse-sauve'); } catch (e) {} SAUVE = { ch: 0 };
+  const titre = juste ? 'Le Juste' : bete ? 'La Bête de la Fosse' : 'Le Survivant';
+  const txt = juste ? 'Vous avez donné plus que vous n’avez pris. Quelque part, en dessous, des inconnus ont mangé grâce à vous. Ils ne connaîtront jamais votre nom.' : bete ? 'Vous êtes sorti. La Fosse aussi est sortie avec vous : elle a votre visage, maintenant, et elle a faim la nuit.' : 'Vous êtes sorti. Ni saint, ni monstre. Vous avez mangé quand il y avait à manger, et attendu quand il n’y avait rien. Comme presque tout le monde.';
+  $('finL').textContent = 'Immersion · six mois'; $('finH').textContent = titre; $('finP').textContent = perso(txt) + (d.passes.length ? ' Codétenus : ' + d.passes.concat(d.cm ? [{ nom: d.cm.nom, sort: d.cm.vivant ? 'sorti' + (d.cm.fem ? 'e' : '') + ' avec vous' : d.cm.sort }] : []).map(p => p.nom + ' (' + p.sort + ')').join(', ') + '.' : '');
+  const S = [['Jours survécus', d.jours], ['Étages visités', d.niveaux.length], ['Repas donnés', d.dons], ['Corps vus tomber', d.corps]];
+  $('finStats').innerHTML = ''; for (const [l, v] of S) { const e = document.createElement('div'); const b = document.createElement('b'); b.textContent = v; e.appendChild(b); e.appendChild(document.createTextNode(l)); $('finStats').appendChild(e); }
+  $('fin').hidden = false; }
 
 // =====================================================================================
 // DÉMARRAGE : images du livre et du menu, polices, personnages
