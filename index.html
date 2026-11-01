@@ -187,6 +187,7 @@ body.tactile #aideTouch{display:block}body.tactile #aideClav{display:none}
     <button class="mode" id="mJouer"><span class="lbl">Campagne 1</span><b>La Descente</b><small>Cinq mois, du niveau 48 au fond. Trimagasi, Imoguiri, Baharat, et la panna cotta.</small></button>
     <button class="mode" id="mJouer2"><span class="lbl">Campagne 2 · inédite</span><b>L’Ascension</b><small>La plateforme descend vide. Remontez la Fosse à la corde, du niveau 247 jusqu’aux cuisines.</small></button>
     <button class="mode" id="mJouer3"><span class="lbl">Campagne 3 · 18+</span><b>La Loi du 98</b><small>Les Bouchers de Grégor exigent un résident par mois. Faim, couteaux, choix sans retour.</small></button>
+    <button class="mode" id="mJouer4"><span class="lbl">Campagne 4 · 18+ · horreur</span><b>L’Écho</b><small>Niveau 66. Personne au-dessus, personne en dessous. La nuit, quelque chose monte du trou.</small></button>
     <button class="mode" id="mP2"><span class="lbl">Jeu complet · séparé</span><b>HDF : Platform 2</b><small>Ossian, Vesna, Tobiah, le Locataire et la grenade. Trois mois, cinq fins.</small></button>
     <button class="mode" id="mImm"><span class="lbl">Mode libre</span><b>Immersion</b><small>Six mois pour de vrai : étage tiré au sort, codétenu inconnu, chaque jour compte.</small></button>
   </div>
@@ -196,9 +197,9 @@ body.tactile #aideTouch{display:block}body.tactile #aideClav{display:none}
   <div id="aideTouch">Pouce gauche : marcher (poussez au bord pour courir) · glissez à droite : regarder · touchez à droite en combat : frapper · boutons à droite selon la situation</div>
 </div></div>
 <div id="ageEcran" class="ecran" hidden><div class="panneau gl">
-  <span class="lbl" style="color:var(--blood)">Campagne 3 · La Loi du 98</span>
+  <span class="lbl" style="color:var(--blood)" id="ageL">Campagne 3 · La Loi du 98</span>
   <h3>Réservé aux adultes</h3>
-  <p style="margin:0;color:var(--dim);font:400 15px/1.5 var(--f-b);max-width:52ch">Cette campagne contient de la violence, un langage cru et des choix moraux extrêmes. Confirmez-vous avoir 18 ans ou plus ?</p>
+  <p style="margin:0;color:var(--dim);font:400 15px/1.5 var(--f-b);max-width:52ch" id="ageP">Cette campagne contient de la violence, un langage cru et des choix moraux extrêmes. Confirmez-vous avoir 18 ans ou plus ?</p>
   <div class="btns"><button class="b p" id="ageOui">J’ai 18 ans ou plus</button><button class="b" id="ageNon">Retour</button></div>
 </div></div>
 <div id="nomEcran" class="ecran" hidden><div class="panneau gl">
@@ -5352,11 +5353,12 @@ const MONDE = { cuisine: false, eclat: 1, rouge: 0, scintille: 0 };
 function lumieresImage() { LUM.length = 0;
   if (MONDE.cuisine) { const cx = MONDE.cx === undefined ? KX : MONDE.cx; for (let x = -6; x <= 6; x += 4) for (const z of [-3, 3]) lumiere([cx + x, 3.3, z], [1, .97, .92], 10 * (MONDE.eclatC || 1), 10); return; }
   const base = Math.floor(REF + .5), deep = clamp((base - 120) / 200, 0, 1); let k0 = 1;
-  if (base > 140) { MONDE.scintille -= A.dt; if (MONDE.scintille < -rnd(2, 9)) MONDE.scintille = rnd(.05, .35); k0 = MONDE.scintille > 0 ? .25 : 1; }
+  if (base > 140 || MONDE.panne) { MONDE.scintille -= A.dt; if (MONDE.scintille < -rnd(2, 9)) MONDE.scintille = rnd(.05, .35); k0 = MONDE.scintille > 0 ? (MONDE.panne ? 2.2 : .25) : 1; }
   const e = MONDE.eclat * k0, c0 = [lerp(.95, 1, deep), lerp(.97, .82, deep), lerp(1, .66, deep)];
   for (let k = 0; k <= 2; k++) for (const s of k ? [1, -1] : [0]) { const i = base + k * s; if (i < 0 || i > FOND) continue; const y = niveauY(i) + H - SL - .45;
     if (k === 0) { lumiere([-3.1, y, 0], c0, 8.5 * e, 9.5); lumiere([3.1, y, 0], c0, 8.5 * e, 9.5); lumiere([0, y, 0], c0, 4 * e, 6); }
-    else lumiere([0, y, 0], c0, (k === 1 ? 5 : 3.5) * (i === 0 ? 2.5 : 1), k === 1 ? 6.5 : 5.5); }
+    else lumiere([0, y, 0], c0, (k === 1 ? 5 : 3.5) * (i === 0 ? 2.5 : 1) * (MONDE.autres === undefined ? 1 : MONDE.autres), k === 1 ? 6.5 : 5.5); }
+  if (MONDE.lampe > 0) { const fl = .82 + .18 * Math.sin(JEU.t * 23) * Math.sin(JEU.t * 7.3); lumiere([J.x - Math.sin(J.a) * .35, J.y + 1.25, J.z - Math.cos(J.a) * .35], [1, .66, .32], 3.2 * MONDE.lampe * fl, 5.2); }
   if (MONDE.rouge > 0) lumiere([0, 2.2, 0], [1, .35, .1], 8 * MONDE.rouge, 10); }
 
 // =====================================================================================
@@ -5705,12 +5707,15 @@ function allerMenu() { document.body.classList.remove('enjeu'); JEU.tk++; JEU.en
 // nouvelle partie : fiche d'admission (prénom), puis le prologue
 function ouvrirFiche(mode) { JEU.modeChoisi = mode; sonInit(); $('menu').hidden = true; $('nomErr').hidden = true; const v = SAUVE && SAUVE.flags && SAUVE.flags.prenom; $('nomIn').value = v || 'Goreng'; $('nomEcran').hidden = false; if (!touch) setTimeout(() => { try { $('nomIn').focus(); $('nomIn').select(); } catch (e) {} }, 60); };
 function nomValider() { const v = nettoyerPrenom($('nomIn').value); if (!v) { $('nomErr').hidden = false; $('nomErr').textContent = 'Écrivez un prénom (lettres, espaces, tirets ou apostrophes).'; return; }
-  try { $('nomIn').blur(); } catch (e) {} $('nomEcran').hidden = true; FLAGS_RESET(); FLAGS.prenom = v; JEU.ckDescente = undefined; lancerChapitre(JEU.modeChoisi === 2 ? 10 : JEU.modeChoisi === 3 ? 20 : JEU.modeChoisi === 4 ? 30 : 0); }
+  try { $('nomIn').blur(); } catch (e) {} $('nomEcran').hidden = true; FLAGS_RESET(); FLAGS.prenom = v; JEU.ckDescente = undefined; lancerChapitre(JEU.modeChoisi === 2 ? 10 : JEU.modeChoisi === 3 ? 20 : JEU.modeChoisi === 4 ? 30 : JEU.modeChoisi === 5 ? 40 : 0); }
 $('mP2').onclick = () => { try { voixCouper(); if (SON.ctx) SON.ctx.suspend(); } catch (e) {} const emb = document.getElementById('p2src');   // version autonome : PLATFORM 2 est embarqué dans ce fichier
   if (emb) { try { const t = atob(emb.textContent.trim()), u = new Uint8Array(t.length); for (let i = 0; i < t.length; i++) u[i] = t.charCodeAt(i); location.href = URL.createObjectURL(new Blob([u], { type: 'text/html;charset=utf-8' })) + '#depuis-hdf'; return; } catch (e) { console.warn('[P2]', e); } }
   location.href = 'platform-2.html#depuis-hdf'; };
 $('mJouer').onclick = () => ouvrirFiche(1); $('mJouer2').onclick = () => ouvrirFiche(2); $('mImm').onclick = () => ouvrirFiche(3);
-$('mJouer3').onclick = () => { sonInit(); $('menu').hidden = true; $('ageEcran').hidden = false; }; $('ageOui').onclick = () => { $('ageEcran').hidden = true; ouvrirFiche(4); }; $('ageNon').onclick = () => { $('ageEcran').hidden = true; $('menu').hidden = false; };
+function ageDemande(mode, titre, txt) { sonInit(); JEU.ageMode = mode; $('ageL').textContent = titre; $('ageP').textContent = txt; $('menu').hidden = true; $('ageEcran').hidden = false; }
+$('mJouer3').onclick = () => ageDemande(4, 'Campagne 3 · La Loi du 98', 'Cette campagne contient de la violence, un langage cru et des choix moraux extrêmes. Confirmez-vous avoir 18 ans ou plus ?');
+$('mJouer4').onclick = () => ageDemande(5, 'Campagne 4 · L’Écho', 'Cette campagne d’horreur contient des scènes effrayantes, des apparitions soudaines et des thèmes très sombres. Confirmez-vous avoir 18 ans ou plus ?');
+$('ageOui').onclick = () => { $('ageEcran').hidden = true; ouvrirFiche(JEU.ageMode || 4); }; $('ageNon').onclick = () => { $('ageEcran').hidden = true; $('menu').hidden = false; };
 $('nomOk').onclick = nomValider; $('nomRetour').onclick = () => { $('nomEcran').hidden = true; $('menu').hidden = false; };
 $('nomIn').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); nomValider(); } else if (e.key === 'Escape') $('nomRetour').click(); });
 $('nomIn').addEventListener('input', () => { $('nomErr').hidden = true; });
@@ -5753,7 +5758,7 @@ function nettoyer() { JEU.tk++; JEU.attentes = []; DLG.ouvert = false; DLG.res =
   JEU.vitesse = 0; JEU.attenteOk = false; JEU.bordDit = false; JEU.voisins = true; JEU.voisinsSale = true; JEU.cine = false; CAM.cine = null; document.body.classList.remove('cine');
   PF.etat = 'loin'; PF.manuel = false; PF.lvl = -20; PLAT.visible = false; PLAT.pos = [0, 0, 0]; PLAT.rot = [0, 0, 0]; for (const it of PF.items) PLAT.remove(it.node); PF.items = [];
   J.arme = 'mains'; J.gl = null; J.h = undefined; REPAS.t = 0; REPAS.it = null; Object.assign(J, { x: -3.9, z: 1.7, y: 0, vy: 0, a: -PI / 2, p: -.05, chute: false, cri: false, attache: false, couche: false, bloque: false, tenu: null, swing: 0, cd: 0, surPlatY: 0 }); vmPlat(null);
-  MONDE.cuisine = false; CUISINE.visible = false; MONDE.eclat = 1; MONDE.rouge = 0; A.setEnv(ENV_FOSSE, true); fx('fxHeat', 0); fx('fxCold', 0); fx('fxGas', 0); fx('fxHurt', 0); objectif(''); $('sub').textContent = ''; $('prog').hidden = true; $('hp').hidden = true; }
+  MONDE.cuisine = false; CUISINE.visible = false; MONDE.eclat = 1; MONDE.rouge = 0; MONDE.panne = false; MONDE.lampe = 0; MONDE.autres = 1; JEU.maj = null; JEU.c4 = false; if (typeof marques === 'function') marques(0); A.setEnv(ENV_FOSSE, true); fx('fxHeat', 0); fx('fxCold', 0); fx('fxGas', 0); fx('fxHurt', 0); objectif(''); $('sub').textContent = ''; $('prog').hidden = true; $('hp').hidden = true; }
 async function lancerChapitre(n, retry) { nettoyer(); if (!VOISINS.length) voisinsInit(); $('fade').style.transitionDuration = '0s'; $('fade').style.opacity = 1;
   if (retry && SAUVE && SAUVE.etat && SAUVE.ch === n) { Object.assign(ETAT, SAUVE.etat); Object.assign(STATS, SAUVE.stats || {}); for (const k in FLAGS) delete FLAGS[k]; Object.assign(FLAGS, SAUVE.flags || {}); }
   if (n > 0) sauver(n); JEU.reprise = n; JEU.enJeu = true; document.body.classList.add('enjeu'); JEU.pause = false; try { await CH[n](); } catch (e) { console.error('chapitre', n, e); } }
@@ -6876,6 +6881,229 @@ function ecranFin3(fin) { const W = c3f(); JEU.pause = true; JEU.enJeu = false; 
     loi: ['La Loi', 'Le mois suivant, le 105 vous a donné quelqu’un. Vous avez mangé tous les jours. Au bout d’un mois, vous ne sentiez plus rien. Grégor avait raison sur un seul point : on s’habitue.'] }[fin];
   $('finL').textContent = 'Campagne 3 · La Loi du 98'; $('finH').textContent = T[0]; $('finP').textContent = perso(T[1]) + (W.abel === 'livre' ? ' Quelque part, une montre avance toujours de quatre minutes.' : '');
   const S = [['Vies prises', W.vies || 0], ['Vies épargnées', W.epargnes || 0], ['Abel', W.abel === 'livre' ? 'livré' : 'défendu'], ['Jonas', { vendu: 'vendu', delivre: 'délivré', vivant: 'sauvé', mort: 'veillé' }[W.jonas] || '—']];
+  $('finStats').innerHTML = ''; for (const [l, v] of S) { const d = document.createElement('div'); const b = document.createElement('b'); b.textContent = v; d.appendChild(b); d.appendChild(document.createTextNode(l)); $('finStats').appendChild(d); }
+  $('fin').hidden = false; }
+
+// =====================================================================================
+// CAMPAGNE 4 — L'ÉCHO (chapitres 40 à 43) · horreur psychologique
+// Niveau 66. Personne au-dessus, personne en dessous. La nuit, quelque chose monte du trou.
+// Coup de théâtre : il n'y a pas de créature. Il n'y a que le résident, la nuit, et le gaz qui
+// efface tout chaque mois. L'Administration observe : « Sujet 66, éveil numéro treize ».
+// =====================================================================================
+const LOOK_ELISE = { colors: { top: '#8aa0b4', top2: '#8aa0b4', bottom: '#3a4250', hair: '#4a2e1c' }, build: 'slim' };
+const LOOK_BASTIEN = { colors: { top: '#4a5a3a', top2: '#4a5a3a', bottom: '#2a2a24', hair: '#1a1410' }, build: 'heavy' };
+const LOOK_LINA = { colors: { top: '#9a5a6a', top2: '#9a5a6a', bottom: '#2e2a38', hair: '#141010' }, build: 'slim' };
+const LOOK_ECHO = { colors: { top: '#1a1816', top2: '#1a1816', bottom: '#141210', skin: '#a09486', hair: '#0a0a0a' }, build: 'slim', height: 1.2 };
+// ---- les marques gravées (une rangée de groupes de traits, mur nord)
+const MARQUES = []; for (let g = 0; g < 13; g++) { const n = new F.Node('marque' + g), m = G.merger(), R0 = srand(66 + g), gx = -1.2 + (g % 7) * .62, gy = 1.25 - Math.floor(g / 7) * .62, col = g === 0 ? [.16, .15, .14] : [.24, .07, .05];
+  for (let i = 0; i < 4; i++) bx(m, .018, .32, .006, gx + i * .07, gy + (R0() - .5) * .03, -RZ + .006, col, 21); bx(m, .3, .016, .006, gx + .1, gy + (R0() - .5) * .05, -RZ + .007, col, 21);
+  for (const p of m.build(mk)) n.addPart(p.mesh, null, p.color, p.mat, { cast: false }); n.pickable = false; n.visible = false; A.add(n); MARQUES.push(n); }
+function marques(k) { MARQUES.forEach((n, i) => { n.visible = i < k; n.pos[1] = 0; }); }
+const c4 = () => FLAGS.c4;
+function prep4(L, cal) { niveau(L, cal); JEU.c4 = true; JEU.voisins = false; JEU.voisinsSale = true; MONDE.autres = 0; JEU.accroupiOk = true; FLAGS.c4 = FLAGS.c4 || { m: 1 }; JEU.inter = interLit(); }
+// ---- sons et effets d'horreur
+function cri() { bruit(1.1, 2600, .8, 'bandpass', .7); ton(1500, .8, .45, 'sawtooth', 260); ton(70, 1, .6, 'sine', 30); vibrer(1, 520); }
+function chuchote(txt, dur) { bulle('???', txt, dur || Math.max(2.6, txt.length * .06)); bruit(1.4, 3400, .05, 'bandpass', 5); }
+function haut(txt) { ROLES['Haut-parleur'] = 'Administration'; bruit(.3, 1800, .12, 'bandpass', 2); return dire('Haut-parleur', txt); }
+function croque(n = 4) { for (let i = 0; i < n; i++) setTimeout(() => { bruit(.12, 900 + Math.random() * 500, .22, 'lowpass', 2, SON.brun); }, i * 330 + Math.random() * 120); }
+function echo(x, z, o = {}) { const c = new Perso({ nom: '???', tenue: 'villager', morph: 'man', graine: 6606, x, z, yaw: o.yaw || 0, clip: o.clip || 'Idle', look: LOOK_ECHO, v: 1.1 }); c.niv = o.niv === undefined ? JEU.niv : o.niv; c.tint = [.012, .008, .006, .92]; ROLES['???'] = ''; return c; }
+async function sursaut(c, garder) { const fx0 = -Math.sin(J.a), fz0 = -Math.cos(J.a); c.path = null; c.niv = JEU.niv; c.rel = null; c.dy = 0; c.x = J.x + fx0 * .62; c.z = J.z + fz0 * .62; c.regarder(J.x, J.z, true); c.jouer('Combat_Idle', { fade: 0 }); c.visible = true;
+  const e0 = MONDE.eclat; MONDE.eclat = 1.6; cri(); A.shake = .6; fx('fxHurt', .7); ETAT.luc = Math.max(3, ETAT.luc - 12); await attendreReel(140); MONDE.eclat = e0; await attendreReel(520); fx('fxHurt', 0); if (!garder) c.visible = false; }
+// ---- la traque : la chose arpente la cellule ; accroupi et hors de sa vue, on survit
+function chasse(c, o) { return new Promise(res => { const tk = JEU.tk, pts = o.points; let i = 0, t = 0, vu = false, perdu = 0, rec = 0, hb = 0, br = 3;
+  const suivant = () => { if (vu || JEU.tk !== tk || !c.visible) return; i = (i + 1) % pts.length; c.aller(pts[i][0], pts[i][1], { v: o.v || 1.05 }).then(suivant); };
+  c.libre = false; c.aller(pts[0][0], pts[0][1], { v: o.v || 1.05 }).then(suivant);
+  objectif(o.obj || 'Cachez-vous : accroupissez-vous et restez hors de sa vue.');
+  JEU.maj = d => { if (JEU.tk !== tk) { JEU.maj = null; return; } if (DLG.ouvert) return; t += d; const dx = J.x - c.x, dz = J.z - c.z, D = Math.hypot(dx, dz);
+    hb -= d; if (hb <= 0) { FX.coeur(); hb = lerp(.38, 1.3, clamp((D - 1) / 7, 0, 1)); if (D < 2.5) vibrer(.25, 90); }
+    ETAT.luc = Math.max(4, ETAT.luc - d * (D < 3.5 ? 1.4 : .25)); br -= d; if (br <= 0) { br = rnd(4, 8); if (o.murmures) chuchote(pick(o.murmures)); }
+    if (!vu) { const ang = Math.abs(angDiff(Math.atan2(dx, dz), c.ch.yaw)), portee = J.accroupi ? (o.porteeA || 1.3) : (o.portee || 3.6);
+      if ((D < portee && ang < 1.05) || D < .8) { vu = true; perdu = 0; c.path = null; cri(); A.shake = .2; if (o.cris) bulle('???', pick(o.cris), 2); } }
+    else { rec -= d; if (rec <= 0) { rec = .3; c.aller(J.x, J.z, { v: o.vc || 3.0, libre: true }); }
+      if (D < .8) { JEU.maj = null; c.path = null; (async () => { await sursaut(c, true); await attendreReel(500); JEU.raisonMort = undefined; mort(o.mort || 'Quelque chose vous a trouvé dans le noir.', o.conseil || 'Accroupissez-vous (C, ○ ou le bouton accroupi) : accroupi, il ne vous repère que de très près. Restez dans son dos.'); })(); return; }
+      if (D > 5.5) { perdu += d; if (perdu > 2.2) { vu = false; c.path = null; bulle('', 'Il a perdu votre trace. Pour l’instant.', 2.2); suivant(); } } else perdu = 0; }
+    if (!vu && t >= o.duree) { JEU.maj = null; c.path = null; objectif(''); res(); } }; }); }
+async function sortirDuTrou(c, x, z) { c.x = x; c.z = z; c.dy = -2.2; c.visible = true; c.jouer('Idle'); FX.chute(); const t0 = JEU.t; await jusqua(() => { c.dy = -2.2 + 2.2 * sstep((JEU.t - t0) / 1.6); return JEU.t - t0 > 1.6; }); c.dy = 0; c.x = x * 1.0; c.z = z + Math.sign(z || 1) * .5; }
+async function rentrerDansTrou(c) { await c.aller(0, HZ + .2, { v: 1.4, libre: true }); const t0 = JEU.t; await jusqua(() => { c.dy = -3 * sstep((JEU.t - t0) / 1.2); return JEU.t - t0 > 1.2; }); c.visible = false; c.dy = 0; }
+function nuit4(cal) { JEU.calendrier = cal; MONDE.panne = true; MONDE.eclat = .14; }
+function jour4(cal) { JEU.calendrier = cal; MONDE.panne = false; MONDE.eclat = 1; MONDE.lampe = 0; JEU.maj = null; }
+const PTS4 = [[-4.1, -3.2], [-4.2, 3.1], [0, 3.4], [4.2, 3.1], [4.1, -3.2], [0, -3.5]];
+
+// =====================================================================================
+// CHAPITRE 40 — Mois 1 · Niveau 66 : le silence
+// =====================================================================================
+CH[40] = async function c4m1() {
+  FLAGS.c4 = { m: 1 }; prep4(66, '<b>L’Écho</b> · mois 1 · jour 1'); ETAT.faim = 50; ETAT.sante = 100; ETAT.luc = 88; marques(0);
+  await carte('Campagne 4', 'L’Écho', 'Personne au-dessus. Personne en dessous.', 4.5);
+  const E = cellmate({ nom: 'Élise', role: 'Codétenue · niveau 66 · infirmière', tenue: 'villager_f', morph: 'woman', graine: 66, x: RX - .82, z: .3, yaw: -PI / 2, clip: 'Sit_Chair', look: LOOK_ELISE }); E.dy = .07;
+  J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6;
+  await carte('Mois 1', 'Niveau 66', '', 3); await fondu(false, 2.5); await attendre(1.2);
+  await dit('Élise', 'Tu te réveilles enfin. Tu as parlé dans ton sommeil toute la nuit. Tu répétais un chiffre. Treize.'); await lever(-3.95, 1.15, versJ2(-3.95, 1.15, E.x, E.z)); await tourner(E.x, 1.2, E.z, .5);
+  await scene([['Élise', 'Élise. J’étais infirmière de nuit. Je croyais connaître le silence. Je ne le connaissais pas.'], ['Élise', 'Écoute.'], ['', 'Rien. Pas une voix au-dessus. Pas un pas en dessous. Pas même une respiration.'], ['Élise', 'J’ai crié pendant deux jours. Personne ne répond. Ni au 65, ni au 67.']]);
+  await questions('Élise', 'Demande-moi ce que tu veux. Parler m’aide à ne pas écouter.', [
+    { q: 'Où sont les autres ?', r: [['Élise', 'Je ne sais pas. Quand on regarde par le trou, les lits sont faits. Propres. Comme si personne n’y avait jamais dormi.']] },
+    { q: 'Pourquoi « treize » ?', r: [['Élise', 'Je pensais que tu me le dirais, toi. Tu le disais comme on récite une leçon. Treize, treize, treize.'], ['Élise', 'Et puis tu as dit « pardon ». Je ne sais pas à qui.']] },
+    { q: 'Vous dormez, vous ?', r: [['Élise', 'Non. Quand je ferme les yeux, j’entends gratter. Sous la dalle. Comme des ongles sur du béton.']] }]);
+  E.parler = async () => { await dire('Élise', pick(['Tu entends ? Non. Rien. C’est ça le pire.', 'Les résidents gravent un trait par mois. Comme ça, on sait combien de temps on a perdu.', 'Si tu cries mon nom cette nuit, je viendrai. Promets-moi de faire pareil.'])); };
+  objectif('Gravez votre première marque dans le mur (E maintenu) : un trait par mois.');
+  await new Promise(res => { JEU.inter = [...interLit(), { x: -.9, y: 1.25, z: -RZ + .1, r: 2.4, cos: .6, k: 'e', t: 'Graver une marque', em: 'mois 1', tenir: 2.2, cond: () => !c4().grave, pendant: dd => { if (Math.random() < dd * 5) bruit(.08, 2200, .06, 'bandpass', 5); }, f() { c4().grave = true; marques(1); FX.verre(); res(); } }]; });
+  await dire('Élise', 'Un. On en est à un. Ça a l’air de rien, un.'); objectif('');
+  // ---- la plateforme, intacte
+  JEU.attenteOk = true; objectif('Attendez la plateforme.'); const pf = plateformeVenir(66, { attente: 24, arret: 60 }); poserBanquet(1, { graine: 661 }); await pf;
+  await scene([['Élise', 'Regarde. Regarde bien.'], ['Élise', 'Tout est intact. Pas une bouchée. Personne n’a mangé, sur soixante-cinq étages. Personne.'], ['Goreng', 'Ça veut dire quoi ?'], ['Élise', 'Ça veut dire qu’au-dessus de nous, il n’y a plus personne pour avoir faim.']]);
+  E.jouer('Idle'); E.dy = 0; await dire('Élise', 'Mange, toi. Moi, je n’ai pas faim. Je n’ai jamais faim, ici. C’est bizarre, non ?'); asseoir(E, .3);
+  objectif('Mangez.'); await jusqua(() => PF.bouchees > 0 || PF.etat !== 'arret'); await plateformePartir(); JEU.attenteOk = false; objectif('');
+  // ---- la nuit : on vous appelle
+  await dormir('<b>L’Écho</b> · mois 1 · nuit', { faim: 10, nuit: async () => coucher(E), matin: () => {} });
+  nuit4('<b>L’Écho</b> · mois 1 · nuit'); J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6; E.visible = false; await fondu(false, 2.5);
+  await attendre(2); chuchote('Goreng…', 3); await attendre(3.5); chuchote('Goreng… descends…', 3.5); await attendre(3);
+  await lever(-3.95, 1.15, versJ2(-3.95, 1.15, RX - .52, 0)); await attendre(.6); await dit('', 'Le lit d’Élise est vide. Les draps sont encore tièdes.', 3.5);
+  objectif('Prenez le briquet sur le lit d’Élise.'); await new Promise(res => { JEU.inter = [{ x: RX - .6, y: .55, z: .2, r: 2.4, cos: .6, k: 'e', t: 'Prendre le briquet', em: 'd’Élise', f() { MONDE.lampe = 1; ton(900, .05, .05, 'square'); bruit(.15, 3000, .1, 'highpass'); res(); } }]; });
+  JEU.inter = []; objectif('Cherchez Élise. Approchez du bord du trou.'); await jusqua(() => Math.hypot(clamp(J.x, -HX, HX) - J.x, clamp(J.z, -HZ, HZ) - J.z) < 1.0);
+  const X = echo(.4, HZ + .7, { niv: 67, clip: 'Crouch_Idle', yaw: 0 }); objectif('Regardez en bas.'); { const t0 = JEU.t; await jusqua(() => J.p < -.55 || JEU.t - t0 > 9); }
+  croque(6); await dit('', 'En dessous, au 67, quelque chose est accroupi. Ça mâche. Lentement.', 3.5); await attendre(1.5);
+  X.jouer('Idle'); X.regarder(J.x, J.z); chuchote('Tu as déjà oublié ?', 2.6); await attendre(2.6); X.visible = false; await attendre(1.1); await sursaut(X); await fondu(true, .2); X.retirer(); E.retirer();
+  // ---- le matin
+  await attendreReel(1500); jour4('<b>L’Écho</b> · mois 1 · jour 2'); J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6; await fondu(false, 2.5); await attendre(1);
+  await lever(-3.95, 1.15, versJ2(-3.95, 1.15, RX - .52, 0)); await dit('', 'Élise n’est pas revenue. Sur son matelas, une tache brune, en forme de main.', 4);
+  ETAT.faim = 100; ETAT.luc = Math.max(10, ETAT.luc - 18); await dit('', 'Étrange : vous n’avez pas faim. Pas du tout. Comme après un très gros repas.', 4);
+  // ---- la deuxième nuit : la chose monte
+  JEU.inter = interLit(); await dormir('<b>L’Écho</b> · mois 1 · nuit 2', { obj: 'Allez vous coucher. Vous n’avez pas le choix.', faim: 0 });
+  nuit4('<b>L’Écho</b> · mois 1 · nuit 2'); MONDE.lampe = 1; J.couche = true; await fondu(false, 2); await attendre(2.5); FX.choc(); A.shake = .1; await dit('', 'Un choc sous le lit. Puis des ongles. Sur le rebord du trou.', 3.5);
+  await lever(-3.95, 1.15); const Y = echo(0, HZ + .2); await sortirDuTrou(Y, 0, HZ + .2);
+  JEU.raisonMort = 'Quelque chose vous a trouvé.'; await chasse(Y, { duree: 34, points: PTS4, murmures: ['Goreng…', 'Je sais où tu es.', 'Élise avait bon goût.', 'Viens. Tu connais déjà la suite.'], cris: ['TE VOILÀ.', 'Tu ne peux pas te cacher de toi.'] });
+  await rentrerDansTrou(Y); Y.retirer(); await dit('', 'Il est redescendu. Votre cœur ne veut pas ralentir.', 3);
+  await gaz('Le gaz. Pour la première fois de votre vie, vous êtes soulagé de le sentir.'); lancerChapitre(41); };
+
+// =====================================================================================
+// CHAPITRE 41 — Mois 2 · Niveau 66 ? Les marques
+// =====================================================================================
+CH[41] = async function c4m2() {
+  FLAGS.c4 = FLAGS.c4 || { m: 1 }; prep4(66, '<b>L’Écho</b> · mois 2 · jour 1'); ETAT.faim = 100; ETAT.luc = Math.min(ETAT.luc, 70); ETAT.sante = Math.max(ETAT.sante, 70); marques(13);
+  const B = cellmate({ nom: 'Bastien', role: 'Codétenu · niveau 66 · ancien soldat', tenue: 'farmer', graine: 661, x: RX - .82, z: -.2, yaw: -PI / 2, clip: 'Sit_Chair', look: LOOK_BASTIEN }); B.dy = .07;
+  J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6;
+  await carte('Mois 2', 'Niveau 66', '', 3.5); await fondu(false, 2.5); await attendre(1); await lever(-3.95, 1.15);
+  await dit('', 'Le numéro peint sur le mur : 66. Le même. On change d’étage chaque mois. Toujours. Sauf ici.', 4.5);
+  await tourner(B.x, 1.2, B.z, .6);
+  await scene([['Bastien', 'Ne t’approche pas tout de suite. Lève les mains. Bien.'], ['Bastien', 'Bastien. Douze ans dans l’armée. Premier mois ici. Toi, je t’ai regardé dormir toute la nuit. Tu souriais.'], ['Bastien', 'Les marques sur le mur. Elles sont apparues pendant que le gaz retombait. J’ai entendu gratter. C’était toi.']]);
+  objectif('Comptez les marques sur le mur.');
+  await new Promise(res => { JEU.inter = [...interLit(), { x: .6, y: 1.0, z: -RZ + .1, r: 2.8, cos: .55, k: 'e', t: 'Compter les marques', f() { res(); } }]; });
+  JEU.inter = interLit(); await scene([['', 'Treize. Une seule est à vous : celle du mois dernier, grise, propre.'], ['', 'Les douze autres sont brunes. Gravées avec les ongles. Il y a du sang séché au fond des sillons.'], ['', 'Vous regardez vos mains. Vos ongles sont cassés. Noirs.']]); ETAT.luc = Math.max(8, ETAT.luc - 12); c4().ongles = true;
+  await questions('Bastien', 'Alors ? Tu m’expliques ?', [
+    { q: 'Où est Élise ?', r: [['Bastien', 'Élise ? Il n’y avait personne quand je suis arrivé. Juste toi, endormi. Et un matelas qu’on avait retourné.'], ['Bastien', 'Mais tu l’as appelée, cette nuit. « Élise, pardon. Élise, j’avais faim. »']] },
+    { q: 'Vous avez vu quelque chose, la nuit ?', r: [['Bastien', 'J’ai vu une ombre près du trou. Grande. Elle s’est retournée vers ton lit. Et puis elle n’était plus là, et toi tu étais réveillé.'], ['Bastien', 'Je ne dis pas que c’est toi. Je dis que je ne dors plus.']] },
+    { q: 'Vous avez faim ?', r: [['Bastien', 'Je crève de faim. Toi non, hein ? Ça se voit. Tu as les joues pleines.']] }]);
+  B.parler = async () => { await dire('Bastien', pick(['Garde tes distances. Rien de personnel.', 'Au front, on attachait ceux qui criaient la nuit. Pour leur bien.', 'Si tu te lèves cette nuit, je le saurai.'])); };
+  // ---- la proposition de Bastien
+  await dire('Bastien', 'Cette nuit, on s’attache. Les draps, des nœuds de marin, aux montants des lits. Comme ça, quoi qu’il arrive, personne ne bouge.');
+  const r = await choisirT('Goreng', 'Bastien tord déjà un drap en corde. Il vous regarde sans cligner.', ['« D’accord. On s’attache tous les deux. »', '« Non. Si la chose revient, je veux pouvoir courir. »', '« Attache-toi, toi. Moi, je veille. »'], 10, 1);
+  c4().pacte = ['deux', 'refus', 'lui'][r];
+  await dire('Bastien', ['Bien. Toi d’abord. Serre fort, je vérifierai.', 'Comme tu veux. Alors je dormirai avec la barre de mon lit dans la main.', '… Tu veux que je sois attaché, et toi libre. Tu te rends compte de ce que tu demandes ?'][r]);
+  if (r === 2) { const r2 = await choisirT('Goreng', 'Il hésite. La corde pend entre ses mains.', ['« Fais-moi confiance. »', '« Laisse tomber. »'], 8, 1); if (r2 === 1) c4().pacte = 'refus'; else await dire('Bastien', 'La confiance. Au 66. D’accord. Tu as gagné. Mais je ne fermerai pas les yeux.'); }
+  // ---- la plateforme, encore intacte
+  JEU.attenteOk = true; objectif('Attendez la plateforme.'); const pf = plateformeVenir(66, { attente: 20, arret: 40 }); poserBanquet(1, { graine: 662 }); await pf;
+  B.jouer('Idle'); B.dy = 0; B.aller(1.4, HZ + .7).then(() => { B.regarder(0, 0); B.manger(); }); await dit('Bastien', 'Intact… Tout est intact. Mange, toi aussi. Tu ne manges pas ?', 3);
+  await dire('Bastien', 'Tu n’as pas faim. Personne n’a pas faim, ici. Personne.'); objectif('');
+  PF.t = PF.arret - 12; await plateformePartir(); JEU.attenteOk = false; B.jouer('Idle'); await asseoir(B, -.2);
+  // ---- la nuit
+  await dormir('<b>L’Écho</b> · mois 2 · nuit', { faim: 0, nuit: async () => coucher(B) });
+  nuit4('<b>L’Écho</b> · mois 2 · nuit'); MONDE.lampe = 1; J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6; await fondu(false, 2);
+  await attendre(2); await dit('', c4().pacte === 'deux' ? 'Vos poignets sont attachés. Puis, d’un coup, ils ne le sont plus. Vous ne vous souvenez pas d’avoir défait les nœuds.' : 'Vous vous réveillez debout. Vous ne vous souvenez pas de vous être levé.', 4.5);
+  J.couche = false; J.x = -2.6; J.z = 2.6; J.p = -.06; J.a = versJ2(-2.6, 2.6, RX - .52, 0); await attendre(.5);
+  chuchote('Il dort. Regarde comme il dort bien.', 3); await attendre(2.5);
+  const Y = echo(0, -HZ - .2); await sortirDuTrou(Y, 0, -HZ - .2); B.jouer('Sleep_Lie');
+  JEU.raisonMort = 'Elle vous a trouvé.'; await chasse(Y, { duree: 42, v: 1.25, vc: 3.2, points: [[RX - 1.3, 0], [3.4, 3.2], [-4.1, 3.2], [-4.2, -3.2], [3.4, -3.3]], portee: 3.9, murmures: ['Bastien… Bastien a faim, lui aussi ?', 'Treize. Bientôt quatorze.', 'Tu te souviens du goût ? Moi oui.', 'Cache-toi. Ça m’amuse.'], cris: ['TROUVÉ.', 'Viens voir ce qu’on fait la nuit.'] });
+  await dit('', 'La chose s’arrête près du lit de Bastien. Elle se penche. Vous fermez les yeux. Vous ne pouvez pas faire autrement.', 4.5);
+  await fondu(true, 1.2); croque(8); await attendreReel(3200); Y.retirer(); B.retirer();
+  jour4('<b>L’Écho</b> · mois 2 · jour 2'); J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6; await fondu(false, 2.5); await attendre(1); await lever(-3.95, 1.15, versJ2(-3.95, 1.15, RX - .52, 0));
+  await dit('', { deux: 'Les draps qui vous liaient sont rongés. Pas coupés : rongés. Des marques de dents, du côté de vos poignets.', refus: 'Le lit de Bastien est vide. Sa barre de fer est par terre, pliée, comme mordue.', lui: 'Bastien est parti. Ses liens sont toujours noués aux montants. Vides. Il était attaché. Il n’a pas pu fuir.' }[c4().pacte], 5);
+  fx('fxHurt', .4); await dit('', 'Vous avez du sang sous les ongles. Et dans la bouche, un goût de fer.', 3.5); fx('fxHurt', 0); ETAT.luc = Math.max(6, ETAT.luc - (c4().pacte === 'lui' ? 22 : 15)); ETAT.faim = 100;
+  await gaz('Le gaz. Vous priez pour qu’il vous fasse oublier. Il le fera.'); lancerChapitre(42); };
+
+// =====================================================================================
+// CHAPITRE 42 — Mois 3 · Le miroir
+// =====================================================================================
+CH[42] = async function c4m3() {
+  FLAGS.c4 = FLAGS.c4 || { m: 1 }; prep4(66, '<b>L’Écho</b> · mois 3 · jour 1'); ETAT.faim = 100; ETAT.luc = Math.min(ETAT.luc, 50); marques(13);
+  J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6;
+  await carte('Mois 3', 'Niveau 66', '', 3.5); await fondu(false, 2.5); await attendre(1.5); await lever(-3.95, 1.15);
+  await dit('', 'Seul. Pas de codétenu, ce mois-ci. Le silence a une épaisseur, maintenant.', 3.5);
+  await attendre(2); ROLES['Élise'] = 'Par le trou'; bulle('Élise', 'Goreng ? Goreng, c’est toi ? Je suis en dessous… Viens me chercher. Je t’en prie, il fait si noir.', 5); await attendre(5.5);
+  objectif('Quand la plateforme passera, montez dessus. Descendez la chercher.'); JEU.attenteOk = true;
+  const pf = plateformeVenir(66, { attente: 20, arret: 999 }); poserBanquet(1, { graine: 663 }); PF.tenir = true; await pf;
+  await jusqua(() => dansTrou(J.x, J.z, .3)); objectif(''); JEU.cine = true; document.body.classList.add('cine'); PF.tenir = false; PF.etat = 'depart'; PF.t = 0; FX.choc(); await attendre(1.8); await fondu(true, 1.2);
+  // ---- en dessous : le même étage
+  niveau(66, '<b>L’Écho</b> · un étage plus bas'); PF.etat = 'loin'; JEU.attenteOk = false; MONDE.eclat = .4; MONDE.panne = true; J.x = .4; J.z = HZ + .9; J.a = 0; J.p = -.06; marques(13);
+  const corpsE = cellmate({ nom: 'Élise', tenue: 'villager_f', morph: 'woman', graine: 66, x: RX - .52, z: .1, yaw: 0, clip: 'Lie_Back', look: LOOK_ELISE }); corpsE.dy = .38; corpsE.tint = [.55, .58, .6, .45];
+  const corpsB = cellmate({ nom: 'Bastien', tenue: 'farmer', graine: 661, x: RX - .9, z: -2.6, yaw: -PI / 2, clip: 'Sit_Ground', look: LOOK_BASTIEN }); corpsB.tint = [.5, .52, .55, .45];
+  JEU.cine = false; document.body.classList.remove('cine'); await fondu(false, 2); await attendre(1);
+  await dit('', 'Le numéro peint sur le mur : 66.', 3); await attendre(.8); await dit('', 'Les mêmes taches. Les mêmes lits. Les mêmes treize marques, au même endroit.', 4);
+  ETAT.luc = Math.max(5, ETAT.luc - 10); await tourner(corpsE.x, .6, corpsE.z, 1); await dit('', 'Sur le lit d’Élise, il y a Élise. Elle ne bouge pas. Elle ne bougera plus. Près du mur, Bastien, encore attaché.', 4.5);
+  bulle('Élise', 'Goreng… Je suis en dessous. Descends encore.', 4); await attendre(4.5); await dit('', 'La voix vient d’en bas. Elle vient toujours d’en bas.', 3);
+  // ---- le livre, le miroir
+  objectif('Votre lit. Il y a quelque chose sous l’oreiller.'); let lu = false;
+  await new Promise(res => { JEU.inter = [{ x: -RX + .52, y: .6, z: .6, r: 2.4, cos: .6, k: 'e', t: 'Ouvrir le livre', em: 'Don Quichotte, annoté de votre main', f() { lu = true; res(); } }]; });
+  JEU.inter = []; await scene([['Votre écriture', 'Si tu lis ça, le gaz t’a encore pris. Tu es au 66. Tu as toujours été au 66. Il n’y a pas d’autre étage.'], ['Votre écriture', 'Il n’y a pas de créature. Il n’y a que toi, la nuit. La nuit, tu te souviens de tout. Le jour, tu oublies.'], ['Votre écriture', 'Si tu n’as pas faim le matin, c’est que tu as déjà mangé.'], ['Votre écriture', 'Élise était la première. Non. La treizième. Je ne sais plus. Je ne sais plus combien.'], ['Votre écriture', 'Regarde-toi dans le miroir au-dessus du lavabo. Tu comprendras. Pardon.']]);
+  objectif('Allez au lavabo. Regardez-vous.');
+  await new Promise(res => { JEU.inter = [{ x: -3.6, y: 1.55, z: -RZ + .1, r: 2.2, cos: .6, k: 'e', t: 'Se regarder', em: 'dans le miroir', f() { res(); } }]; });
+  JEU.inter = []; objectif(''); await dit('', 'Le miroir est fêlé. Votre reflet est flou. Vous approchez.', 3); await attendre(1.2);
+  const R = echo(0, 0); R.visible = false; await sursaut(R, true); R.jouer('Idle');
+  { const t0 = JEU.t, tt = [.012, .008, .006, .92]; await jusqua(() => { const u = clamp((JEU.t - t0) / 2.6, 0, 1); R.tint = [tt[0], tt[1], tt[2], tt[3] * (1 - u)]; return u >= 1; }); }
+  await scene([['', 'Ce n’est pas une ombre. C’est un visage. Pâle, maigre, la bouche noire.'], ['', 'Sur sa poitrine, un badge d’admission : « Goreng · Résident 66 ».'], ['', 'Le reflet sourit. Vous ne souriez pas.']]);
+  await attendre(1.4); R.visible = false; await dit('', '… Puis vous souriez.', 3); R.retirer(); ETAT.luc = 4;
+  await haut('Sujet 66. Éveil numéro treize. Seuil de lucidité atteint.');
+  await haut('Rappel : vous avez signé. Article 9 du contrat de séjour : « le résident consent à toute étude de comportement menée pendant son séjour ».');
+  await haut('Votre contribution est précieuse. Le protocole reprend. Une nouvelle résidente arrive. Bonne nuit, Goreng.');
+  corpsE.retirer(); corpsB.retirer(); await gaz('Le gaz. Cette fois, vous savez exactement ce qu’il vous prend.'); lancerChapitre(43); };
+
+// =====================================================================================
+// CHAPITRE 43 — Mois 4 · Le treizième
+// =====================================================================================
+CH[43] = async function c4m4() {
+  FLAGS.c4 = FLAGS.c4 || { m: 1 }; prep4(66, '<b>L’Écho</b> · mois 4 · jour 1'); ETAT.faim = 100; ETAT.luc = 30; ETAT.sante = Math.max(ETAT.sante, 60); marques(13);
+  const Li = cellmate({ nom: 'Lina', role: 'Codétenue · niveau 66 · premier mois', tenue: 'villager_f', morph: 'woman', graine: 662, x: RX - .82, z: .3, yaw: -PI / 2, clip: 'Sit_Chair', look: LOOK_LINA }); Li.dy = .07;
+  J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6;
+  await carte('Mois 4', 'Niveau 66', 'Cette fois, vous vous souvenez.', 4); await fondu(false, 2.5); await attendre(1); await lever(-3.95, 1.15, versJ2(-3.95, 1.15, Li.x, Li.z)); await tourner(Li.x, 1.2, Li.z, .5);
+  await scene([['Lina', 'Bonjour… Lina. C’est mon premier mois. Je ne sais pas comment ça marche, ici. On m’a dit de ne pas avoir peur de mon codétenu.'], ['Lina', 'Tu as l’air fatigué. Tu veux que je te laisse ma part, à la plateforme ? Moi, je n’ai pas très faim.'], ['', 'Vous, si. Pour la première fois depuis quatre mois, vous avez faim. Pas de pain. Pas de viande. D’elle.']]);
+  Li.parler = async () => { await dire('Lina', pick(['Pourquoi tu regardes mes mains comme ça ?', 'Tu as compté les marques ? Treize. Tu crois que quelqu’un est resté treize mois ici ?', 'Je dors côté mur. Tu me réveilleras s’il y a un problème ?'])); };
+  await attendre(1.5); chuchote('Ce soir.', 2); await attendre(2.5); await dit('', 'La voix ne vient plus d’en bas. Elle vient de l’intérieur de votre tête.', 3.5);
+  // ---- le dernier choix
+  const opts = ['Vous attacher au lit avec les draps, le plus serré possible.', 'Donner la barre de fer à Lina : « Si je me lève cette nuit, frappe. Fort. »', 'Arracher le haut-parleur et hurler à l’Administration.', 'Ne rien dire. Dormir. Espérer.'];
+  const r = await choisirT('Goreng', 'Le soir tombe. Les néons grésillent. Lina vous sourit, confiante.', opts, 14, 3);
+  let fin;
+  if (r === 2) { objectif('Le haut-parleur, au plafond, dans le coin.'); await new Promise(res => { JEU.inter = [{ x: RX - .4, y: 3.4, z: -RZ + .4, r: 3.2, cos: .5, k: 'e', t: 'Arracher le haut-parleur', tenir: 2.4, pendant: dd => { if (Math.random() < dd * 6) bruit(.1, 1500, .1, 'bandpass', 3); }, f() { res(); } }]; });
+    JEU.inter = []; objectif(''); FX.choc(); A.shake = .3; bruit(2, 2000, .35, 'highpass', .5);
+    await scene([['Goreng', 'Je sais ce que vous faites ! Vous m’entendez ? JE SAIS !'], ['Haut-parleur', 'Nous vous entendons, Goreng. Nous vous entendons toujours. Le haut-parleur n’est qu’un haut-parleur.'], ['Haut-parleur', 'Vous l’avez déjà arraché. Sept fois. Vous criez toujours la même phrase. C’est une de nos données les plus stables.'], ['Lina', 'De quoi il parle ? Goreng ? De quoi il parle ?'], ['Haut-parleur', 'Résidente 67, veuillez rester calme. Diffusion du gaz dans trois, deux…']]);
+    fin = 'treizieme'; FX.gaz(); fx('fxGas', .9); await attendreReel(2500); await fondu(true, 2); fx('fxGas', 0); }
+  else { if (r === 0) { await dit('', 'Vous nouez les draps autour de vos poignets, puis aux montants. Lina vous aide sans comprendre. Elle serre fort, parce que vous le lui demandez.', 4.5); }
+    else if (r === 1) { await scene([['Lina', 'Frapper ? Toi ? Mais pourquoi…'], ['Goreng', 'Ne pose pas de questions. Si je me lève, ce ne sera plus moi. Frappe à la tête.'], ['Lina', '… D’accord. D’accord. Tu me fais peur.']]); }
+    await asseoir(Li, .3); coucher(Li); nuit4('<b>L’Écho</b> · mois 4 · la nuit'); MONDE.lampe = 0;
+    J.couche = r !== 0; J.attache = r === 0; if (r === 0) { J.x = -RX + 1.1; J.z = .3; J.a0 = J.a = versJ2(J.x, J.z, Li.x, Li.z); J.p = 0; }
+    await fondu(false, 2); await attendre(1.5);
+    // ---- résister à la faim
+    const vit = [5.2, 7.4, 0, 9.5][r]; let pulsion = 25, t = 0, br = 1.5; const tk = JEU.tk; let fini = false;
+    const M = ['Elle dort.', 'Juste un peu.', 'Tu l’as déjà fait douze fois. Qu’est-ce qu’une de plus ?', 'Tu n’as pas faim de pain. Tu le sais.', 'Écoute son cœur. Il est lent. Il est tendre.', 'Le gaz effacera tout. Il efface toujours tout.', 'Personne ne te jugera. Ils regardent, c’est tout.'];
+    JEU.inter = [{ k: 'e', t: 'Résister', em: 'appuyez, encore, encore', f() { pulsion = Math.max(0, pulsion - 9); vibrer(.2, 60); FX.coeur(); } }];
+    await new Promise(res => { JEU.maj = d => { if (JEU.tk !== tk) { JEU.maj = null; return; } if (DLG.ouvert || fini) return; t += d; pulsion = Math.min(100, pulsion + vit * d * (1 + t / 60)); ETAT.luc = Math.max(2, 40 - pulsion * .38);
+      br -= d; if (br <= 0) { br = rnd(3.5, 6); chuchote(pick(M)); } if (Math.random() < d * .8) FX.coeur();
+      objectif('Résistez (' + glyphe('e') + ' répété) · faim ' + Math.round(pulsion) + ' % · aube dans ' + Math.max(0, Math.ceil(36 - t)) + ' s'); A.shake = Math.max(A.shake || 0, pulsion / 900);
+      if (pulsion >= 100) { fini = true; JEU.maj = null; res('perdu'); } else if (t >= 36) { fini = true; JEU.maj = null; res('aube'); } }; }).then(v => { fin = v; });
+    JEU.inter = []; objectif('');
+    if (fin === 'aube') { J.attache = false; fin = 'liens'; await fondu(true, 2); jour4('<b>L’Écho</b> · mois 4 · l’aube'); J.couche = false; J.x = -3.95; J.z = 1.15; J.p = -.06; J.a = versJ2(J.x, J.z, Li.x, Li.z); Li.jouer('Idle'); Li.dy = 0; Li.x = RX - 1.3; Li.regarderJoueur(); await fondu(false, 2.5);
+      await scene([['Lina', r === 0 ? 'Tu as crié toute la nuit. Tu as tiré sur les draps jusqu’au sang. Mais ils ont tenu. Tu as tenu.' : r === 1 ? 'Tu t’es assis, une fois. Tu m’as regardée. J’avais la barre dans les mains. Et puis tu t’es recouché. Tout seul.' : 'Tu n’as pas dormi. Tu as serré les dents jusqu’au matin. Je t’entendais grincer.'], ['Haut-parleur', 'Sujet 66. Résultat non conforme au modèle. Le protocole est suspendu.'], ['Haut-parleur', 'Résidente 67, vous serez transférée. Sujet 66, veuillez patienter.'], ['', 'Vous avez faim. Faim de pain. Pour la première fois depuis des mois. Vous pleurez de soulagement.']]); }
+    else if (r === 1) { fin = 'barre'; J.couche = false; J.x = -2.6; J.z = 1.2; J.p = -.06; J.a = versJ2(J.x, J.z, Li.x, Li.z); await dit('', 'Vous êtes debout. Vous ne vous souvenez pas de vous être levé. Vous marchez vers son lit.', 3.5);
+      Li.jouer('Idle'); Li.dy = 0; Li.x = RX - 1.3; Li.regarderJoueur(); await attendre(.8); await dire('Lina', 'Goreng ? Goreng, recouche-toi. S’il te plaît. Ne m’oblige pas…'); await attendre(.6); FX.coup(); A.shake = .6; fx('fxHurt', 1); vibrer(1, 600); await fondu(true, .25); await attendreReel(2200); fx('fxHurt', 0); }
+    else { fin = 'resident'; await dit('', 'Vous ne résistez plus. Vous vous levez. Le noir est chaud et familier, comme une maison.', 4); await fondu(true, 2.5); croque(10); await attendreReel(4200); Li.retirer();
+      jour4('<b>L’Écho</b> · mois 4 · jour 2'); J.attache = false; J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6; await fondu(false, 2.5); await attendre(1); await lever(-3.95, 1.15, versJ2(-3.95, 1.15, RX - .52, 0));
+      await dit('', 'Le lit de Lina est vide. Le matelas est retourné.', 3.5); await dit('', 'Vous n’avez pas faim.', 3); await haut('Sujet 66. Conforme au modèle. Merci, Goreng. Une nouvelle résidente arrivera au prochain cycle.'); await fondu(true, 2.5); } }
+  ecranFin4(fin); };
+function ecranFin4(fin) { JEU.pause = true; JEU.enJeu = false; JEU.maj = null; try { localStorage.removeItem('fosse-sauve'); } catch (e) {} SAUVE = { ch: 0 }; document.body.classList.remove('cine'); J.attache = false;
+  const T = { liens: ['Les Liens', 'Vous avez tenu une nuit. Une seule, mais c’est la première en treize mois. L’Administration a suspendu le protocole. Lina a été transférée. Personne ne vous dit où, ni ce qu’on fera de vous. Sur le mur, vous gravez une quatorzième marque. Grise, propre. La vôtre.'],
+    barre: ['La Barre', 'Lina a frappé, comme vous le lui aviez demandé. Elle a frappé encore, après, parce qu’elle avait peur. Au cycle suivant, l’Administration l’a gardée au 66. Elle ne dort plus. Elle grave des marques. Elle entend gratter.'],
+    treizieme: ['Le Treizième', 'Mois 1. Niveau 66. Vous vous réveillez. Votre codétenue est infirmière. Elle s’appelle Élise. Elle vous dit que vous avez parlé toute la nuit, et que vous répétiez un chiffre : quatorze.'],
+    resident: ['Résident 66', 'Vous êtes un résultat stable. L’Administration vous en remercie. Chaque mois, une nouvelle personne arrive au 66, et chaque mois vous oubliez. Sauf la nuit. La nuit, vous vous souvenez de tout. Et vous avez faim.'] }[fin] || ['L’Écho', ''];
+  $('finL').textContent = 'Campagne 4 · L’Écho'; $('finH').textContent = T[0]; $('finP').textContent = perso(T[1]);
+  const W = c4() || {}, S = [['Éveils', fin === 'treizieme' ? '14' : '13'], ['Pacte avec Bastien', { deux: 'attachés', refus: 'refusé', lui: 'lui seul' }[W.pacte] || '—'], ['Marques sur le mur', fin === 'liens' ? 14 : 13], ['Lina', { liens: 'vivante', barre: 'vivante', treizieme: '—', resident: 'disparue' }[fin] || '—']];
   $('finStats').innerHTML = ''; for (const [l, v] of S) { const d = document.createElement('div'); const b = document.createElement('b'); b.textContent = v; d.appendChild(b); d.appendChild(document.createTextNode(l)); $('finStats').appendChild(d); }
   $('fin').hidden = false; }
 
