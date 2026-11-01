@@ -78,6 +78,11 @@ body.cine #hud>*:not(#sub){opacity:0;transition:opacity .6s}
 .b:hover,.b:focus-visible{border-color:var(--amber);outline:none}
 .b.p{background:var(--amber);color:#1a1206;border-color:var(--amber)}
 .b[disabled]{opacity:.35;cursor:default}
+#nomIn{font:700 30px/1.1 var(--f-d);letter-spacing:.03em;padding:12px 14px;border-radius:8px;background:#121316;color:var(--ink);border:1.5px solid var(--line);width:100%;box-sizing:border-box;user-select:text;-webkit-user-select:text}
+#nomIn:focus{outline:none;border-color:var(--amber)}
+#nomEcran{touch-action:manipulation}#nomEcran input{touch-action:manipulation}
+.b.s{padding:8px 13px;font-size:14px;letter-spacing:.06em;text-transform:none}
+#qui{font:600 12px/1 var(--f-d);letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
 #aideClav{font:500 13px/1.7 var(--f-b);color:var(--dim)}#aideClav kbd{font:600 11px/1 var(--f-d);border:1px solid var(--line);border-radius:3px;padding:2px 5px;color:var(--ink)}
 .panneau{width:min(92vw,560px);padding:22px;display:grid;gap:16px}
 .panneau h3{margin:0;font:700 28px/1 var(--f-d);letter-spacing:.03em;text-transform:uppercase}
@@ -136,6 +141,7 @@ body.tactile #aideTouch{display:block}body.tactile #aideClav{display:none}
 <div id="hud">
   <div id="top" class="gl">
     <div id="niv"><small>Niveau</small><span id="nivN">—</span></div>
+    <div id="qui"></div>
     <div id="cal">—</div>
     <div class="bar"><span class="lbl">Faim</span><i id="bF"><b></b></i></div>
     <div class="bar"><span class="lbl">Santé</span><i id="bS"><b></b></i></div>
@@ -166,6 +172,16 @@ body.tactile #aideTouch{display:block}body.tactile #aideClav{display:none}
   <div id="aideClav"><kbd>Z Q S D</kbd> / <kbd>W A S D</kbd> marcher · souris regarder · <kbd>E</kbd> agir · <kbd>F</kbd> prendre · <kbd>G</kbd> jeter dans le vide · clic gauche frapper · clic droit parer · <kbd>Maj</kbd> courir · <kbd>T</kbd> attendre la plateforme · <kbd>Échap</kbd> pause</div>
   <div id="aidePad">Manette : stick gauche marcher (<span class="pk">L3</span> courir) · stick droit regarder · <span class="pk">✕</span> agir · <span class="pk">□</span> prendre · <span class="pk">△</span> jeter · <span class="pk">R2</span> frapper · <span class="pk">L2</span> parer · croix bas attendre · <span class="pk">OPT</span> pause</div>
   <div id="aideTouch">Pouce gauche : marcher (poussez au bord pour courir) · glissez à droite : regarder · touchez à droite en combat : frapper · boutons à droite selon la situation</div>
+</div></div>
+<div id="nomEcran" class="ecran" hidden><div class="panneau gl">
+  <span class="lbl" style="color:var(--amber)">Fiche d’admission · séjour volontaire de six mois</span>
+  <h3>Votre prénom</h3>
+  <p style="margin:0;color:var(--dim);font:400 15px/1.5 var(--f-b);max-width:52ch">Un seul objet autorisé : un livre. En échange, un diplôme homologué à la sortie. Signez de votre prénom.</p>
+  <label for="nomIn" class="lbl">Prénom du résident</label>
+  <input id="nomIn" type="text" maxlength="16" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="go" value="Goreng">
+  <div class="btns" id="nomSugg"><button class="b s">Goreng</button><button class="b s">Inès</button><button class="b s">Malik</button><button class="b s">Sacha</button><button class="b s">Léon</button><button class="b s">Nora</button></div>
+  <p id="nomErr" hidden style="margin:0;color:var(--blood);font:500 14px/1.4 var(--f-b)"></p>
+  <div class="btns"><button class="b p" id="nomOk">Signer et entrer</button><button class="b" id="nomRetour">Retour</button></div>
 </div></div>
 <div id="opts" class="ecran" hidden><div class="panneau gl">
   <h3>Réglages</h3>
@@ -5031,7 +5047,7 @@ function tickAttentes() { for (let i = JEU.attentes.length - 1; i >= 0; i--) { c
 // ---------------------------------------------------------------- entrées : clavier, souris (verrouillage du pointeur), tactile
 const KEYS = {}; const IN = { dx: 0, dy: 0, att: false, par: false, mx: 0, mz: 0, appuis: [] };
 const appui = k => IN.appuis.push(k);
-addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (e.repeat) { KEYS[k] = true; return; } KEYS[k] = true;
+addEventListener('keydown', e => { if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return; const k = e.key.toLowerCase(); if (e.repeat) { KEYS[k] = true; return; } KEYS[k] = true;
   if (DLG.ouvert) { if (k === 'arrowdown' || k === 's') dlgSel(1); else if (k === 'arrowup' || k === 'z' || k === 'w') dlgSel(-1); else if (k === 'enter' || k === ' ' || k === 'e') dlgOk(); else if (/^[1-6]$/.test(k)) dlgChoix(+k - 1); e.preventDefault(); return; }
   if (k === 'escape') { if (!$('livre').hidden) livreFermer(); else basculerPause(); return; }
   if (['e', 'f', 'g', 'c', 't'].includes(k)) appui(k); if (k === ' ') e.preventDefault(); });
@@ -5124,22 +5140,27 @@ function parler(txt, nom, fem, enfant) { if (!OPT.voix || !self.speechSynthesis 
 // iOS / iPadOS : la synthèse ne parle qu'après un premier énoncé lancé par un geste de l'utilisateur
 function voixAmorcer() { if (VOIX.amorce || !self.speechSynthesis) return; VOIX.amorce = true; try { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); voixCharger(); } catch (e) {} }
 
+// ---------------------------------------------------------------- prénom du joueur : « Goreng » dans les textes devient le prénom choisi
+const PRENOM_DEF = 'Goreng';
+function prenom() { return (typeof FLAGS !== 'undefined' && FLAGS.prenom) || PRENOM_DEF; }
+function perso(t) { if (t === undefined || t === null) return t; const n = prenom(); return n === PRENOM_DEF ? String(t) : String(t).replace(/Goreng/g, n); }
+function nettoyerPrenom(v) { v = String(v || '').normalize('NFC').replace(/[^\p{L}\p{M}' \-]/gu, '').replace(/\s+/g, ' ').replace(/^[ '\-]+|[ '\-]+$/g, '').slice(0, 16); if (v && v === v.toLocaleLowerCase('fr')) v = v.replace(/(^|[ \-'])(\p{L})/gu, (m, a, c) => a + c.toLocaleUpperCase('fr')); return v ? v.charAt(0).toLocaleUpperCase('fr') + v.slice(1) : ''; }
 // ---------------------------------------------------------------- interface : sous-titres, objectif, cartes, fondu, dialogue
 let subT = 0;
-function bulle(nom, txt, dur) { const el = $('sub'); el.innerHTML = ''; if (nom) { const b = document.createElement('b'); b.textContent = nom; el.appendChild(b); } el.appendChild(document.createTextNode(txt)); subT = dur || Math.max(2.6, txt.length * .055); const P = PERSOS.find(p => p.nom === nom && !p.voisin && p.visible); if (P && !P.manuel) P.parleT = Math.min(subT, 6); parler(txt, nom, P && P.fem, P && P.enfant); }
-function objectif(t) { $('obj').hidden = !t; $('objT').textContent = t || ''; JEU.obj = t || ''; }
+function bulle(nom, txt, dur) { const el = $('sub'); el.innerHTML = ''; if (nom) { const b = document.createElement('b'); b.textContent = perso(nom); el.appendChild(b); } txt = perso(txt); el.appendChild(document.createTextNode(txt)); subT = dur || Math.max(2.6, txt.length * .055); const P = PERSOS.find(p => p.nom === nom && !p.voisin && p.visible); if (P && !P.manuel) P.parleT = Math.min(subT, 6); parler(txt, nom, P && P.fem, P && P.enfant); }
+function objectif(t) { t = perso(t); $('obj').hidden = !t; $('objT').textContent = t || ''; JEU.obj = t || ''; }
 function fondu(noir, dur = 1.2) { const el = $('fade'); el.style.transitionDuration = dur + 's'; el.style.opacity = noir ? 1 : 0; return attendreReel(dur * 1000); }
 function attendreReel(ms) { const tk = JEU.tk; return new Promise(r => setTimeout(() => { if (tk === JEU.tk) r(); }, ms)); }
-async function carte(p, h, d, dur = 3.6) { $('carteP').textContent = p || ''; $('carteH').textContent = h || ''; $('carteD').textContent = d || ''; $('carte').style.opacity = 1; await attendreReel(dur * 1000); $('carte').style.opacity = 0; await attendreReel(900); }
+async function carte(p, h, d, dur = 3.6) { $('carteP').textContent = perso(p) || ''; $('carteH').textContent = perso(h) || ''; $('carteD').textContent = perso(d) || ''; $('carte').style.opacity = 1; await attendreReel(dur * 1000); $('carte').style.opacity = 0; await attendreReel(900); }
 function fx(id, v) { $(id).style.opacity = v; }
 
 const DLG = { ouvert: false, sel: 0, o: null, res: null };
 // dire(nom, texte) : réplique à valider ; choisir(nom, texte, [choix]) : renvoie l'indice choisi
 function dlgOuvrir(o) { return new Promise(res => { DLG.ouvert = true; DLG.o = o; DLG.res = res; DLG.sel = 0; DLG.t0 = performance.now(); for (const k in KEYS) KEYS[k] = false;
-  $('dlg').hidden = false; const n = $('dlgNom'); n.innerHTML = ''; n.appendChild(document.createTextNode(o.nom || '')); if (o.role) { const s = document.createElement('span'); s.textContent = o.role; n.appendChild(s); }
-  $('dlgTxt').textContent = o.texte || ''; const box = $('dlgBox'); box.innerHTML = ''; (o.choix || []).forEach((c, i) => { const d = document.createElement('div'); d.className = 'c'; const k = document.createElement('i'); k.textContent = i + 1; d.appendChild(k); d.appendChild(document.createTextNode(c)); d.onclick = ev => { ev.stopPropagation(); dlgChoix(i); }; box.appendChild(d); });
+  $('dlg').hidden = false; const n = $('dlgNom'); n.innerHTML = ''; n.appendChild(document.createTextNode(perso(o.nom) || '')); if (o.role) { const s = document.createElement('span'); s.textContent = o.role; n.appendChild(s); }
+  $('dlgTxt').textContent = perso(o.texte) || ''; const box = $('dlgBox'); box.innerHTML = ''; (o.choix || []).forEach((c, i) => { const d = document.createElement('div'); d.className = 'c'; const k = document.createElement('i'); k.textContent = i + 1; d.appendChild(k); d.appendChild(document.createTextNode(perso(c))); d.onclick = ev => { ev.stopPropagation(); dlgChoix(i); }; box.appendChild(d); });
   $('dlgSuite').hidden = !!(o.choix && o.choix.length); $('dlgSuite').textContent = ENTREE.mode === 'manette' ? '✕ pour continuer' : ENTREE.mode === 'tactile' ? 'Touchez pour continuer' : 'Entrée · clic pour continuer'; dlgSel(0); const P = PERSOS.find(p => p.nom === o.nom && !p.voisin && p.visible && p.mortT === undefined);
-  if (DLG.p && DLG.p !== P) DLG.p.parle = false; DLG.p = P && !P.manuel ? P : null; if (DLG.p) { DLG.p.parle = true; if (!DLG.p.assis() && !DLG.p.path && typeof J !== 'undefined') DLG.p.regarderJoueur(); } if (o.texte && o.nom) parler(o.texte, o.nom, P && P.fem, P && P.enfant);
+  if (DLG.p && DLG.p !== P) DLG.p.parle = false; DLG.p = P && !P.manuel ? P : null; if (DLG.p) { DLG.p.parle = true; if (!DLG.p.assis() && !DLG.p.path && typeof J !== 'undefined') DLG.p.regarderJoueur(); } if (o.texte && o.nom) parler(perso(o.texte), o.nom, P && P.fem, P && P.enfant);
   if (document.pointerLockElement) document.exitPointerLock(); }); }
 $('dlg').addEventListener('click', () => { if (!(DLG.o && DLG.o.choix && DLG.o.choix.length)) dlgOk(); });
 function dlgSel(d) { const n = (DLG.o && DLG.o.choix || []).length; if (!n) return; DLG.sel = (DLG.sel + d + n) % n; [...$('dlgBox').children].forEach((el, i) => el.classList.toggle('on', i === DLG.sel)); if (d) FX.bip(); }
@@ -5577,7 +5598,7 @@ const fmtT = s => { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + '
 let hudT = 0;
 function majHud(dt) { hudT -= dt; if (subT > 0) { subT -= dt; if (subT <= 0) $('sub').textContent = ''; } if (hudT > 0) return; hudT = .1;
   $('nivN').textContent = MONDE.cuisine ? '0' : String(Math.max(1, Math.round(REF)));
-  $('cal').innerHTML = JEU.calendrier || '';
+  $('cal').innerHTML = JEU.calendrier || ''; $('qui').textContent = prenom();
   $('bF').firstChild.style.width = ETAT.faim + '%'; $('bS').firstChild.style.width = ETAT.sante + '%'; $('bL').firstChild.style.width = ETAT.luc + '%';
   const P = PF; let t = '—', s = ''; if (JEU.descente) { t = Math.round(REF) >= FOND ? 'Le fond' : 'Descente'; s = JEU.vitesse > .05 ? 'Niveau ' + Math.round(REF) + ' ↓' : Math.round(REF) >= FOND ? 'Niveau 333' : 'À l\'arrêt'; }
   else if (P.etat === 'approche') { t = 'Niveau ' + Math.max(0, P.aff) + ' ↓'; s = JEU.attenteOk ? 'T : attendre son passage' : 'Elle descend'; } else if (P.etat === 'arret') { t = P.tenir ? 'Ici' : 'Ici · ' + fmtT(P.arret - P.t); s = !P.tenir && P.arret - P.t <= 10.5 ? ((P.bouchees || 0) === 0 && ETAT.faim < 70 ? 'Elle vous attend encore un peu' : 'Elle va repartir') : 'Mangez maintenant'; } else if (P.etat === 'depart') { t = 'Repartie ↓'; s = 'Niveau ' + P.aff; } else s = 'Prochain passage demain';
@@ -5627,12 +5648,19 @@ let SAUVE = { ch: 0 };
 try { SAUVE = JSON.parse(localStorage.getItem('fosse-sauve') || 'null') || { ch: 0 }; } catch (e) {}
 function sauver(ch) { SAUVE = { ch, ck: JEU.ckDescente, rations: JEU.rationsCk, etat: { ...ETAT }, stats: { ...STATS }, flags: { ...FLAGS } }; try { localStorage.setItem('fosse-sauve', JSON.stringify(SAUVE)); } catch (e) {} }
 $('mCont').hidden = !(SAUVE && SAUVE.ch > 0);
-function mort(titre, conseil) { if (!JEU.enJeu || !$('mort').hidden) return; vibrer(1, 450); JEU.pause = true; $('mortH').textContent = titre || 'Goreng est mort'; $('mortP').textContent = conseil || ''; $('mort').hidden = false; if (document.pointerLockElement) document.exitPointerLock(); }
+function mort(titre, conseil) { if (!JEU.enJeu || !$('mort').hidden) return; vibrer(1, 450); JEU.pause = true; $('mortH').textContent = perso(titre || 'Goreng est mort'); $('mortP').textContent = perso(conseil || ''); $('mort').hidden = false; if (document.pointerLockElement) document.exitPointerLock(); }
 $('mortRe').onclick = () => { $('mort').hidden = true; lancerChapitre(JEU.reprise !== undefined ? JEU.reprise : (SAUVE.ch || 0), true); };
 $('mortMenu').onclick = () => { $('mort').hidden = true; allerMenu(); };
 $('finMenu').onclick = () => { $('fin').hidden = true; allerMenu(); };
 function allerMenu() { document.body.classList.remove('enjeu'); JEU.tk++; JEU.enJeu = false; JEU.pause = true; JEU.attentes = []; DLG.ouvert = false; $('dlg').hidden = true; $('menu').hidden = false; $('mCont').hidden = !(SAUVE && SAUVE.ch > 0); fondu(true, .3); }
-$('mJouer').onclick = () => { sonInit(); $('menu').hidden = true; FLAGS_RESET(); JEU.ckDescente = undefined; lancerChapitre(0); };
+// nouvelle partie : fiche d'admission (prénom), puis le prologue
+$('mJouer').onclick = () => { sonInit(); $('menu').hidden = true; $('nomErr').hidden = true; const v = SAUVE && SAUVE.flags && SAUVE.flags.prenom; $('nomIn').value = v || 'Goreng'; $('nomEcran').hidden = false; if (!touch) setTimeout(() => { try { $('nomIn').focus(); $('nomIn').select(); } catch (e) {} }, 60); };
+function nomValider() { const v = nettoyerPrenom($('nomIn').value); if (!v) { $('nomErr').hidden = false; $('nomErr').textContent = 'Écrivez un prénom (lettres, espaces, tirets ou apostrophes).'; return; }
+  try { $('nomIn').blur(); } catch (e) {} $('nomEcran').hidden = true; FLAGS_RESET(); FLAGS.prenom = v; JEU.ckDescente = undefined; lancerChapitre(0); }
+$('nomOk').onclick = nomValider; $('nomRetour').onclick = () => { $('nomEcran').hidden = true; $('menu').hidden = false; };
+$('nomIn').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); nomValider(); } else if (e.key === 'Escape') $('nomRetour').click(); });
+$('nomIn').addEventListener('input', () => { $('nomErr').hidden = true; });
+document.querySelectorAll('#nomSugg button').forEach(b => { b.onclick = () => { $('nomIn').value = b.textContent; $('nomErr').hidden = true; FX.bip(); }; });
 $('mCont').onclick = () => { sonInit(); $('menu').hidden = true; JEU.ckDescente = SAUVE.ck; JEU.rationsCk = SAUVE.rations; lancerChapitre(SAUVE.ch || 0, true); };
 function FLAGS_RESET() { for (const k in FLAGS) delete FLAGS[k]; Object.assign(STATS, { mange: 0, rations: 0, coups: 0, tues: 0, paroles: 0, niveaux: 0 }); Object.assign(ETAT, { faim: 70, sante: 100, luc: 85 }); }
 
@@ -6036,7 +6064,7 @@ function ecranFin(pcOk) { JEU.pause = true; JEU.enJeu = false; try { localStorag
   const txt = pcOk ? 'La panna cotta est restée intacte au niveau 333, la preuve qu’il y avait assez pour tous. Et une enfant remonte vers le niveau 0, là où personne ne l’attend. Les cuisiniers verront revenir la plateforme. Cette fois, il y aura quelqu’un dessus.'
     : FLAGS.pcMangee ? 'Le plat que Goreng devait protéger, il l’a mangé. La Fosse a gagné ce combat-là. Mais une enfant remonte vers le niveau 0, et elle, personne ne pourra la manger des yeux sans comprendre.'
     : 'La panna cotta a nourri une femme affamée au niveau 146. Il ne reste aucun plat intact pour témoigner. Il reste une enfant, qui remonte vers le niveau 0. C’est peut-être le seul message qui comptait.';
-  $('finL').textContent = 'Fin · niveau 333'; $('finH').textContent = titre; $('finP').textContent = txt;
+  $('finL').textContent = 'Fin · niveau 333'; $('finH').textContent = titre; $('finP').textContent = perso(txt);
   const S = [['Niveaux descendus', STATS.niveaux], ['Rations distribuées', STATS.rations], ['Paroles plutôt que coups', STATS.paroles], ['Détenus tombés', STATS.tues]];
   $('finStats').innerHTML = ''; for (const [l, v] of S) { const d = document.createElement('div'); const b = document.createElement('b'); b.textContent = v; d.appendChild(b); d.appendChild(document.createTextNode(l)); $('finStats').appendChild(d); }
   $('fin').hidden = false; document.body.classList.remove('cine'); }
@@ -6052,12 +6080,12 @@ addEventListener('gamepadconnected', e => { PAD.idx = e.gamepad.index; modeEntre
 addEventListener('gamepaddisconnected', e => { if (e.gamepad.index === PAD.idx) { PAD.idx = null; PAD.mx = PAD.mz = 0; PAD.par = false; IN.par = false; KEYS.e = false; if (JEU.enJeu && !JEU.pause) basculerPause(true); modeEntree(touch ? 'tactile' : 'clavier'); } });
 const zm = (v, dz = .16) => { const a = Math.abs(v); return a < dz ? 0 : Math.sign(v) * ((a - dz) / (1 - dz)); };
 // écran d'interface ouvert (navigation à la croix / stick, ✕ valide, ○ revient)
-function ecranOuvert() { for (const id of ['opts', 'pause', 'mort', 'fin', 'livre', 'msg', 'menu']) if (!$(id).hidden) return $(id); return null; }
+function ecranOuvert() { for (const id of ['opts', 'pause', 'mort', 'fin', 'livre', 'msg', 'nomEcran', 'menu']) if (!$(id).hidden) return $(id); return null; }
 function focusables(sc) { return [...sc.querySelectorAll('button, input, select')].filter(el => !el.hidden && !el.disabled && el.offsetParent !== null); }
 function padFocus(d, sc) { sc = sc || ecranOuvert(); if (!sc) return; const L = focusables(sc); if (!L.length) return; let i = L.indexOf(PAD.focus); i = i < 0 ? 0 : (i + d + L.length) % L.length; if (PAD.focus) PAD.focus.classList.remove('padfocus'); PAD.focus = L[i]; PAD.focus.classList.add('padfocus'); try { PAD.focus.focus({ preventScroll: false }); } catch (e) {} }
-function padValider() { const el = PAD.focus; if (!el || el.offsetParent === null) { padFocus(0); return; } if (el.type === 'checkbox') { el.checked = !el.checked; el.dispatchEvent(new Event('change')); } else if (el.tagName === 'BUTTON') { sonInit(); el.click(); setTimeout(() => { const sc = ecranOuvert(); if (sc && (!PAD.focus || PAD.focus.offsetParent === null || !sc.contains(PAD.focus))) { PAD.focus = null; padFocus(0, sc); } }, 60); } }
+function padValider() { const el = PAD.focus; if (!el || el.offsetParent === null) { padFocus(0); return; } if (el.tagName === 'INPUT' && el.type === 'text') { try { el.focus(); el.select(); } catch (e) {} return; } if (el.type === 'checkbox') { el.checked = !el.checked; el.dispatchEvent(new Event('change')); } else if (el.tagName === 'BUTTON') { sonInit(); el.click(); setTimeout(() => { const sc = ecranOuvert(); if (sc && (!PAD.focus || PAD.focus.offsetParent === null || !sc.contains(PAD.focus))) { PAD.focus = null; padFocus(0, sc); } }, 60); } }
 function padAjuster(d) { const el = PAD.focus; if (!el) return; if (el.type === 'range') { el.value = clamp(+el.value + d * (+el.step || .1), +el.min, +el.max); el.dispatchEvent(new Event('input')); } else if (el.tagName === 'SELECT') { el.selectedIndex = clamp(el.selectedIndex + d, 0, el.options.length - 1); el.dispatchEvent(new Event('change')); } }
-function padRetour(sc) { if (sc.id === 'opts') $('oOk').click(); else if (sc.id === 'pause') basculerPause(); else if (sc.id === 'livre') livreFermer(); PAD.focus = null; const s2 = ecranOuvert(); if (s2) padFocus(0, s2); }
+function padRetour(sc) { if (sc.id === 'opts') $('oOk').click(); else if (sc.id === 'pause') basculerPause(); else if (sc.id === 'livre') livreFermer(); else if (sc.id === 'nomEcran') $('nomRetour').click(); PAD.focus = null; const s2 = ecranOuvert(); if (s2) padFocus(0, s2); }
 let padT = 0;
 function pollPad(now) { requestAnimationFrame(pollPad); const gp = padActif(); if (!gp) return; const dt = padT ? clamp((now - padT) / 1000, 0, .05) : .016; padT = Math.max(padT, now);
   const B = gp.buttons, on = i => !!(B[i] && (B[i].pressed || B[i].value > .4)), dn = i => on(i) && !PAD.prev[i];
