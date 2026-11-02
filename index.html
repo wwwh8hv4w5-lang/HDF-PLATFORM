@@ -149,6 +149,41 @@ body.tactile #aideTouch{display:block}body.tactile #aideClav{display:none}
 #perf{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--sb) + 2px);z-index:11;padding:4px 10px;font:600 12px/1.2 var(--f-d);letter-spacing:.06em;font-variant-numeric:tabular-nums;pointer-events:none;color:var(--dim)}
 #perf.lourd{color:var(--blood)}
 @media (prefers-reduced-motion:reduce){#pf.alerte #pfT{animation:none}#fade,#carte,.fx{transition:none}}
+
+/* ---- taille des textes (confort manette à distance) ---- */
+body.tx #sub{font-size:calc(19px*var(--tz));width:min(96vw,calc(820px*var(--tz)))}
+body.tx #dlgNom{font-size:calc(22px*var(--tz));width:min(94vw,calc(820px*var(--tz)))}
+body.tx #dlgNom span{font-size:calc(13px*var(--tz))}
+body.tx #dlgTxt{font-size:calc(20px*var(--tz));width:min(94vw,calc(820px*var(--tz)))}
+body.tx #dlgBox{width:min(94vw,calc(820px*var(--tz)));max-height:52vh}
+body.tx #dlgBox .c{font-size:calc(17px*var(--tz));padding:calc(11px*var(--tz)) calc(20px*var(--tz))}
+body.tx #dlgChrono{width:min(94vw,calc(820px*var(--tz)));height:calc(4px*var(--tz))}
+body.tx #dlgSuite{font-size:calc(12px*var(--tz));width:min(94vw,calc(820px*var(--tz)))}
+body.tx #obj{font-size:calc(14px*var(--tz));max-width:min(70vw,calc(520px*var(--tz)))}
+body.tx #act div{font-size:calc(16px*var(--tz));padding:calc(10px*var(--tz)) calc(18px*var(--tz))}
+body.tx #act kbd{font-size:calc(13px*var(--tz));padding:calc(4px*var(--tz)) calc(7px*var(--tz))}
+body.tx #top{width:calc(190px*var(--tz))}
+body.tx #niv{font-size:calc(46px*var(--tz))}
+body.tx #niv small,body.tx #qui{font-size:calc(11px*var(--tz))}
+body.tx #cal{font-size:calc(13px*var(--tz))}
+body.tx #pfT{font-size:calc(22px*var(--tz))}
+body.tx #pfS,body.tx #inv{font-size:calc(12.5px*var(--tz))}
+body.tx #inv{top:calc(var(--st) + 86px*var(--tz))}
+body.tx #carte p{font-size:calc(14px*var(--tz))}
+body.tx #carte div{font-size:calc(17px*var(--tz));max-width:min(90vw,calc(560px*var(--tz)))}
+body.tx #fin p,body.tx #menu .sous{font-size:calc(17px*var(--tz))}
+body.tx #finStats{font-size:calc(14px*var(--tz))}
+body.tx #finStats b{font-size:calc(26px*var(--tz))}
+body.tx .b{font-size:calc(17px*var(--tz));padding:calc(13px*var(--tz)) calc(22px*var(--tz))}
+body.tx .mode b{font-size:calc(24px*var(--tz))}
+body.tx .mode small{font-size:calc(13px*var(--tz))}
+body.tx .mode .lbl,body.tx .lbl{font-size:calc(11px*var(--tz))}
+body.tx .opt{font-size:calc(15px*var(--tz))}
+body.tx .opt select,body.tx #nomIn{font-size:calc(16px*var(--tz))}
+body.tx .panneau p,body.tx .panneau h3{font-size:calc(1em*var(--tz))}
+body.tx .bar{grid-template-columns:calc(66px*var(--tz)) 1fr}
+body.tx .bar i{height:calc(6px*var(--tz))}
+body.tx #menu .in{width:min(96vw,calc(860px*var(--tz)))}
 </style>
 
 <canvas id="c" tabindex="0"></canvas>
@@ -188,6 +223,7 @@ body.tactile #aideTouch{display:block}body.tactile #aideClav{display:none}
     <button class="mode" id="mJouer2"><span class="lbl">Campagne 2 · inédite</span><b>L’Ascension</b><small>La plateforme descend vide. Remontez la Fosse à la corde, du niveau 247 jusqu’aux cuisines.</small></button>
     <button class="mode" id="mJouer3"><span class="lbl">Campagne 3 · 18+</span><b>La Loi du 98</b><small>Les Bouchers de Grégor exigent un résident par mois. Faim, couteaux, choix sans retour.</small></button>
     <button class="mode" id="mJouer4"><span class="lbl">Campagne 4 · 18+ · horreur</span><b>L’Écho</b><small>Niveau 66. Personne au-dessus, personne en dessous. La nuit, quelque chose monte du trou.</small></button>
+    <button class="mode" id="mJouer5"><span class="lbl">Campagne 5 · version longue</span><b>L’Intégrale</b><small>L’histoire originale, jour après jour : l’entretien, Trimagasi, Miharu, Imoguiri, Baharat, puis la descente jusqu’au 333.</small></button>
     <button class="mode" id="mP2"><span class="lbl">Jeu complet · séparé</span><b>HDF : Platform 2</b><small>Ossian, Vesna, Tobiah, le Locataire et la grenade. Trois mois, cinq fins.</small></button>
     <button class="mode" id="mImm"><span class="lbl">Mode libre</span><b>Immersion</b><small>Six mois pour de vrai : étage tiré au sort, codétenu inconnu, chaque jour compte.</small></button>
   </div>
@@ -220,6 +256,7 @@ body.tactile #aideTouch{display:block}body.tactile #aideClav{display:none}
   <label class="opt" for="oVoix">Voix des personnages non joueurs (synthèse vocale)<input type="checkbox" id="oVoix"></label>
   <div class="opt"><span id="oVoixEtat" style="color:var(--dim);font-size:13px">Sur iPhone et iPad, touchez « Tester » une fois pour activer les voix.</span><button class="b s" id="oTest" type="button">Tester la voix</button></div>
   <label class="opt" for="oPerf">Afficher les performances (images/s, triangles)<input type="checkbox" id="oPerf"></label>
+  <label class="opt" for="oTxt">Taille des textes<select id="oTxt"><option value="auto">Automatique (très grande à la manette)</option><option value="1">Normale</option><option value="1.3">Grande</option><option value="1.65">Très grande</option><option value="2">Géante (télé, canapé)</option></select></label>
   <label class="opt" for="oQ">Qualité graphique<select id="oQ"><option value="auto">Automatique</option><option value="basse">Basse</option><option value="haute">Haute</option><option value="ultra">Ultra</option></select></label>
   <div class="btns"><button class="b p" id="oOk">Retour</button></div>
 </div></div>
@@ -5041,7 +5078,7 @@ const FOND = 333;
 const PLAT_W = 4.94, PLAT_D = 3.34;
 
 // ---------------------------------------------------------------- réglages (préférences de ce navigateur seulement)
-const OPT = { sens: 1, inv: false, vol: .7, voix: true, q: 'auto' };
+const OPT = { sens: 1, inv: false, vol: .7, voix: true, q: 'auto', txt: 'auto' };
 try { Object.assign(OPT, JSON.parse(localStorage.getItem('fosse-opt') || '{}')); } catch (e) {}
 if (!OPT.v2) { OPT.voix = true; OPT.v2 = 1; }
 const saveOpt = () => { try { localStorage.setItem('fosse-opt', JSON.stringify(OPT)); } catch (e) {} };
@@ -5115,7 +5152,8 @@ tb('tbA', () => { if (JEU.cine) { JEU.passer = true; return; } if (DLG.ouvert) {
 tb('tbF', () => appui('f')); tb('tbC', () => appui('c')); tb('tbG', () => appui('g')); tb('tbT', () => appui('t')); tb('tbX', () => { IN.att = true; }); tb('tbB', () => { IN.par = true; }, () => { IN.par = false; }); tb('tbM', () => basculerPause());
 // mode d'entrée (clavier, tactile, manette) : glyphes des invites, interface tactile affichée ou non
 const ENTREE = { mode: touch ? 'tactile' : 'clavier' };
-function modeEntree(m) { if (ENTREE.mode === m) return; ENTREE.mode = m; document.body.classList.toggle('manette', m === 'manette'); document.body.classList.toggle('tactile', m === 'tactile'); if (typeof actSig !== 'undefined') actSig = ''; if (typeof tacSig !== 'undefined') tacSig = ''; }
+function tailleTexte() { const v = OPT.txt === 'auto' || !OPT.txt ? (ENTREE.mode === 'manette' ? 1.65 : 1) : +OPT.txt; document.body.classList.toggle('tx', v > 1.01); document.body.style.setProperty('--tz', v); }
+function modeEntree(m) { if (ENTREE.mode === m) return; ENTREE.mode = m; document.body.classList.toggle('manette', m === 'manette'); document.body.classList.toggle('tactile', m === 'tactile'); tailleTexte(); if (typeof actSig !== 'undefined') actSig = ''; if (typeof tacSig !== 'undefined') tacSig = ''; }
 const GLYPHES = { manette: { e: '✕', f: '□', g: '△', t: '▼', c: '○' } };
 const glyphe = k => (GLYPHES[ENTREE.mode] || {})[k] || k.toUpperCase();
 addEventListener('keydown', () => modeEntree('clavier'), true);
@@ -5675,7 +5713,8 @@ $('pMenu').onclick = () => { $('pause').hidden = true; allerMenu(); };
 $('pRecom').onclick = () => { $('pause').hidden = true; lancerChapitre(SAUVE.ch || 0); };
 $('pOpt').onclick = () => { $('opts').hidden = false; };
 $('mOpt').onclick = () => { $('opts').hidden = false; };
-function optsVersUI() { $('oSens').value = OPT.sens; $('oInv').checked = OPT.inv; $('oVol').value = OPT.vol; $('oVoix').checked = OPT.voix; $('oQ').value = OPT.q; }
+function optsVersUI() { $('oSens').value = OPT.sens; $('oInv').checked = OPT.inv; $('oVol').value = OPT.vol; $('oVoix').checked = OPT.voix; $('oQ').value = OPT.q; $('oTxt').value = OPT.txt || 'auto'; }
+$('oTxt').onchange = e => { OPT.txt = e.target.value; saveOpt(); tailleTexte(); }; tailleTexte();
 optsVersUI();
 $('oSens').oninput = e => { OPT.sens = +e.target.value; saveOpt(); }; $('oInv').onchange = e => { OPT.inv = e.target.checked; saveOpt(); }; $('oVol').oninput = e => { OPT.vol = +e.target.value; sonVol(); saveOpt(); };
 $('oVoix').onchange = e => { OPT.voix = e.target.checked; saveOpt(); }; $('oQ').onchange = e => { OPT.q = e.target.value; saveOpt(); try { if (OPT.q !== 'auto') { A.autoQuality = false; A.setQuality(OPT.q); } else A.autoQuality = true; } catch (er) {} };
@@ -5707,11 +5746,11 @@ function allerMenu() { document.body.classList.remove('enjeu'); JEU.tk++; JEU.en
 // nouvelle partie : fiche d'admission (prénom), puis le prologue
 function ouvrirFiche(mode) { JEU.modeChoisi = mode; sonInit(); $('menu').hidden = true; $('nomErr').hidden = true; const v = SAUVE && SAUVE.flags && SAUVE.flags.prenom; $('nomIn').value = v || 'Goreng'; $('nomEcran').hidden = false; if (!touch) setTimeout(() => { try { $('nomIn').focus(); $('nomIn').select(); } catch (e) {} }, 60); };
 function nomValider() { const v = nettoyerPrenom($('nomIn').value); if (!v) { $('nomErr').hidden = false; $('nomErr').textContent = 'Écrivez un prénom (lettres, espaces, tirets ou apostrophes).'; return; }
-  try { $('nomIn').blur(); } catch (e) {} $('nomEcran').hidden = true; FLAGS_RESET(); FLAGS.prenom = v; JEU.ckDescente = undefined; lancerChapitre(JEU.modeChoisi === 2 ? 10 : JEU.modeChoisi === 3 ? 20 : JEU.modeChoisi === 4 ? 30 : JEU.modeChoisi === 5 ? 40 : 0); }
+  try { $('nomIn').blur(); } catch (e) {} $('nomEcran').hidden = true; FLAGS_RESET(); FLAGS.prenom = v; JEU.ckDescente = undefined; lancerChapitre(JEU.modeChoisi === 2 ? 10 : JEU.modeChoisi === 3 ? 20 : JEU.modeChoisi === 4 ? 30 : JEU.modeChoisi === 5 ? 40 : JEU.modeChoisi === 6 ? 50 : 0); }
 $('mP2').onclick = () => { try { voixCouper(); if (SON.ctx) SON.ctx.suspend(); } catch (e) {} const emb = document.getElementById('p2src');   // version autonome : PLATFORM 2 est embarqué dans ce fichier
   if (emb) { try { const t = atob(emb.textContent.trim()), u = new Uint8Array(t.length); for (let i = 0; i < t.length; i++) u[i] = t.charCodeAt(i); location.href = URL.createObjectURL(new Blob([u], { type: 'text/html;charset=utf-8' })) + '#depuis-hdf'; return; } catch (e) { console.warn('[P2]', e); } }
   location.href = 'platform-2.html#depuis-hdf'; };
-$('mJouer').onclick = () => ouvrirFiche(1); $('mJouer2').onclick = () => ouvrirFiche(2); $('mImm').onclick = () => ouvrirFiche(3);
+$('mJouer').onclick = () => ouvrirFiche(1); $('mJouer2').onclick = () => ouvrirFiche(2); $('mImm').onclick = () => ouvrirFiche(3); $('mJouer5').onclick = () => ouvrirFiche(6);
 function ageDemande(mode, titre, txt) { sonInit(); JEU.ageMode = mode; $('ageL').textContent = titre; $('ageP').textContent = txt; $('menu').hidden = true; $('ageEcran').hidden = false; }
 $('mJouer3').onclick = () => ageDemande(4, 'Campagne 3 · La Loi du 98', 'Cette campagne contient de la violence, un langage cru et des choix moraux extrêmes. Confirmez-vous avoir 18 ans ou plus ?');
 $('mJouer4').onclick = () => ageDemande(5, 'Campagne 4 · L’Écho', 'Cette campagne d’horreur contient des scènes effrayantes, des apparitions soudaines et des thèmes très sombres. Confirmez-vous avoir 18 ans ou plus ?');
@@ -6125,7 +6164,7 @@ function ecranFin(pcOk) { JEU.pause = true; JEU.enJeu = false; try { localStorag
   const txt = pcOk ? 'La panna cotta est restée intacte au niveau 333, la preuve qu’il y avait assez pour tous. Et une enfant remonte vers le niveau 0, là où personne ne l’attend. Les cuisiniers verront revenir la plateforme. Cette fois, il y aura quelqu’un dessus.'
     : FLAGS.pcMangee ? 'Le plat que Goreng devait protéger, il l’a mangé. La Fosse a gagné ce combat-là. Mais une enfant remonte vers le niveau 0, et elle, personne ne pourra la manger des yeux sans comprendre.'
     : 'La panna cotta a nourri une femme affamée au niveau 146. Il ne reste aucun plat intact pour témoigner. Il reste une enfant, qui remonte vers le niveau 0. C’est peut-être le seul message qui comptait.';
-  $('finL').textContent = 'Fin · niveau 333'; $('finH').textContent = titre; $('finP').textContent = perso(txt);
+  $('finL').textContent = FLAGS.camp5 ? 'Campagne 5 · L’Intégrale · niveau 333' : 'Fin · niveau 333'; $('finH').textContent = titre; $('finP').textContent = perso(txt);
   const S = [['Niveaux descendus', STATS.niveaux], ['Rations distribuées', STATS.rations], ['Paroles plutôt que coups', STATS.paroles], ['Détenus tombés', STATS.tues]];
   $('finStats').innerHTML = ''; for (const [l, v] of S) { const d = document.createElement('div'); const b = document.createElement('b'); b.textContent = v; d.appendChild(b); d.appendChild(document.createTextNode(l)); $('finStats').appendChild(d); }
   $('fin').hidden = false; document.body.classList.remove('cine'); }
@@ -7106,6 +7145,244 @@ function ecranFin4(fin) { JEU.pause = true; JEU.enJeu = false; JEU.maj = null; t
   const W = c4() || {}, S = [['Éveils', fin === 'treizieme' ? '14' : '13'], ['Pacte avec Bastien', { deux: 'attachés', refus: 'refusé', lui: 'lui seul' }[W.pacte] || '—'], ['Marques sur le mur', fin === 'liens' ? 14 : 13], ['Lina', { liens: 'vivante', barre: 'vivante', treizieme: '—', resident: 'disparue' }[fin] || '—']];
   $('finStats').innerHTML = ''; for (const [l, v] of S) { const d = document.createElement('div'); const b = document.createElement('b'); b.textContent = v; d.appendChild(b); d.appendChild(document.createTextNode(l)); $('finStats').appendChild(d); }
   $('fin').hidden = false; }
+
+// =====================================================================================
+// CAMPAGNE 5 — L'INTÉGRALE (chapitres 50 à 55, puis la descente du chapitre 6)
+// La version longue, au plus près de l'histoire originale : l'entretien d'admission, puis
+// cinq mois vécus jour après jour, avec leur routine (réveil, plateforme, activités, nuit),
+// Miharu qui passe chaque mois sur la plateforme, et le fantôme de Trimagasi qui ne part plus.
+// =====================================================================================
+const LOOK_T5 = { colors: { top: '#5a5248', top2: '#4a443c', bottom: '#2f2c28' }, build: 'heavy' };
+const LOOK_I5 = { colors: { hair: '#c9c9c9', top: '#6c5f78', top2: '#6c5f78', bottom: '#3a3a44' }, build: 'slim' };
+const LOOK_M5 = { colors: { top: '#3a2626', top2: '#3a2626', bottom: '#241c1c', hair: '#0e0c0c', accent: '#6a1a12' }, build: 'slim' };
+const KN5 = [{ prop: 'Knife', socket: 'Socket_Hand_R', q: [0, 0, 0, 1], t: [0, 0, 0] }];
+const c5 = () => FLAGS.c5;
+function prep5(L, cal) { niveau(L, cal); FLAGS.camp5 = true; FLAGS.c5 = FLAGS.c5 || {}; JEU.voisins = true; JEU.inter = interLit(); }
+function reveil5() { J.couche = true; J.x = -RX + .52; J.z = .3; J.a = -PI / 2; J.p = .6; }
+async function journal(txt) { await carte('', '', txt, Math.max(3.5, txt.length * .055)); }
+async function nouveauJour(cal, txt) { await fondu(true, 1.2); JEU.calendrier = cal; reveil5(); if (txt) await journal(txt); await fondu(false, 1.6); await attendre(.6); await lever(-3.95, 1.15); }
+function miharuPlat(x = .6, z = -.2) { const m = new Perso({ nom: 'Miharu', tenue: 'villager_f', morph: 'woman', graine: 303, x, z, yaw: -PI / 2, clip: 'Crouch_Idle', look: LOOK_M5, props: KN5 }); m.rel = () => PLAT.pos[1]; m.libre = true; ROLES.Miharu = 'Elle descend chaque mois sur la plateforme'; return m; }
+async function platJour(L, o = {}) { JEU.attenteOk = true; objectif(o.obj || 'Attendez la plateforme (vous pouvez accélérer l’attente).'); const pf = plateformeVenir(L, { attente: o.attente || 22, arret: o.arret || 45, banquet: o.banquet }); await pf; objectif(o.obj2 || 'Mangez avant qu’elle reparte.'); if (o.pendant) { PF.tenir = true; await o.pendant(); PF.tenir = false; PF.t = Math.max(PF.t, PF.arret - 22); objectif('Mangez avant qu’elle reparte.'); } await plateformePartir(); JEU.attenteOk = false; objectif(''); }
+
+// =====================================================================================
+// CHAPITRE 50 — L'entretien d'admission
+// =====================================================================================
+CH[50] = async function c5entretien() {
+  FLAGS.c5 = {}; FLAGS.camp5 = true; niveau(48, ''); JEU.voisins = false; ETAT.faim = 70; ETAT.sante = 100; ETAT.luc = 100;
+  await carte('Campagne 5', 'L’Intégrale', 'Six mois. Un livre. Un diplôme homologué à la sortie.', 5);
+  ROLES['Imoguiri'] = 'Administration · bureau des admissions';
+  await carte('Centre vertical d’autogestion', 'Bureau des admissions', '', 3.5);
+  await scene([['Imoguiri', 'Asseyez-vous, monsieur Goreng. Ce ne sera pas long. Quelques questions, une signature, et vous dormirez.'], ['Imoguiri', 'Six mois de séjour volontaire. À la sortie, le diplôme que vous avez demandé. Vous confirmez ?'], ['Goreng', 'Je confirme.']]);
+  const rp = await choisir('Imoguiri', 'Quel est votre plat préféré ? La cuisine le prépare pour chaque résident.', ['Les escargots au beurre.', 'Le homard.', 'Un simple pain chaud.', 'Le gâteau à la crème de ma grand-mère.']);
+  c5().plat = ['escargots au beurre', 'homard', 'pain chaud', 'gâteau à la crème'][rp];
+  await dire('Imoguiri', 'Noté. Vous le reconnaîtrez sur la plateforme. Si quelqu’un vous le laisse.');
+  const ro = await choisir('Imoguiri', 'Chaque résident a droit à un objet. Un seul. Qu’apportez-vous ?', ['Un livre : Don Quichotte.', '« Un couteau, c’est autorisé ? »', '« Quelque chose qui m’aide à arrêter de fumer. »']);
+  await dire('Imoguiri', ['Don Quichotte. Vous êtes le premier à me demander un livre cette année. C’est très bien, un livre.', 'Autorisé, oui. Mais je vous ai déjà inscrit avec un livre, sur votre formulaire. Don Quichotte. Vous ne vous en souvenez pas ?', 'Les cigarettes sont interdites, alors je vous ai inscrit avec votre livre. Don Quichotte. Vous aurez le temps de le finir.'][ro]);
+  const rw = await choisir('Imoguiri', 'Dernière question. Pourquoi êtes-vous ici, monsieur Goreng ?', ['« Pour le diplôme. »', '« Pour arrêter de fumer. Et lire, enfin. »', '« Je ne sais pas vraiment. »']);
+  c5().pourquoi = rw;
+  await scene([['Imoguiri', ['Le diplôme. Beaucoup viennent pour lui. Peu repartent avec.', 'Arrêter de fumer et lire. Ce sont de bonnes raisons. Les meilleures, peut-être.', 'Honnête. Ça aussi, c’est rare.'][rw]], ['Imoguiri', 'Vous verrez, l’endroit est… vertical. Certains mois, on est bien placé. D’autres moins. Tout dépend de ceux du dessus.'], ['Goreng', 'Et la nourriture ?'], ['Imoguiri', 'Il y en a assez pour tout le monde. Si chacun ne mange que sa part.'], ['Imoguiri', 'Signez ici. Merci. Respirez normalement. Le gaz est sans danger.']]);
+  FX.gaz(); fx('fxGas', .9); await attendreReel(2600); await fondu(true, 2); fx('fxGas', 0); lancerChapitre(51); };
+
+// =====================================================================================
+// CHAPITRE 51 — Mois 1 · Niveau 48 : Trimagasi
+// =====================================================================================
+CH[51] = async function c5m1() {
+  prep5(48, '<b>Mois 1</b> · niveau 48 · jour 1'); ETAT.faim = 62; reveil5();
+  const T = cellmate({ nom: 'Trimagasi', role: 'Codétenu · niveau 48', tenue: 'elder', morph: 'elder', graine: 77, x: RX - .82, z: -.2, yaw: -PI / 2, clip: 'Sit_Chair', look: LOOK_T5 }); T.dy = .07;
+  await carte('Mois 1', 'Niveau 48', '', 3); await fondu(false, 2.5); await attendre(1.2);
+  await dit('Trimagasi', 'Ah. Il se réveille. Il a bien dormi, le nouveau ?'); await lever(-3.95, 1.15, versJ2(-3.95, 1.15, T.x, T.z)); await tourner(T.x, 1.2, T.z, .5);
+  await scene([['Trimagasi', 'Quarante-huit. C’est un bon niveau. Ceux du dessus ne mangent pas tout. Pas tout.'], ['Goreng', 'Vous êtes là depuis longtemps ?'], ['Trimagasi', 'Assez pour savoir que les questions, ici, on les paye. Mais toi, je vais t’en offrir quelques-unes. Gratuites. Le premier mois.']]);
+  await questions('Trimagasi', 'Vas-y. Demande.', [
+    { q: 'Comment ça marche, ici ?', r: [['Trimagasi', 'Une plateforme descend une fois par jour. On mange ce que ceux du dessus ont laissé. Ceux du dessous mangent ce qu’on laisse.'], ['Trimagasi', 'Et chaque mois, on se réveille ailleurs. Plus haut. Ou plus bas.'], ['Goreng', 'Et si on garde de la nourriture ?'], ['Trimagasi', 'La cellule chauffe. Ou gèle. Jusqu’à ce que tu jettes ce que tu as volé. Évident.']] },
+    { q: 'Qu’est-ce que vous avez apporté ?', r: [['Trimagasi', 'Ça.'], ['', 'Il sort un couteau de cuisine de sous son matelas. La lame brille comme si elle était neuve.'], ['Trimagasi', 'Samouraï Plus. Le couteau qui s’aiguise tout seul, à mesure qu’il coupe. Je l’ai vu à la télévision. Il ne s’use jamais.'], ['Trimagasi', 'Et toi ?'], ['Goreng', 'Un livre.'], ['Trimagasi', 'Un livre. Il a apporté un livre. Ha ! Tu le mangeras quand ?']] },
+    { q: 'Pourquoi êtes-vous ici ?', r: [['Trimagasi', 'Homicide involontaire.'], ['Trimagasi', 'J’ai jeté une télévision par la fenêtre. Elle passait des publicités, toujours les mêmes. Elle est tombée sur un homme, en bas.'], ['Trimagasi', 'Ici, c’était ça ou l’hôpital psychiatrique. J’ai choisi la Fosse. Au moins, ici, on mange.']] }]);
+  T.parler = async () => { await dire('Trimagasi', pick(['Évident.', 'Ne parle pas à ceux du dessus. Ils ne répondent jamais. Ils sont au-dessus.', 'Ceux du dessous ? Ce sont ceux du dessous. Ils ne sont rien.', 'Lis ton livre. Moi, je regarde mon couteau. Chacun son spectacle.'])); };
+  // ---- jour 1 : la première plateforme
+  await platJour(48, { pendant: async () => {
+    await dit('Trimagasi', 'Mange. Vite. Les mains, pas de couverts. Les couverts, c’est en haut.', 3);
+    await dit('', 'Votre plat préféré est là, sur la plateforme : ' + (c5().plat || 'escargots au beurre') + '. Ou ce qu’il en reste. Quelqu’un a mordu dedans et l’a reposé.', 4.5);
+    const r = await choisir('Goreng', 'En haut, des voix rient. En dessous, le 49 attend en silence.', ['Crier vers le 47 : « Laissez-en plus ! »', 'Crier vers le 49 : « Ne prenez que votre part ! »', 'Manger sans rien dire.']);
+    if (r === 0) await scene([['Goreng', 'Hé, le 47 ! Vous pourriez en laisser un peu plus ?'], ['Voix du 47', 'Va te faire voir, le 48 ! Ceux du 46 nous laissent rien, à nous !'], ['Trimagasi', 'Tu vois ? Ceux du dessus ne répondent qu’avec des insultes. Ou avec leur pisse.']]);
+    else if (r === 1) await scene([['Goreng', 'Le 49 ! Prenez seulement ce qu’il vous faut, il y a des gens en dessous !'], ['Voix du 49', '…'], ['Trimagasi', 'Ne leur parle pas. On ne parle pas à ceux du dessous. Ils sont en dessous.'], ['Goreng', 'Et dans un mois, si c’est nous ?'], ['Trimagasi', 'Alors on ne nous parlera pas non plus. Évident.']]);
+    else { c5().silence = (c5().silence || 0) + 1; await dit('Trimagasi', 'Bien. Tu apprends vite.', 2.5); }
+    T.jouer('Idle'); T.dy = 0; await T.aller(1.4, HZ + .7); T.regarder(0, 0); T.geste('Pick_Up'); await attendre(1.5);
+    await dit('', 'Trimagasi crache longuement sur ce qui reste d’un plat de pâtes. Puis il sourit au 49, en dessous.', 4); c5().crachat = true; } });
+  T.jouer('Idle'); await asseoir(T, -.2);
+  // ---- le soir : le couteau
+  await scene([['Trimagasi', 'Viens voir. Regarde.'], ['', 'Il fait glisser le Samouraï Plus sur le bord en béton du lit. Une étincelle. Puis il tranche un quignon qu’il a gardé. Net.'], ['Trimagasi', 'Plus il coupe, plus il coupe. Tu comprends ? Il devient meilleur à chaque fois.'], ['Goreng', 'Vous gardez du pain ? La cellule va chauffer.'], ['Trimagasi', 'Pas si je le mange avant. Regarde bien comme on fait, le nouveau.']]);
+  await dormir('<b>Mois 1</b> · niveau 48 · jour 1', { faim: 10, nuit: async () => coucher(T), matin: () => assis(T, -.2) });
+  // ---- jour 2 : le livre
+  JEU.calendrier = '<b>Mois 1</b> · niveau 48 · jour 2';
+  objectif('Lisez Don Quichotte sur votre lit (le temps passe moins lentement).'); await jusqua(() => !$('livre').hidden); await jusqua(() => $('livre').hidden); objectif('');
+  await scene([['Trimagasi', 'Lis-moi un passage. Allez. J’ai envie de rire.'], ['Goreng', '« Il ne faut pas jeter le manche après la cognée. »'], ['Trimagasi', 'Ça veut dire quoi ?'], ['Goreng', 'Qu’il ne faut pas abandonner quand tout semble perdu.'], ['Trimagasi', 'Il était fou, ton chevalier. Il se battait contre des moulins.'], ['Goreng', 'Il voyait des géants. Et il les attaquait quand même.'], ['Trimagasi', 'Évident. Les fous, ça vit vieux. Ça ne réfléchit pas.']]);
+  await platJour(48, { pendant: async () => { await dit('', 'Au-dessus, un homme du 47 se penche, rit, et urine sur le banquet qui descend. Trimagasi rit aussi.', 4); await dire('Trimagasi', 'Demain, si c’est nous au 47, je ferai pareil. Ce n’est pas personnel. C’est la Fosse.'); } });
+  // ---- jour 3 : celui qui tombe, et Miharu
+  await nouveauJour('<b>Mois 1</b> · niveau 48 · jour 5', 'Les jours se ressemblent. On mange, on attend, on écoute ceux du dessus. Trimagasi aiguise son couteau. Vous lisez.');
+  await attendre(2); bruit(1.8, 900, .3, 'bandpass', .5); await dit('', 'Un cri traverse le trou de haut en bas. Un homme passe devant vous en tombant. Il bat des bras. Puis plus rien.', 4.5);
+  await scene([['Goreng', 'Il… il est tombé.'], ['Trimagasi', 'Il a sauté. Il y en a toujours un, le premier mois. Ceux qui ont compris trop vite.'], ['Trimagasi', 'Ne regarde pas en bas. Ça donne des idées.']]); ETAT.luc = Math.max(40, ETAT.luc - 8);
+  JEU.attenteOk = true; objectif('Attendez la plateforme.'); const pf = plateformeVenir(48, { attente: 20, arret: 999 }); PF.tenir = true; const M = miharuPlat(); await pf;
+  M.regarderJoueur(); await scene([['', 'Il y a une femme sur la plateforme. Accroupie au milieu des plats, un couteau à la main. Elle a du sang jusqu’aux coudes.'], ['Trimagasi', 'Miharu. Ne bouge pas. Ne la regarde pas dans les yeux.'], ['Trimagasi', 'Chaque mois, elle descend sur la plateforme jusqu’en bas, puis elle remonte. Elle cherche son enfant. Elle tue ceux qui la touchent.']]);
+  const rm = await choisir('Goreng', 'Miharu vous fixe. Elle respire vite, comme un animal.', ['Lui tendre votre part : « Prenez. »', '« Votre enfant… comment s’appelle-t-il ? »', 'Reculer contre le mur.']);
+  if (rm === 0) { c5().miharuDon = true; await scene([['', 'Elle regarde votre main tendue. Longtemps. Puis elle prend le pain, sans vous toucher.'], ['Trimagasi', 'Tu es fou. Complètement fou. Tu viens de nourrir la seule personne d’ici qui n’a pas besoin de toi.']]); }
+  else if (rm === 1) await scene([['Miharu', '…'], ['', 'Elle ne répond pas. Mais quelque chose passe dans son regard, puis s’éteint.'], ['Trimagasi', 'Elle ne parle pas. Personne ne l’a jamais entendue parler.']]);
+  else await dit('Trimagasi', 'Bien. Très bien. On vit vieux, contre le mur.', 2.5);
+  PF.tenir = false; PF.t = PF.arret - 4; await plateformePartir(); M.retirer(); JEU.attenteOk = false; objectif('');
+  // ---- fin du mois
+  await nouveauJour('<b>Mois 1</b> · niveau 48 · jour 30', 'Trente jours. Vous avez fini la première partie du livre. Trimagasi vous appelle « mon ami », maintenant. Vous ne savez pas si c’est une bonne nouvelle.');
+  await scene([['Trimagasi', 'Demain, le gaz. On se réveillera ailleurs. Parfois, on garde le même codétenu. Quand on s’entend bien.'], ['Trimagasi', 'Et nous deux, on s’entend bien, non ? Mon ami.'], ['Goreng', 'Je crois, oui.'], ['Trimagasi', 'Évident.']]);
+  await gaz('Le gaz. Trimagasi vous souhaite bonne nuit. Il sourit.'); lancerChapitre(52); };
+
+// =====================================================================================
+// CHAPITRE 52 — Mois 2 · Niveau 171 : le Samouraï Plus
+// =====================================================================================
+CH[52] = async function c5m2() {
+  prep5(171, '<b>Mois 2</b> · niveau 171 · jour 1'); ETAT.faim = Math.min(ETAT.faim, 55);
+  const T = cellmate({ nom: 'Trimagasi', role: 'Codétenu · niveau 171', tenue: 'elder', morph: 'elder', graine: 77, x: 1.2, z: 2.6, yaw: PI * .8, clip: 'Idle', look: LOOK_T5, props: KN5 });
+  J.couche = true; J.attache = true; J.x = -RX + .52; J.z = .3; J.a0 = J.a = -PI / 2; J.p = .6;
+  await carte('Mois 2', 'Niveau 171', '', 3); await fondu(false, 2.5); await attendre(1);
+  await dit('', 'Vos poignets sont liés au cadre du lit avec des bandes de drap. Serrées. Professionnelles.', 3.5);
+  J.couche = false; J.x = -RX + 1.1; J.z = .3; J.a0 = J.a = versJ2(J.x, J.z, T.x, T.z); J.p = 0; T.regarderJoueur();
+  await scene([['Trimagasi', 'Tu es réveillé. Bien. Ne tire pas, tu vas te faire mal aux poignets.'], ['Goreng', 'Trimagasi. Détache-moi.'], ['Trimagasi', 'Cent soixante et onze, mon ami. Rien ne descend jusqu’ici. Rien. Pas un os.'], ['Trimagasi', 'Dans huit jours, on aura faim. Dans quinze, on deviendra fous. Moi, je ne veux pas devenir fou.'], ['Trimagasi', 'Alors je vais couper. Un peu. Chaque jour. Pas assez pour te tuer. Je mangerai, je panserai, et tu vivras plus longtemps que si je te tuais d’un coup.'], ['Trimagasi', 'C’est presque de la gentillesse, si tu y penses.']]);
+  ROLES.Trimagasi = 'Codétenu · niveau 171';
+  // ---- les jours d'attente : parler pour gagner du temps
+  for (let j = 0; j < 3; j++) {
+    const dits = [
+      { q: '« Tu disais qu’on était amis. »', r: [['Trimagasi', 'On l’est. C’est pour ça que je ne te mange pas tout de suite. Un ennemi, je l’aurais égorgé la première nuit.']] },
+      { q: '« Le mois prochain, on sera peut-être au 10. »', r: [['Trimagasi', 'Peut-être. Et peut-être au 300. Je ne parie pas ma vie sur peut-être.']] },
+      { q: '« Pense à ce que tu vas devenir. »', r: [['Trimagasi', 'Je sais ce que je vais devenir : vivant. C’est la seule chose qu’on devient, ici. Vivant, ou rien.']] },
+      { q: '« Je te donnerai ma part, tous les mois. Je le jure. »', r: [['Trimagasi', 'Tu jures. Sur ton livre ? Ton chevalier jurait aussi. Il est mort dans son lit, ruiné et fou.']] },
+      { q: 'Se taire. Le regarder.', r: [['Trimagasi', 'Ne me regarde pas comme ça. C’est la Fosse qui fait ça. Pas moi. Tu ferais pareil. Tu le sais.']] }];
+    await questions('Trimagasi', ['Jour ' + (j * 3 + 2) + '. Il aiguise son couteau en sifflotant.', 'Il compte les jours à voix haute, sur ses doigts.', 'Il ne siffle plus. Il a faim, lui aussi.'][j], dits.slice(j, j + 3));
+    await plateformeVenir(171, { attente: 14, arret: 10, banquet: { rien: true } }); await dit('', 'La plateforme passe. Vide. Propre.', 2.4); await plateformePartir();
+    await fondu(true, 1); ETAT.faim = Math.max(5, ETAT.faim - 14); JEU.calendrier = '<b>Mois 2</b> · niveau 171 · jour ' + (j * 3 + 4); await attendreReel(500); await fondu(false, 1); }
+  // ---- jour 8 : le couteau
+  await scene([['Trimagasi', 'Huit jours, mon ami. C’est l’heure.'], ['', 'Il s’approche. Le Samouraï Plus capte la lumière des néons.'], ['Trimagasi', 'La cuisse. C’est là qu’il y a le plus. Ne bouge pas, ce sera plus propre.']]);
+  T.aller(J.x + .9, J.z + .2).then(() => T.regarderJoueur()); await attendre(1.2);
+  JEU.attenteOk = false; const pf = plateformeVenir(171, { attente: 2, arret: 999, banquet: { rien: true } }); PF.tenir = true; const M = miharuPlat(); await pf;
+  await scene([['', 'La plateforme. Hors de son heure. Miharu est dessus.'], ['', 'Elle saute. Elle est sur Trimagasi avant qu’il se retourne.'], ['Trimagasi', 'Lâche-moi ! Lâche-moi, sorcière !']]);
+  M.rel = null; M.niv = 171; M.x = J.x + 1.6; M.z = J.z - .6; M.jouer('Combat_Idle'); T.jouer('Hit_Front'); await attendre(.8);
+  objectif('Libérez-vous (E maintenu) !'); await new Promise(res => { JEU.inter = [{ k: 'e', t: 'Arracher vos liens', tenir: 2.2, pendant: d => { if (Math.random() < d * 5) FX.souffle(); }, f() { J.attache = false; FX.coup(); res(); } }]; });
+  JEU.inter = []; objectif(''); J.arme = 'mains';
+  JEU.raisonMort = 'Trimagasi a eu ce qu’il voulait.'; JEU.conseilMort = 'Parez son couteau (clic droit, L2), puis frappez. Miharu se bat à vos côtés.';
+  const E = ennemi({ nom: 'Trimagasi', tenue: 'elder', morph: 'elder', graine: 77, x: T.x, z: T.z, niv: 171, look: LOOK_T5, hp: 90, dmg: 11, couteau: true, barks: ['Tu étais mon ami !', 'Évident ! C’était évident !', 'Ingrat ! Je t’ai nourri un mois entier !'] }); T.retirer(); COMBAT.allies = [M];
+  await combat([E], { obj: 'Battez-vous contre Trimagasi.' }); COMBAT.allies = []; STATS.tues++;
+  await scene([['', 'Trimagasi est par terre. Le Samouraï Plus a glissé jusqu’à vos pieds.'], ['Trimagasi', 'Mon… ami…'], ['', 'Miharu ramasse le couteau. Elle vous le tend, le manche en avant. Elle attend.']]);
+  const rk = await choisirT('Goreng', 'Trimagasi respire encore. Miharu attend, le manche tendu.', ['Prendre le couteau. Finir.', 'Refuser. Laisser Miharu faire.'], 10, 1);
+  await fondu(true, .4); FX.touche(); await attendreReel(700); E.visible = false; await fondu(false, .8); c5().trimaToi = rk === 0;
+  await dit('', rk === 0 ? 'Vous l’avez fait. Le couteau coupe très bien. Il s’aiguise tout seul.' : 'Miharu l’a fait, sans un bruit, sans vous quitter des yeux.', 4);
+  PF.tenir = false; PF.t = PF.arret - 3; await plateformePartir();
+  await scene([['', 'Miharu ne remonte pas sur la plateforme. Elle reste. Elle panse vos blessures avec des bandes de drap, celles qui vous attachaient.'], ['', 'Le soir, elle découpe. Elle vous donne la première part. Vous ne regardez pas ce que c’est.']]);
+  await journal('Miharu est restée huit jours. Elle n’a jamais parlé. Le neuvième, elle a sauté sur la plateforme, et elle est descendue chercher son enfant.');
+  M.retirer(); ETAT.faim = 70; ETAT.luc = Math.max(15, ETAT.luc - 25);
+  const G = fantome(RX - .82, -.2, -PI / 2, 'Sit_Chair'); G.dy = .07; await attendre(1);
+  await scene([['Trimagasi', 'Tu vois ? Tu as mangé. Tu manges encore. Évident.'], ['Goreng', 'Tu es mort.'], ['Trimagasi', 'Et toi tu es vivant. Grâce à moi. Ne fais pas cette tête. C’est le plus beau cadeau qu’on m’ait jamais fait faire.']]);
+  G.retirer(); await gaz('Le gaz. Quand vous fermez les yeux, Trimagasi est assis sur son lit. Il vous regarde dormir.'); lancerChapitre(53); };
+
+// =====================================================================================
+// CHAPITRE 53 — Mois 3 · Niveau 33 : Imoguiri et la solidarité spontanée
+// =====================================================================================
+CH[53] = async function c5m3() {
+  prep5(33, '<b>Mois 3</b> · niveau 33 · jour 1'); ETAT.faim = Math.min(ETAT.faim, 50); ETAT.luc = Math.max(ETAT.luc, 40); reveil5();
+  const I = cellmate({ nom: 'Imoguiri', role: 'Codétenue · niveau 33 · ancienne de l’Administration', tenue: 'villager_f', morph: 'woman', graine: 58, x: RX - .82, z: .3, yaw: -PI / 2, clip: 'Sit_Chair', look: LOOK_I5 }); I.dy = .07;
+  const dog = bete('Dog', { x: 3.4, z: 2.7, niv: 33, yaw: -2, coat: 1, scale: .9 }); dog.idle = 'Lie'; dog.play('Lie');
+  await carte('Mois 3', 'Niveau 33', '', 3); await fondu(false, 2.5); await attendre(1); FX.aboie(); await dit('', 'Un chien aboie. Il y a un chien dans la cellule.', 3);
+  await lever(-3.95, 1.15, versJ2(-3.95, 1.15, I.x, I.z)); await tourner(I.x, 1.2, I.z, .5);
+  await scene([['Imoguiri', 'Bonjour, monsieur Goreng. Vous ne vous souvenez pas de moi ?'], ['Goreng', '… Le bureau des admissions. Vous m’avez demandé mon plat préféré.'], ['Imoguiri', 'Les ' + (c5().plat || 'escargots') + '. Je n’oublie jamais un plat préféré. Vingt-cinq ans que je les note.'], ['Imoguiri', 'Et voici Ramsès II. Mon objet. Il ne mord pas. Il est très bien élevé, n’est-ce pas, Ramsès ?']]);
+  await questions('Imoguiri', 'Vous avez le droit de me demander. Je vous dois bien ça.', [
+    { q: 'Pourquoi êtes-vous ici ?', r: [['Imoguiri', 'J’ai un cancer. Il me reste peu de temps. J’ai voulu le passer à faire quelque chose d’utile.'], ['Imoguiri', 'Et puis j’ai envoyé tant de gens ici. Je voulais voir. Je ne savais pas. Je vous jure que je ne savais pas.']] },
+    { q: 'Vous saviez, pour la Fosse ?', r: [['Imoguiri', 'On nous disait « centre vertical d’autogestion ». Deux cents niveaux, deux personnes par niveau.'], ['Goreng', 'Il y en a plus de deux cents. J’ai vu passer un homme qui tombait. Longtemps.'], ['Imoguiri', '… Alors on nous a menti, à nous aussi.']] },
+    { q: 'Vous connaissez Miharu ?', r: [['Imoguiri', 'Miharu… Oui. Je l’ai reçue, il y a dix mois. Une femme japonaise. Seule.'], ['Imoguiri', 'Elle n’avait pas d’enfant. Je m’en souviendrais. Aucun mineur n’est admis dans la Fosse. Jamais.']] }]);
+  if (c5().trimaToi !== undefined) { const G = fantome(-4.6, -2.8, PI * .3); await dire('Trimagasi', 'Le chien, mon ami. Regarde comme il est gras. Évident.'); G.retirer(); }
+  I.parler = async () => { await dire('Imoguiri', pick(['Ramsès, assis. Bien.', 'Si chacun mangeait seulement sa part, il y en aurait jusqu’en bas. C’est mathématique.', 'Vous lisez encore votre livre ? Vous me lirez un passage, ce soir ?'])); };
+  // ---- jour 1 : la solidarité spontanée
+  await scene([['Imoguiri', 'J’ai une idée. Ou plutôt, je l’ai depuis le premier jour, mais je n’ai encore convaincu personne.'], ['Imoguiri', 'Chaque jour, nous préparons deux rations : une pour vous, une pour moi. Le reste, nous le laissons au 34, en leur demandant de faire pareil.'], ['Imoguiri', 'Ils le diront au 35, qui le dira au 36… Une solidarité spontanée. Vous voulez bien m’aider ?']]);
+  await platJour(33, { obj2: 'Préparez deux rations avec Imoguiri (E maintenu près de la plateforme).', pendant: async () => {
+    await new Promise(res => { JEU.inter = [...interLit(), { x: 0, y: .4, z: HZ - .2, r: 3, cos: .55, k: 'e', t: 'Préparer les rations', em: 'deux assiettes', tenir: 2.6, f() { nourrir('pain', 14, 'Ration'); STATS.rations = (STATS.rations || 0) + 2; res(); } }]; });
+    JEU.inter = interLit(); await scene([['Imoguiri', 'Le 34 ! Bonjour ! Je m’appelle Imoguiri. Nous vous avons préparé deux rations. Laissez-en deux au 35, je vous en prie.'], ['Voix du 34', 'Va crever, la vieille ! On mange ce qu’on veut !'], ['Imoguiri', 'Je vous en prie. C’est pour tout le monde.'], ['Voix du 34', 'Et ton chien, tu nous le descends ? Ha !']]); } });
+  await dit('Imoguiri', 'Ils finiront par comprendre. Il faut du temps. Les gens sont bons, au fond.', 3.5);
+  // ---- jour 3 : la manière de Goreng
+  await nouveauJour('<b>Mois 3</b> · niveau 33 · jour 3', 'Deux jours de suite, Imoguiri a supplié. Deux jours de suite, le 34 a tout mangé.');
+  await platJour(33, { obj2: 'Le 34 refuse toujours. Parlez-leur.', pendant: async () => {
+    const r = await choisirT('Goreng', 'Imoguiri vous regarde. Le 34 rigole en dessous.', ['« Si vous ne mangez pas vos rations, demain je chie sur votre plateforme. Sur tout. »', '« Je vous en supplie, comme elle. Laissez-en pour le 35. »', '« Je descendrai vous briser les doigts. Un par un. »'], 12, 0);
+    c5().manierer = r; STATS.paroles = (STATS.paroles || 0) + 1;
+    if (r === 1) await scene([['Voix du 34', 'Il supplie ! Ils supplient tous les deux ! Ha !'], ['Imoguiri', 'Ce n’est rien. On recommencera demain.']]);
+    else await scene([['Voix du 34', '… Tu ferais ça ?'], ['Goreng', 'Chaque jour. Jusqu’à ce que vous mangiez vos deux rations.'], ['Voix du 34', '… D’accord. D’accord ! Deux rations. On laisse le reste.'], ['Imoguiri', 'Vous les avez menacés.'], ['Goreng', 'Vous les avez suppliés. Ça marche mieux comme ça.'], ['Imoguiri', 'Mais pourquoi faut-il toujours que ça passe par la merde ?']]); } });
+  // ---- jour 7 : Miharu et Ramsès
+  await nouveauJour('<b>Mois 3</b> · niveau 33 · jour 7', c5().manierer === 1 ? 'Le 34 a fini par céder. Pas à vos supplications : à la faim de ceux du 35, qui sont montés leur parler avec les poings.' : 'Le 34 tient parole. Le 35 aussi, dit-on. Imoguiri pleure de joie tous les matins.');
+  JEU.attenteOk = true; objectif('Attendez la plateforme.'); const pf = plateformeVenir(33, { attente: 18, arret: 999 }); PF.tenir = true; const M = miharuPlat(); await pf;
+  dog.play('Idle'); FX.aboie(); await attendre(.6); FX.aboie(); await dit('', 'Ramsès II se lève et aboie contre la plateforme. Contre Miharu.', 3);
+  const rd = await choisirT('Goreng', 'Miharu s’est redressée, le couteau levé. Le chien grogne, les crocs dehors.', ['Attraper le chien par le collier.', 'Se mettre entre eux.', 'Ne rien faire.'], 5, 2);
+  if (rd === 1) { await scene([['', 'Vous levez les mains devant Miharu. Elle vous reconnaît. Elle baisse son couteau, lentement.'], ['', 'Ramsès II se tait. Il recule jusqu’à Imoguiri, en tremblant.']]); c5().ramses = 'vivant'; }
+  else { await fondu(true, .3); bruit(.3, 1600, .3, 'bandpass', 2); await attendreReel(900); await fondu(false, .8); dog.visible = false; c5().ramses = 'mort'; await scene([['', rd === 0 ? 'Le chien s’est arraché de vos mains. Il a sauté. Miharu a été plus rapide.' : 'Le chien a sauté. Miharu a été plus rapide.'], ['Imoguiri', 'Ramsès… Ramsès !'], ['', 'Imoguiri serre le corps contre elle. Miharu la regarde, sans rien dire, puis s’accroupit de nouveau parmi les plats.']]); ETAT.luc = Math.max(10, ETAT.luc - 12); }
+  PF.tenir = false; PF.t = PF.arret - 4; await plateformePartir(); M.retirer(); JEU.attenteOk = false; objectif('');
+  await scene([['Imoguiri', 'Cette femme est un monstre. Elle n’a pas d’enfant ! Je vous l’ai dit : aucun mineur n’entre ici. Jamais. C’est le règlement.'], ['Goreng', 'Le règlement dit aussi qu’il y a deux cents niveaux.'], ['Imoguiri', '…'], ['Goreng', 'Elle m’a sauvé la vie. Au 171. Vous ne savez rien de la Fosse, Imoguiri. Vous n’en connaissez que le formulaire.']]);
+  const rf = await choisir('Imoguiri', 'Elle baisse les yeux. Elle a l’air très vieille, tout à coup.', ['« Pardon. Je n’aurais pas dû dire ça. »', '« Il fallait que quelqu’un vous le dise. »', 'Lui lire un passage de Don Quichotte.']);
+  await dire('Imoguiri', ['Non. Vous aviez raison. C’est ça le pire.', 'Oui. Il fallait. Merci. Je crois.', 'Le chevalier et les moulins… Oui. Je me bats contre des moulins, moi aussi. Mais je continuerai.'][rf]); c5().imoLien = rf !== 1;
+  await gaz('Le gaz. Imoguiri vous tient la main. ' + (c5().ramses === 'mort' ? 'De l’autre, elle tient le collier vide de Ramsès.' : 'Ramsès dort entre vous deux.')); lancerChapitre(54); };
+
+// =====================================================================================
+// CHAPITRE 54 — Mois 4 · Niveau 202 : ce qu'elle a laissé
+// =====================================================================================
+CH[54] = async function c5m4() {
+  prep5(202, '<b>Mois 4</b> · niveau 202 · jour 1'); ETAT.faim = Math.min(ETAT.faim, 45); reveil5();
+  const I = cellmate({ nom: 'Imoguiri', tenue: 'villager_f', morph: 'woman', graine: 58, x: RX - .52, z: .15, yaw: 0, clip: 'Lie_Back', look: LOOK_I5 }); I.dy = .38;
+  await carte('Mois 4', 'Niveau 202', '', 3); await fondu(false, 3); await attendre(1.2);
+  await dit('Goreng', 'Imoguiri ?', 2); await attendre(1.5); await lever(-3.95, 1.15, versJ2(-3.95, 1.15, I.x, I.z));
+  objectif('Approchez-vous d’Imoguiri.'); await jusqua(() => Math.hypot(J.x - I.x, J.z - I.z) < 2.2); objectif('');
+  await scene([['', 'Elle ne respire plus. Elle est partie pendant la nuit, à sa façon, sans réveiller personne.'], ['', 'Sur le mur, au-dessus de son lit, elle a écrit au charbon, de son écriture appliquée de fonctionnaire :'], ['', '« Monsieur Goreng. Deux cent deux. Vous avez un mois sans rien. Moi, je n’avais que quelques semaines devant moi. Je vous laisse la seule chose que j’ai. Vivez. Et faites ce que je n’ai pas su faire. »']]);
+  ETAT.luc = Math.max(8, ETAT.luc - 15);
+  objectif('Recouvrez-la (E maintenu).'); await new Promise(res => { JEU.inter = [{ x: I.x, y: .5, z: I.z, r: 2.4, cos: .6, k: 'e', t: 'Recouvrir', em: 'd’un drap', tenir: 2.5, f() { I.tint = [.82, .8, .76, .85]; res(); } }]; }); JEU.inter = interLit(); objectif('');
+  // ---- les jours sans rien
+  for (let j = 0; j < 2; j++) { await plateformeVenir(202, { attente: 14, arret: 10, banquet: { rien: true } }); await dit('', pick(['Rien. Quelques os, des éclats de vaisselle.', 'Vide. Le métal de la plateforme brille comme un plat lavé.']), 2.6); await plateformePartir(); await fondu(true, 1); ETAT.faim = Math.max(3, ETAT.faim - 16); ETAT.sante = Math.max(25, ETAT.sante - 10); JEU.calendrier = '<b>Mois 4</b> · niveau 202 · jour ' + (5 + j * 5); await attendreReel(500); await fondu(false, 1); }
+  const G = fantome(-4.6, -2.8, PI * .3, 'Idle');
+  await scene([['Trimagasi', 'Dix jours, mon ami. Tu tiens bien. Mieux que moi.'], ['Goreng', 'Va-t’en.'], ['Trimagasi', 'Je ne peux pas. Je suis dans ton ventre. Tu te souviens ?'], ['Trimagasi', 'Elle t’a écrit une lettre. Elle t’a fait un cadeau. Et toi, tu vas mourir par politesse ?'], ['Goreng', 'Ce n’est pas de la politesse.'], ['Trimagasi', 'Alors c’est quoi ? De la morale ? La morale, c’est pour ceux du niveau 6.']]);
+  await questions('Trimagasi', 'Il s’assoit au bord du trou, les jambes dans le vide.', [
+    { q: '« Pourquoi tu ne me laisses pas tranquille ? »', r: [['Trimagasi', 'Parce que tu es mon seul ami. Le seul qui m’ait mangé. On ne peut pas être plus proches.']] },
+    { q: '« Elle croyait que les gens étaient bons. »', r: [['Trimagasi', 'Et regarde où ça l’a menée. Au 202, sous un drap. Les gens ne sont ni bons ni mauvais. Ils ont faim, ou ils n’ont pas faim.']] },
+    { q: '« Si je fais ça, je deviens toi. »', r: [['Trimagasi', 'Non. Moi, je n’avais pas de lettre. Toi, on te l’a donné. C’est toute la différence entre un meurtrier et un héritier.']] }]);
+  const r = await choisirT('Goreng', 'Le drap blanc. La lettre au charbon. Trimagasi qui attend.', ['Faire ce qu’elle vous a demandé.', 'Refuser. Attendre la fin du mois, quoi qu’il arrive.'], 15, 0);
+  G.retirer(); c5().imoguiri = r === 0 ? 'heritage' : 'refus';
+  if (r === 0) { await fondu(true, 2); await journal('Goreng ne parlera jamais de ces semaines-là. Il a gardé la lettre en mémoire, mot pour mot. Il se la récite encore, certains soirs.'); ETAT.faim = 55; ETAT.sante = 60; ETAT.luc = Math.max(5, ETAT.luc - 18); I.retirer(); }
+  else { await fondu(true, 2); await journal('Goreng s’allonge contre le mur et attend. Il ne sait plus s’il dort ou s’il meurt. Le dixième jour, il ne sait plus son propre nom. Mais il tient.'); ETAT.faim = 4; ETAT.sante = 22; ETAT.luc = Math.max(5, ETAT.luc - 8); }
+  await fondu(false, 1.5); await gaz('Le gaz. Vous l’accueillez comme un repas.'); lancerChapitre(55); };
+
+// =====================================================================================
+// CHAPITRE 55 — Mois 5 · Niveau 6 : Baharat, la corde et le message
+// =====================================================================================
+CH[55] = async function c5m5() {
+  prep5(6, '<b>Mois 5</b> · niveau 6 · jour 1'); ETAT.faim = Math.min(ETAT.faim, 40); ETAT.sante = Math.max(ETAT.sante, 45); reveil5();
+  const B = cellmate({ nom: 'Baharat', role: 'Codétenu · niveau 6', tenue: 'villager', morph: 'man', graine: 64, x: RX - .82, z: -.3, yaw: -PI / 2, clip: 'Sit_Chair', look: LOOK_B }); B.dy = .07;
+  await carte('Mois 5', 'Niveau 6', '', 3); await fondu(false, 2.5); await attendre(1); await lever(-3.95, 1.15, versJ2(-3.95, 1.15, B.x, B.z)); await tourner(B.x, 1.2, B.z, .5);
+  await scene([['Baharat', 'Niveau six, mon frère ! Six ! Tu sais ce que ça veut dire ? Ce mois-ci, on mange. Tous les jours.'], ['Baharat', 'Baharat. Et ça, c’est mon objet.'], ['', 'Il soulève une corde épaisse, tressée de draps, enroulée comme un serpent.'], ['Baharat', 'Une corde. Ce mois-ci, je monte. Niveau 5, 4, 3, 2, 1. Et je sors. Dieu m’a mis au 6 pour ça.']]);
+  if (c5().imoguiri === 'heritage') { const G = fantome(-4.6, -2.8, PI * .3); await dire('Trimagasi', 'Niveau six. Tu vois ? La Fosse récompense ceux qui mangent. Évident.'); G.retirer(); }
+  B.parler = async () => { await dire('Baharat', pick(['La corde tiendra. Je l’ai tressée pendant trois mois.', 'Tu crois en Dieu, mon frère ? Moi, je crois en lui et en ma corde.', 'Ceux du 5 sont riches, ils ont un bon cœur. Les riches ont toujours bon cœur quand ils ont mangé.'])); };
+  // ---- jour 1 : le banquet du 6
+  await platJour(6, { pendant: async () => { await dit('Baharat', 'Regarde ça. Regarde ça ! Presque rien n’est touché !', 3); await dit('', 'Il y a tout. Du vin, du homard, des gâteaux entiers. Et au milieu, intacte, une panna cotta.', 4); objectif('Mangez à votre faim.'); { const t0 = JEU.t; await jusqua(() => PF.bouchees >= 2 || JEU.t - t0 > 25); } } });
+  await dit('Goreng', 'Ceux du 7 auront presque autant. Et ceux du 50 ? Et ceux du 200 ?', 3.6);
+  // ---- jour 2 : la corde
+  await nouveauJour('<b>Mois 5</b> · niveau 6 · jour 2');
+  await scene([['Baharat', 'Aujourd’hui, je monte. Aide-moi, mon frère. Tiens la corde quand je lancerai.'], ['Goreng', 'Ceux du 5 vont t’aider ?'], ['Baharat', 'Je leur parlerai. Je leur dirai que je suis un homme. Tu verras.']]);
+  objectif('Tenez la corde pendant que Baharat grimpe (E maintenu).'); B.jouer('Idle'); B.dy = 0; await B.aller(0, -HZ - .4); B.regarder(0, 0);
+  await new Promise(res => { JEU.inter = [{ x: B.x, y: 1, z: B.z, r: 3, cos: .5, k: 'e', t: 'Tenir la corde', em: 'de toutes vos forces', tenir: 3.5, pendant: d => { if (Math.random() < d * 3) FX.souffle(); }, f() { res(); } }]; }); JEU.inter = interLit(); objectif('');
+  B.libre = true; { const t0 = JEU.t; B.jouer('Idle'); await jusqua(() => { B.dy = 2.8 * sstep((JEU.t - t0) / 3); return JEU.t - t0 > 3; }); }
+  ROLES['Femme du 5'] = 'Niveau 5'; ROLES['Homme du 5'] = 'Niveau 5';
+  await scene([['Baharat', 'Bonjour ! Je suis Baharat, du 6. Aidez-moi à monter, je vous en prie. Je suis un homme, comme vous.'], ['Femme du 5', 'Bien sûr. Bien sûr, mon pauvre. Donne-moi la main.'], ['Baharat', 'Merci ! Que Dieu vous bénisse ! Que Dieu…'], ['', 'L’homme du 5 se penche au-dessus de lui, défait sa ceinture et se soulage sur son visage. La femme rit. Puis elle tire la corde vers le haut, d’un coup.'], ['Homme du 5', 'Retourne en bas, le 6 ! Ta place est en bas !']]);
+  FX.chute(); A.shake = .2; const rc = await choisirT('Goreng', 'Baharat lâche prise. Il tombe vers le trou, juste devant vous !', ['L’ATTRAPER !', 'Reculer.'], 3, 1);
+  if (rc === 0) { B.dy = 0; B.x = 0; B.z = -HZ - .4; B.jouer('Sit_Ground'); vibrer(.8, 300); FX.coup(); c5().baharat = 'rattrape'; await scene([['', 'Vous l’attrapez par le col, au bord du vide. Vous tombez tous les deux en arrière, sur le béton.'], ['Baharat', 'Ils… ils m’ont…'], ['Goreng', 'Je sais. Je sais.']]); }
+  else { B.dy = 0; B.x = -HX - .3; B.z = -HZ - .6; B.jouer('Lie_Back'); FX.choc(); c5().baharat = 'blesse'; await scene([['', 'Il s’écrase sur le rebord, à moitié dans le vide. Il se hisse, la jambe tordue, en hurlant.'], ['Baharat', 'Pourquoi tu n’as pas tendu la main ? Pourquoi personne ne tend la main ?']]); ETAT.luc = Math.max(5, ETAT.luc - 10); }
+  await scene([['Baharat', 'Ma corde. Trois mois. Ils ont pris ma corde.'], ['Goreng', 'Baharat. Écoute-moi. Monter ne sert à rien. Ceux du dessus ne nous laisseront jamais monter.'], ['Baharat', 'Alors quoi ? On attend le prochain mois ? Le 200, le 300 ?'], ['Goreng', 'On descend.']]);
+  // ---- le plan, et le sage
+  await nouveauJour('<b>Mois 5</b> · niveau 6 · jour 3', 'Toute la nuit, vous avez parlé. De rations. De niveaux. De ce qui reste, en bas, quand tout le monde a pris sa part.');
+  await scene([['Goreng', 'Demain, on monte sur la plateforme avec des barres de fer. On descend avec elle, jusqu’en bas. Et on distribue une ration par personne. Une seule.'], ['Baharat', 'Ils nous tueront.'], ['Goreng', 'Certains essaieront. On parlera d’abord. On frappera s’il le faut.'], ['Baharat', 'Et après ? Quand on sera en bas ? Ça ne changera rien, mon frère, la plateforme remontera vide.'], ['Goreng', 'Pas vide. On gardera un plat intact. Un seul. Il remontera jusqu’au niveau 0. Ce sera le message : il y en avait assez pour tout le monde.']]);
+  const rs = await choisir('Baharat', 'Il réfléchit longtemps. Puis il vous regarde.', ['« Imoguiri m’a demandé de faire ce qu’elle n’a pas su faire. C’est ça. »', '« Je n’ai pas de meilleure raison que la faim des autres. »', '« Tu viens, ou tu attends ta prochaine corde ? »']);
+  await dire('Baharat', ['Une femme de l’Administration t’a demandé ça ? Alors Dieu a de l’humour. Je viens.', 'La faim des autres… Ma mère disait ça. « Ta faim, c’est ton affaire. La faim des autres, c’est l’affaire de Dieu, et Dieu n’a que tes mains. » Je viens.', 'Ha ! Tu parles comme un homme du 6. Je viens, mon frère.'][rs]);
+  const G2 = fantome(-4.6, -2.8, PI * .3); await scene([['Trimagasi', 'Descendre. Avec une barre de fer et un dessert. Ton chevalier serait fier de toi, mon ami. Il attaquait des moulins, lui aussi.'], ['Goreng', 'Et il avait raison.'], ['Trimagasi', 'Il était fou.'], ['Goreng', 'Les deux.']]); G2.retirer();
+  objectif('Démontez une barre de fer de votre lit (E maintenu).');
+  await new Promise(res => { JEU.inter = [{ x: -RX + .52, y: .5, z: 0, r: 2.4, cos: .7, k: 'e', t: 'Démonter une barre', em: 'pour la descente', tenir: 3.2, pendant: d => { if (Math.random() < d * 4) bruit(.1, 1800, .08, 'bandpass', 6); }, f() { J.arme = 'barre'; FX.verre(); res(); } }]; }); JEU.inter = []; objectif('');
+  await dit('Baharat', 'J’ai la mienne. Bismillah.', 2.5);
+  FLAGS.bMort = false; JEU.ckDescente = 0; JEU.rationsCk = undefined;
+  await journal('Le lendemain, à l’heure de la plateforme, Goreng et Baharat montent sur le banquet. La panna cotta est au centre. Personne n’y touchera. C’est le message.');
+  lancerChapitre(6); };
 
 // =====================================================================================
 // DÉMARRAGE : images du livre et du menu, polices, personnages
